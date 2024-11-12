@@ -1,0 +1,154 @@
+Center(
+                  child: SizedBox(
+                    height: 500,
+                    width: size.width * .8,
+                    child: Row(
+                      children: [
+                        SectionArticlePrincipal(
+                          numberArticle: 4,
+                          color: rouge,
+                          titre: 'Politique',
+                        ),
+                        const SectionArticleSecondaire(
+                          color: Colors.green,
+                          title: "Santé",
+                          nombreArticle: 2,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                paddingVerticalGlobal(),
+                Container(
+                  height: 150,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/pub-actu.jpg"),
+                          fit: BoxFit.cover)),
+                ),
+                paddingVerticalGlobal(),
+                Center(
+                  child: SizedBox(
+                      width: size.width * .8,
+                      child: const SectionImageFull(title: "économie")),
+                ),
+                paddingVerticalGlobal(),
+                Container(
+                  height: 150,
+                  color: bgNoir,
+                  child: Center(
+                    child: Text(
+                      'Anuaire des entreprises',
+                      style: TextStyle(color: blanc),
+                    ),
+                  ),
+                ),
+                paddingVerticalGlobal(),
+                SizedBox(
+                  height: 500,
+                  child: Row(
+                    children: [
+                      SectionArticlePrincipal(
+                        numberArticle: 4,
+                        color: Colors.brown,
+                        titre: 'La redaction',
+                        withEmission: false,
+                      ),
+                      SectionDossierRedactionWidget()
+                    ],
+                  ),
+                ),
+                paddingVerticalGlobal(),
+                Container(
+                  height: 150,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/pub-actu.jpg"),
+                          fit: BoxFit.cover)),
+                ),
+                paddingVerticalGlobal(),
+                Center(
+                  child: SizedBox(
+                    height: 500,
+                    width: size.width * .8,
+                    child: Row(
+                      children: [
+                        SectionArticlePrincipal(
+                          numberArticle: 4,
+                          color: rouge,
+                          titre: 'Contributions',
+                          withEmission: false,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                paddingVerticalGlobal(),
+                SizedBox(
+                  height: 500,
+                  child: Row(
+                    children: [
+                      const SectionArticleWithBG(
+                        title: "Sport",
+                        tag: "néwétane",
+                      ),
+                      paddingHorizontalGlobal(8),
+                      Expanded(
+                          child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage("assets/images/87e.jpg"))),
+                      ))
+                    ],
+                  ),
+                ),
+                paddingVerticalGlobal(),
+                SizedBox(
+                  height: 600,
+                  child: Row(
+                    children: [
+                      SectionArticleWithBG(
+                        title: "Internationales",
+                        bg: blanc,
+                        tag: "baisse des prix",
+                        colorT: rouge,
+                        color: noir,
+                      ),
+                      paddingHorizontalGlobal(),
+                      const SectionArticleSecondaire(
+                        color: Colors.greenAccent,
+                        title: "Pêche",
+                        nombreArticle: 2,
+                      )
+                    ],
+                  ),
+                ),
+                paddingVerticalGlobal(),
+                const SectionImageFull(title: "Afrique"),
+                paddingVerticalGlobal(),
+                const RubriqueTitle(title: "Politique"),
+                Row(
+                  children: [
+                    const MenuArticleRubrique(),
+                    paddingHorizontalGlobal(),
+                    const MenuArticleRubrique(),
+                    paddingHorizontalGlobal(),
+                    const MenuArticleRubrique(),
+                    paddingHorizontalGlobal(),
+                    const MenuArticleRubrique(),
+                    paddingHorizontalGlobal()
+                  ],
+                ),
+                RubriqueTitle(title: "economique"),
+                Row(
+                  children: [
+                    const MenuArticleRubrique(),
+                    paddingHorizontalGlobal(),
+                    const MenuArticleRubrique(),
+                    paddingHorizontalGlobal(),
+                    const MenuArticleRubrique(),
+                    paddingHorizontalGlobal(),
+                    const MenuArticleRubrique(),
+                    paddingHorizontalGlobal()
+                  ],
+                ),
