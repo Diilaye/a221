@@ -102,45 +102,6 @@ class JournalisteScreen extends StatelessWidget {
                       isActive: menuAdminBloc.menu == 11,
                       ontap: () => menuAdminBloc.setMenu(11),
                     ),
-
-                    // ItemMenu(
-                    //   titre: 'TV',
-                    //   icons: CupertinoIcons.circle_fill,
-                    //   haveIcon: false,
-                    //   isActive: menuAdminBloc.menu == 2,
-                    //   ontap: () => menuAdminBloc.setMenu(2),
-                    // ),
-                    // ItemMenu(
-                    //   titre: 'Emissions',
-                    //   icons: CupertinoIcons.circle,
-                    //   isActive: menuAdminBloc.menu == 20,
-                    //   ontap: () => menuAdminBloc.setMenu(20),
-                    // ),
-                    // ItemMenu(
-                    //   titre: 'Ajouter une emission',
-                    //   icons: CupertinoIcons.circle,
-                    //   isActive: menuAdminBloc.menu == 21,
-                    //   ontap: () => menuAdminBloc.setMenu(21),
-                    // ),
-                    // ItemMenu(
-                    //   titre: 'Presse écrite',
-                    //   icons: CupertinoIcons.circle_fill,
-                    //   haveIcon: false,
-                    //   isActive: menuAdminBloc.menu == 3,
-                    //   ontap: () => menuAdminBloc.setMenu(3),
-                    // ),
-                    // ItemMenu(
-                    //   titre: 'Journal papier',
-                    //   icons: CupertinoIcons.circle,
-                    //   isActive: menuAdminBloc.menu == 30,
-                    //   ontap: () => menuAdminBloc.setMenu(30),
-                    // ),
-                    // ItemMenu(
-                    //   titre: 'Ajouter journal papier',
-                    //   icons: CupertinoIcons.circle,
-                    //   isActive: menuAdminBloc.menu == 31,
-                    //   ontap: () => menuAdminBloc.setMenu(31),
-                    // ),
                     ItemMenu(
                       titre: 'Flash news',
                       icons: CupertinoIcons.circle_fill,
@@ -160,45 +121,18 @@ class JournalisteScreen extends StatelessWidget {
                       isActive: menuAdminBloc.menu == 41,
                       ontap: () => menuAdminBloc.setMenu(41),
                     ),
-                    // ItemMenu(
-                    //   titre: 'Post digitaux',
-                    //   icons: CupertinoIcons.circle_fill,
-                    //   haveIcon: false,
-                    //   isActive: menuAdminBloc.menu == 5,
-                    //   ontap: () => menuAdminBloc.setMenu(5),
-                    // ),
-                    // ItemMenu(
-                    //   titre: 'Liste',
-                    //   icons: CupertinoIcons.circle,
-                    //   isActive: menuAdminBloc.menu == 50,
-                    //   ontap: () => menuAdminBloc.setMenu(50),
-                    // ),
-                    // ItemMenu(
-                    //   titre: 'Ajouter post',
-                    //   icons: CupertinoIcons.circle,
-                    //   isActive: menuAdminBloc.menu == 51,
-                    //   ontap: () => menuAdminBloc.setMenu(51),
-                    // ),
-                    // SizedBox(
-                    //   height: size.height * .02,
-                    // ),
-                    // ItemMenu(
-                    //   titre: 'Help & Support',
-                    //   icons: CupertinoIcons.headphones,
-                    //   isActive: menuAdminBloc.menu == 6,
-                    //   ontap: () => menuAdminBloc.setMenu(6),
-                    // ),
-                    // SizedBox(
-                    //   height: size.height * .01,
-                    // ),
-                    // ItemMenu(
-                    //   titre: 'Paramètres',
-                    //   icons: CupertinoIcons.settings,
-                    //   isActive: menuAdminBloc.menu == 7,
-                    //   ontap: () => menuAdminBloc.setMenu(7),
-                    // ),
                     SizedBox(
-                      height: size.height * .6,
+                      height: size.height * .5,
+                    ),
+                    ItemMenu(
+                      titre: 'Paramètres',
+                      icons: CupertinoIcons.settings,
+                      isActive: menuAdminBloc.menu == 7,
+                      sizeIcon: 16,
+                      ontap: () => null,
+                    ),
+                    SizedBox(
+                      height: 16,
                     ),
                     GestureDetector(
                       onTap: () => dialogRequest(

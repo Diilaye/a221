@@ -35,9 +35,9 @@ class SectionAfriqueMobile extends StatelessWidget {
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
               onTap: () {
-                homeUtilisateurBloc.setAticle(homeUtilisateurBloc.uneCulture!);
+                homeUtilisateurBloc.setAticle(homeUtilisateurBloc.uneAfrique!);
                 js.context.callMethod('open', [
-                  'https://a221.net/article/${homeUtilisateurBloc.uneCulture!.slug!}',
+                  'https://a221.net/article/${homeUtilisateurBloc.uneAfrique!.slug!}',
                   '_self'
                 ]);
               },

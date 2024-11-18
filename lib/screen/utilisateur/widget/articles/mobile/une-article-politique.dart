@@ -64,7 +64,7 @@ class UneArticlePolitique extends StatelessWidget {
                               paddingVerticalGlobal(4),
                               Text(
                                 article.tags!.titre!,
-                                style: fontFammilyDii(context, 18, rouge,
+                                style: fontFammilyDii(context, 15, rouge,
                                     FontWeight.bold, FontStyle.normal),
                               ),
                               Expanded(
@@ -77,7 +77,7 @@ class UneArticlePolitique extends StatelessWidget {
                                         article.titre!,
                                         textAlign: TextAlign.center,
                                         overflow: TextOverflow.fade,
-                                        style: fontFammilyDii(context, 13, noir,
+                                        style: fontFammilyDii(context, 10, noir,
                                             FontWeight.w500, FontStyle.normal),
                                       ),
                                     ),

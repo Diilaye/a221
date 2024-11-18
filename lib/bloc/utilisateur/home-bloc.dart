@@ -154,6 +154,8 @@ class HomeUtilisateurBloc with ChangeNotifier {
     articleInvestigations = articles
         .where((e) =>
             e.categorie!.titre == 'INVESTIGATION' && e.typeUne! != "rubrique")
+        .toList()
+        .reversed
         .toList();
 
     uneInvestigations = articles.firstWhere((e) =>

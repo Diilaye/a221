@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 class ItemMenu extends StatefulWidget {
   final String titre;
   final IconData icons;
+  final double sizeIcon;
   final bool haveIcon;
   final bool isActive;
   final Function ontap;
@@ -15,6 +16,7 @@ class ItemMenu extends StatefulWidget {
       required this.icons,
       required this.ontap,
       this.haveIcon = true,
+      this.sizeIcon = 8,
       this.isActive = false});
 
   @override
@@ -59,14 +61,17 @@ class _ItemMenuState extends State<ItemMenu> {
               Row(
                 children: [
                   SizedBox(
-                    width:
-                        widget.haveIcon ? size.width * .035 : size.width * .025,
+                    width: widget.haveIcon
+                        ? widget.sizeIcon != 8
+                            ? size.width * .025
+                            : size.width * .035
+                        : size.width * .025,
                   ),
                   if (widget.haveIcon)
                     Icon(
                       widget.icons,
                       color: noir,
-                      size: 8,
+                      size: widget.sizeIcon,
                     ),
                   const SizedBox(
                     width: 4,

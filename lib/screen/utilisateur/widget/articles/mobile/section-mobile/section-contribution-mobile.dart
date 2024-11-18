@@ -30,7 +30,7 @@ class SectionContributionMobile extends StatelessWidget {
                 Text(
                   'Contribution & Analyse'.toUpperCase(),
                   style: fontFammilyDii(
-                      context, 22, blanc, FontWeight.bold, FontStyle.normal),
+                      context, 18, blanc, FontWeight.bold, FontStyle.normal),
                 ),
               ],
             ),
@@ -53,7 +53,8 @@ class SectionContributionMobile extends StatelessWidget {
                   children: [
                     Image.network(
                       BASE_URL_ASSET +
-                          homeUtilisateurBloc.uneEconomie!.imageArticle!.url!,
+                          homeUtilisateurBloc
+                              .articleContributions.first.imageArticle!.url!,
                       height: 250,
                       width: size.width * .92,
                       fit: BoxFit.cover,
@@ -62,8 +63,9 @@ class SectionContributionMobile extends StatelessWidget {
                       children: [
                         paddingHorizontalGlobal(16),
                         Text(
-                          homeUtilisateurBloc.uneEconomie!.tags!.titre!,
-                          style: fontFammilyDii(context, 24, blanc,
+                          homeUtilisateurBloc
+                              .articleContributions.first.tags!.titre!,
+                          style: fontFammilyDii(context, 18, blanc,
                               FontWeight.w600, FontStyle.normal),
                         ),
                       ],
@@ -71,10 +73,10 @@ class SectionContributionMobile extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        homeUtilisateurBloc.uneEconomie!.titre!,
+                        homeUtilisateurBloc.articleContributions.first.titre!,
                         textAlign: TextAlign.justify,
                         overflow: TextOverflow.fade,
-                        style: fontFammilyDii(context, 18, blanc,
+                        style: fontFammilyDii(context, 13, blanc,
                             FontWeight.w500, FontStyle.normal),
                       ),
                     ),

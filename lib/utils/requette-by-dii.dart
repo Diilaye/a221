@@ -4,11 +4,11 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: constant_identifier_names
-const String BASE_URL = "https://a221.net/api/v1";
+const String BASE_URL = "https://api-actu.yaatalmbinde.sn/api/v1";
 // const String BASE_URL = "http://localhost:3800/api/v1";
 
-const String BASE_URL_ASSET = "http://localhost:3800";
-// const String BASE_URL_ASSET = "https://a221.net/";
+// const String BASE_URL_ASSET = "http://localhost:3800";
+const String BASE_URL_ASSET = "https://api-actu.yaatalmbinde.sn/";
 
 Future getResponse({
   required String url,
@@ -85,6 +85,7 @@ Future postResponse(
     'Content-Type': 'application/json',
     'authorization': "Bearer $token"
   }).then((value) {
+    print(value.body);
     return {"body": json.decode(value.body), "status": value.statusCode};
   });
 }

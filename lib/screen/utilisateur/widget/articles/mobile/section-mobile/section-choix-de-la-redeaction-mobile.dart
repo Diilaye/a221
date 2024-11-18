@@ -52,7 +52,7 @@ class SectionChoixDeLaRedactionMobile extends StatelessWidget {
               Expanded(
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: homeUtilisateurBloc.articlePolitiques
+                  children: homeUtilisateurBloc.articleChoixRedac
                       .map((e) => Padding(
                             padding: const EdgeInsets.only(right: 8.0),
                             child: ArticlePolitiqueSecondaireMobile(

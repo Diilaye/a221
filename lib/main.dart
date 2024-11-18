@@ -214,7 +214,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        title: "Actu221 | L’essentiel de l'information",
+        title: "ACTU221 | L’essentiel de l'information",
         debugShowCheckedModeBanner: false,
         localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
         supportedLocales: const [Locale('en'), Locale('fr')],

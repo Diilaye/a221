@@ -41,7 +41,7 @@ class ArticlecontributionSecondaire extends StatelessWidget {
                       Text(
                         article.tags!.titre!,
                         overflow: TextOverflow.ellipsis,
-                        style: fontFammilyDii(context, 16, blanc,
+                        style: fontFammilyDii(context, 14, blanc,
                             FontWeight.w600, FontStyle.normal),
                       ),
                     ],
@@ -54,12 +54,12 @@ class ArticlecontributionSecondaire extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.only(right: 4.0),
                             child:
-                                Icon(Icons.article, size: 20.0, color: blanc),
+                                Icon(Icons.article, size: 10.0, color: blanc),
                           ),
                         ),
                         TextSpan(
                           text: article.titre!,
-                          style: fontFammilyDii(context, 16, blanc,
+                          style: fontFammilyDii(context, 13, blanc,
                               FontWeight.w500, FontStyle.normal),
                         ),
                       ],

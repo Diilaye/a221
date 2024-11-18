@@ -55,9 +55,15 @@ class AddArticleBloc with ChangeNotifier {
 
   String body = "";
 
-  setBody(String v) {
+  setBody(String v) async {
     body = v;
     notifyListeners();
+  }
+
+  giveTextController() {
+    print("giveTextController");
+    print(body);
+    controllerProduct.setText(body);
   }
 
   int parcourirFile = 0;
@@ -112,6 +118,7 @@ class AddArticleBloc with ChangeNotifier {
   TagsModel? tag;
 
   setTags(TagsModel? t) {
+    print(t?.toJson());
     tag = t;
     notifyListeners();
   }
