@@ -156,12 +156,12 @@ class ArticleScreen extends StatelessWidget {
                                         child: HtmlWidget(
                                           homeUtilisateurBloc
                                               .articleSlug!.description!,
-                                          textStyle: fontFammilyDii(
-                                              context,
-                                              20,
-                                              noir,
-                                              FontWeight.w400,
-                                              FontStyle.normal),
+                                          // textStyle: fontFammilyDii(
+                                          //     context,
+                                          //     20,
+                                          //     noir,
+                                          //     FontWeight.w400,
+                                          //     FontStyle.normal),
                                         ),
                                       ),
                                       paddingHorizontalGlobal(),
