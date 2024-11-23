@@ -52,23 +52,29 @@ class JournalisteScreen extends StatelessWidget {
                     SizedBox(
                       height: size.height * .02,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: size.width * .025,
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => context.go('/'),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: size.width * .025,
+                            ),
+                            Text(
+                              'Dashbord',
+                              style: fontFammilyDii(context, 14, rouge,
+                                  FontWeight.bold, FontStyle.normal),
+                            ),
+                            Text(
+                              'Actu221',
+                              style: fontFammilyDii(context, 14, noir,
+                                  FontWeight.bold, FontStyle.normal),
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Dashbord',
-                          style: fontFammilyDii(context, 14, rouge,
-                              FontWeight.bold, FontStyle.normal),
-                        ),
-                        Text(
-                          'Actu221',
-                          style: fontFammilyDii(context, 14, noir,
-                              FontWeight.bold, FontStyle.normal),
-                        ),
-                      ],
+                      ),
                     ),
                     SizedBox(
                       height: size.height * .02,

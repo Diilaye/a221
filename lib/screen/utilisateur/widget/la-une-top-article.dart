@@ -81,7 +81,7 @@ class _LaUneTopArticleState extends State<LaUneTopArticle> {
                               width: 4,
                             ),
                             Text(
-                              'une centrale'.toUpperCase(),
+                              ' à la une '.toUpperCase(),
                               style: fontFammilyDii(
                                   context,
                                   size.width >= 1440
