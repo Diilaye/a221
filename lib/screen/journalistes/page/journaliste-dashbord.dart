@@ -1,7 +1,6 @@
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/articles/add-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/flash-news/add-flash-news.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/flash-news/flash-new.dart';
-import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/params-dashbord.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/posts-digiteaux/add-post-digiteaux.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/posts-digiteaux/posts-digiteaux.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/presse-ecrite/add-presse-ecrite.dart';
@@ -11,6 +10,7 @@ import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/tv/tv-screen.da
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/articles/journal-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/overview-admin.dart';
 import 'package:actu/screen/adminnistrateur/widgets/menu/item-menu.dart';
+import 'package:actu/screen/journalistes/page/params-dashbord-journaliste.dart';
 import 'package:actu/utils/color-by-dii.dart';
 import 'package:actu/utils/diallog-dii.dart';
 import 'package:actu/utils/widgets/font-fammily-dii.dart';
@@ -135,7 +135,7 @@ class JournalisteScreen extends StatelessWidget {
                       icons: CupertinoIcons.settings,
                       isActive: menuAdminBloc.menu == 7,
                       sizeIcon: 16,
-                      ontap: () => null,
+                      ontap: () => menuAdminBloc.setMenu(7),
                     ),
                     SizedBox(
                       height: 16,
@@ -226,7 +226,7 @@ class JournalisteScreen extends StatelessWidget {
                                                                               : menuAdminBloc.menu == 51
                                                                                   ? const AddPostDigiteauxScreen()
                                                                                   : menuAdminBloc.menu == 7
-                                                                                      ? const ParamsDashbord()
+                                                                                      ? const ParamsDashbordJournaliste()
                                                                                       : Container()),
             ],
           ),

@@ -1,8 +1,10 @@
 import 'package:actu/bloc/administrateur/menu-admin.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/categories/categories-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/mots-cles/key-word-screen.dart';
+import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/profile-sccren.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/sous-categorie/sous-categorie-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/tags/tags-screen.dart';
+import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/users/users-screen.dart';
 import 'package:actu/screen/adminnistrateur/widgets/menu/item-menu.dart';
 import 'package:actu/utils/color-by-dii.dart';
 import 'package:actu/utils/widgets/font-fammily-dii.dart';
@@ -51,26 +53,6 @@ class ParamsDashbordRedacteur extends StatelessWidget {
                 height: size.height * .02,
               ),
               ItemMenu(
-                titre: 'Catégories',
-                icons: CupertinoIcons.circle_fill,
-                haveIcon: false,
-                isActive: menuAdminBloc.sousMenu == 0,
-                ontap: () => menuAdminBloc.setSousMenu(0),
-              ),
-              SizedBox(
-                height: size.height * .02,
-              ),
-              ItemMenu(
-                titre: 'Sous-catégories',
-                icons: CupertinoIcons.circle_fill,
-                haveIcon: false,
-                isActive: menuAdminBloc.sousMenu == 1,
-                ontap: () => menuAdminBloc.setSousMenu(1),
-              ),
-              SizedBox(
-                height: size.height * .02,
-              ),
-              ItemMenu(
                 titre: 'Tags',
                 icons: CupertinoIcons.circle_fill,
                 haveIcon: false,
@@ -81,26 +63,34 @@ class ParamsDashbordRedacteur extends StatelessWidget {
                 height: size.height * .02,
               ),
               ItemMenu(
-                titre: 'Mots clés',
+                titre: 'Utilisateur',
                 icons: CupertinoIcons.circle_fill,
                 haveIcon: false,
-                isActive: menuAdminBloc.sousMenu == 3,
-                ontap: () => menuAdminBloc.setSousMenu(3),
+                isActive: menuAdminBloc.sousMenu == 4,
+                ontap: () => menuAdminBloc.setSousMenu(4),
+              ),
+              SizedBox(
+                height: size.height * .02,
+              ),
+              ItemMenu(
+                titre: 'Mot de passe',
+                icons: CupertinoIcons.circle_fill,
+                haveIcon: false,
+                isActive: menuAdminBloc.sousMenu == 5,
+                ontap: () => menuAdminBloc.setSousMenu(5),
               ),
             ],
           ),
         )),
         Expanded(
             flex: 4,
-            child: menuAdminBloc.sousMenu == 0
-                ? const CategorieScreen()
-                : menuAdminBloc.sousMenu == 1
-                    ? const SousCategorieScreen()
-                    : menuAdminBloc.sousMenu == 2
-                        ? const TagScreen()
-                        : menuAdminBloc.sousMenu == 3
-                            ? const KeyWorlScreen()
-                            : const SizedBox()),
+            child: menuAdminBloc.sousMenu == 2
+                ? const TagScreen()
+                : menuAdminBloc.sousMenu == 4
+                    ? const UserScreen()
+                    : menuAdminBloc.sousMenu == 5
+                        ? const ProfileUserScreen()
+                        : const SizedBox()),
       ],
     );
   }

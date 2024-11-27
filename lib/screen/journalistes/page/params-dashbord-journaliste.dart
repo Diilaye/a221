@@ -12,8 +12,8 @@ import 'package:actu/utils/widgets/padding-global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
-class ParamsDashbord extends StatelessWidget {
-  const ParamsDashbord({super.key});
+class ParamsDashbordJournaliste extends StatelessWidget {
+  const ParamsDashbordJournaliste({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,53 +52,6 @@ class ParamsDashbord extends StatelessWidget {
               SizedBox(
                 height: size.height * .02,
               ),
-              ItemMenu(
-                titre: 'Catégories',
-                icons: CupertinoIcons.circle_fill,
-                haveIcon: false,
-                isActive: menuAdminBloc.sousMenu == 0,
-                ontap: () => menuAdminBloc.setSousMenu(0),
-              ),
-              SizedBox(
-                height: size.height * .02,
-              ),
-              ItemMenu(
-                titre: 'Sous-catégories',
-                icons: CupertinoIcons.circle_fill,
-                haveIcon: false,
-                isActive: menuAdminBloc.sousMenu == 1,
-                ontap: () => menuAdminBloc.setSousMenu(1),
-              ),
-              SizedBox(
-                height: size.height * .02,
-              ),
-              ItemMenu(
-                titre: 'Tags',
-                icons: CupertinoIcons.circle_fill,
-                haveIcon: false,
-                isActive: menuAdminBloc.sousMenu == 2,
-                ontap: () => menuAdminBloc.setSousMenu(2),
-              ),
-              SizedBox(
-                height: size.height * .02,
-              ),
-              ItemMenu(
-                titre: 'Mots clés',
-                icons: CupertinoIcons.circle_fill,
-                haveIcon: false,
-                isActive: menuAdminBloc.sousMenu == 3,
-                ontap: () => menuAdminBloc.setSousMenu(3),
-              ),
-              SizedBox(
-                height: size.height * .02,
-              ),
-              ItemMenu(
-                titre: 'Utilisateur',
-                icons: CupertinoIcons.circle_fill,
-                haveIcon: false,
-                isActive: menuAdminBloc.sousMenu == 4,
-                ontap: () => menuAdminBloc.setSousMenu(4),
-              ),
               SizedBox(
                 height: size.height * .02,
               ),
@@ -114,19 +67,9 @@ class ParamsDashbord extends StatelessWidget {
         )),
         Expanded(
             flex: 4,
-            child: menuAdminBloc.sousMenu == 0
-                ? const CategorieScreen()
-                : menuAdminBloc.sousMenu == 1
-                    ? const SousCategorieScreen()
-                    : menuAdminBloc.sousMenu == 2
-                        ? const TagScreen()
-                        : menuAdminBloc.sousMenu == 3
-                            ? const KeyWorlScreen()
-                            : menuAdminBloc.sousMenu == 4
-                                ? const UserScreen()
-                                : menuAdminBloc.sousMenu == 5
-                                    ? const ProfileUserScreen()
-                                    : const SizedBox()),
+            child: menuAdminBloc.sousMenu == 5
+                ? const ProfileUserScreen()
+                : const SizedBox()),
       ],
     );
   }

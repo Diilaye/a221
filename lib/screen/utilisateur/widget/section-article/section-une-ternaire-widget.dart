@@ -91,10 +91,10 @@ class SectionUneTernaireWidget extends StatelessWidget {
                       style: fontFammilyDii(
                           context,
                           size.width >= 1440
-                              ? 28
+                              ? 18
                               : size.width >= 1024 && size.width < 1440
-                                  ? 22
-                                  : 16,
+                                  ? 18
+                                  : 10,
                           noir,
                           FontWeight.bold,
                           FontStyle.normal),

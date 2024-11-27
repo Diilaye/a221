@@ -78,12 +78,13 @@ class TagScreen extends StatelessWidget {
                         paddingHorizontalGlobal(8),
                         Expanded(
                           child: TextField(
-                            // controller: connectionBloc.email,
+                            controller: tagsBloc.tagRecherche,
                             decoration: InputDecoration(
                               hintText: "RECHERCHER UN tag".toUpperCase(),
                               border: const OutlineInputBorder(),
                               enabledBorder: const OutlineInputBorder(),
                             ),
+                            onChanged: (value) => tagsBloc.setRecherche(value),
                           ),
                         ),
                         paddingHorizontalGlobal(8),
@@ -183,6 +184,8 @@ class TagScreen extends StatelessWidget {
                         Expanded(
                           child: ListView(
                             children: tagsBloc.tags
+                                .where((e) => e.titre!.toLowerCase().contains(
+                                    tagsBloc.rechercheT.toLowerCase()))
                                 .map((e) => Container(
                                       height: 50,
                                       color: blanc,

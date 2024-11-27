@@ -18,7 +18,6 @@ class UserScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final menuAdminBloc = Provider.of<MenuAdminBloc>(context);
-    final categorieBloc = Provider.of<CategorieBloc>(context);
     final userBloc = Provider.of<UserBloc>(context);
 
     return Stack(
@@ -86,8 +85,7 @@ class UserScreen extends StatelessWidget {
                               border: const OutlineInputBorder(),
                               enabledBorder: const OutlineInputBorder(),
                             ),
-                            onChanged: (value) =>
-                                categorieBloc.setRecherche(value),
+                            onChanged: (value) => userBloc.setRecherche(value),
                           ),
                         ),
                         paddingHorizontalGlobal(8),
@@ -190,6 +188,8 @@ class UserScreen extends StatelessWidget {
                         Expanded(
                           child: ListView(
                             children: userBloc.users
+                                .where((e) => e.nom!.toLowerCase().contains(
+                                    userBloc.rechercheT.toLowerCase()))
                                 .map((e) => Container(
                                       height: 50,
                                       color: blanc,
@@ -293,7 +293,7 @@ class UserScreen extends StatelessWidget {
                                                   onPressed: () async =>
                                                       dialogRequest(
                                                               title:
-                                                                  'Vous êtes sur de vouloir suprimer cette categorie',
+                                                                  'Vous êtes sur de vouloir suprimer cette user',
                                                               context: context)
                                                           .then((value) async {
                                                         if (value) {
@@ -301,14 +301,32 @@ class UserScreen extends StatelessWidget {
                                                           userBloc.activeUser();
                                                         }
                                                       }),
-                                                  tooltip: e.statusOnline! ==
-                                                          "on"
-                                                      ? "Suprimer  categorie"
-                                                      : "Réintégrer catégorie",
+                                                  tooltip:
+                                                      e.statusOnline! == "on"
+                                                          ? "Suprimer  user"
+                                                          : "Réintégrer user",
                                                   icon: Icon(e.statusOnline! ==
                                                           "on"
                                                       ? CupertinoIcons.delete
                                                       : Icons.publish)),
+                                              paddingHorizontalGlobal(6),
+                                              IconButton(
+                                                  onPressed: () async =>
+                                                      dialogRequest(
+                                                              title:
+                                                                  'Vous êtes sur de vouloir réinitialiser le mot de passe de ce user',
+                                                              context: context)
+                                                          .then((value) async {
+                                                        if (value) {
+                                                          userBloc.setUser(e);
+                                                          userBloc
+                                                              .reinitialiserPasswordUser();
+                                                        }
+                                                      }),
+                                                  tooltip:
+                                                      "Vous êtes sur de vouloir réinitialiser le mot de passe de ce user",
+                                                  icon: Icon(CupertinoIcons
+                                                      .return_icon)),
                                             ],
                                           )),
                                           paddingHorizontalGlobal(8),
@@ -331,7 +349,7 @@ class UserScreen extends StatelessWidget {
               children: [
                 paddingHorizontalGlobal(8),
                 Text(
-                  "Affichage de 1 à 10 sur ${categorieBloc.categories.length} users",
+                  "Affichage de 1 à 10 sur ${userBloc.users.length} users",
                   style: fontFammilyDii(context, 14, noir.withOpacity(.7),
                       FontWeight.w700, FontStyle.normal),
                 ),

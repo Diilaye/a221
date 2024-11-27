@@ -18,6 +18,7 @@ import 'package:actu/bloc/utilisateur/posts-digiteaux.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/adminisatrateur-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/connection-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/register-screen.dart';
+import 'package:actu/screen/infographie/pages/infographie-dashbord.dart';
 import 'package:actu/screen/journalistes/page/journaliste-dashbord.dart';
 import 'package:actu/screen/redacteur/page/redacteur-dashbord.dart';
 import 'package:actu/screen/utilisateur/pages/article-screen.dart';
@@ -130,8 +131,12 @@ final _router = GoRouter(
           } else if (sharedPreferences.getString("role") == "redacteur" &&
               sharedPreferences.containsKey("role")) {
             return "/redacteur";
-          } else {
+          } else if (sharedPreferences.getString("role") == "journaliste" &&
+              sharedPreferences.containsKey("role")) {
             return "/journaliste";
+          } else if (sharedPreferences.getString("role") == "infographie" &&
+              sharedPreferences.containsKey("role")) {
+            return "/infographie";
           }
         } else {
           return '/login';
@@ -161,6 +166,10 @@ final _router = GoRouter(
     GoRoute(
       path: '/administratif',
       builder: (context, state) => const AdministrateurAscreen(),
+    ),
+    GoRoute(
+      path: '/infographie',
+      builder: (context, state) => const InfographieDashbordAscreen(),
     ),
     GoRoute(
       path: '/journaliste',

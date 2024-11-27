@@ -1,7 +1,6 @@
 import 'package:actu/bloc/administrateur/menu-admin.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/categories/categories-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/mots-cles/key-word-screen.dart';
-import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/profile-sccren.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/sous-categorie/sous-categorie-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/tags/tags-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/users/users-screen.dart';
@@ -124,9 +123,7 @@ class ParamsDashbord extends StatelessWidget {
                             ? const KeyWorlScreen()
                             : menuAdminBloc.sousMenu == 4
                                 ? const UserScreen()
-                                : menuAdminBloc.sousMenu == 5
-                                    ? const ProfileUserScreen()
-                                    : const SizedBox()),
+                                : const SizedBox()),
       ],
     );
   }

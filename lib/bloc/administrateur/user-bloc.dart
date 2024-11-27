@@ -12,12 +12,42 @@ class UserBloc with ChangeNotifier {
   TextEditingController email = TextEditingController();
   TextEditingController telephone = TextEditingController();
 
+  TextEditingController oldpassword = TextEditingController();
+  TextEditingController newPassword = TextEditingController();
+
+  bool showOldPassword = false;
+  bool showNewPassword = false;
+
+  setShowOldPassword() {
+    showOldPassword = !showOldPassword;
+    notifyListeners();
+  }
+
+  setShowNewPassword() {
+    showNewPassword = !showNewPassword;
+    notifyListeners();
+  }
+
+  UserModel? userAuth;
+
   String role = '';
 
   int showUpdate = 0;
 
+  String rechercheT = "";
+
+  getAuth() async {
+    userAuth = await authService.getAuth();
+    notifyListeners();
+  }
+
   setShowUpate(int i) {
     showUpdate = i;
+    notifyListeners();
+  }
+
+  setRecherche(String v) {
+    rechercheT = v;
     notifyListeners();
   }
 
@@ -47,6 +77,7 @@ class UserBloc with ChangeNotifier {
   bool chargement = false;
 
   UserBloc() {
+    getAuth();
     allUsers();
   }
 
@@ -146,6 +177,46 @@ class UserBloc with ChangeNotifier {
     notifyListeners();
   }
 
+  updatePasswordUser() async {
+    chargement = true;
+    notifyListeners();
+
+    Map<String, dynamic> body = {
+      "oldpassword": oldpassword.text,
+      "newPassword": newPassword.text,
+    };
+
+    String? result = await authService.updateAdmin(body, userAuth!.id!);
+
+    if (result != null) {
+      Fluttertoast.showToast(
+          msg: "Utilisateur modifier avec success.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: vert,
+          textColor: Colors.white,
+          fontSize: 12.0);
+      await allUsers();
+      newPassword.text = "";
+      oldpassword.text = "";
+      showUpdate = 0;
+      notifyListeners();
+    } else {
+      Fluttertoast.showToast(
+          msg: "Une erreur à été decélé.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: rouge,
+          textColor: Colors.white,
+          fontSize: 12.0);
+    }
+
+    chargement = false;
+    notifyListeners();
+  }
+
   activeUser() async {
     chargement = true;
     notifyListeners();
@@ -171,6 +242,44 @@ class UserBloc with ChangeNotifier {
       email.text = "";
       telephone.text = "";
       role = "";
+      showUpdate = 0;
+      notifyListeners();
+    } else {
+      Fluttertoast.showToast(
+          msg: "Une erreur à été decélé.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: rouge,
+          textColor: Colors.white,
+          fontSize: 12.0);
+    }
+
+    chargement = false;
+    notifyListeners();
+  }
+
+  reinitialiserPasswordUser() async {
+    chargement = true;
+    notifyListeners();
+
+    Map<String, dynamic> body = {
+      "reinipass": "oui",
+    };
+
+    String? result = await authService.updateAdmin(body, user!.id!);
+
+    if (result != null) {
+      Fluttertoast.showToast(
+          msg: "mot de passe  réinitialiser avec success.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: vert,
+          textColor: Colors.white,
+          fontSize: 12.0);
+      await allUsers();
+
       showUpdate = 0;
       notifyListeners();
     } else {

@@ -53,6 +53,16 @@ class AuthService {
     });
   }
 
+  Future<UserModel?> getAuth() async {
+    return await getResponse(url: '/users/auth').then((value) async {
+      if (value['status'] == 200) {
+        return UserModel.fromJson(value['body']['data']);
+      } else {
+        return null;
+      }
+    });
+  }
+
   Future<List<UserModel>> all() async {
     return await getResponse(url: '/users').then((value) async {
       if (value['status'] == 200) {

@@ -9,12 +9,21 @@ class TagsBloc with ChangeNotifier {
 
   TextEditingController titre = TextEditingController();
 
+  TextEditingController tagRecherche = TextEditingController();
+
   bool chargement = false;
 
   int showUpdate = 0;
 
+  String rechercheT = "";
+
   setShowUpdate(int i) {
     showUpdate = i;
+    notifyListeners();
+  }
+
+  setRecherche(String v) {
+    rechercheT = v;
     notifyListeners();
   }
 
