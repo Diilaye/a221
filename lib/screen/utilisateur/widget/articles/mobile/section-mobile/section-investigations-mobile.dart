@@ -22,7 +22,7 @@ class SectionInvestigationMobile extends StatelessWidget {
             children: [
               paddingHorizontalGlobal(),
               Text(
-                'Insvestigations'.toUpperCase(),
+                'Révélation'.toUpperCase(),
                 style: fontFammilyDii(
                     context, 22, rouge, FontWeight.bold, FontStyle.normal),
               ),

@@ -34,7 +34,7 @@ class SectionInvestigationtWidget extends StatelessWidget {
                         child: Row(
                           children: [
                             Text(
-                              'Investigations'.toUpperCase(),
+                              'Révélation'.toUpperCase(),
                               style: fontFammilyDii(
                                   context,
                                   size.width >= 1440
