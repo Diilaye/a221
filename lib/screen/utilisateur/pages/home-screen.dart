@@ -42,9 +42,7 @@ class HomeUtilisateurScreen extends StatelessWidget {
 
     return deviceName(size) == ScreenType.Mobile
         ? const HomeMobileScreen()
-        : homeUtilisateurBloc.articles.isEmpty
-            ? const SizedBox()
-            : Scaffold(
+        : Scaffold(
                 backgroundColor: gris,
                 appBar: AppBar(
                   elevation: .0,
@@ -55,106 +53,111 @@ class HomeUtilisateurScreen extends StatelessWidget {
                     Container(
                       color: blanc,
                     ),
-                    Container(
-                      height: size.height,
-                      width: size.width,
-                      color: blanc,
-                      child: ListView(
-                        controller: homeUtilisateurBloc.controllerListHome,
-                        children: [
-                          homeUtilisateurBloc.showMenu == 0
-                              ? paddingVerticalGlobal(220)
-                              : paddingVerticalGlobal(220),
-                          Center(
-                            child: SizedBox(
-                              height: 45,
-                              width: size.width * .8,
+                    Center(
+                      child: Container(
+                        height: size.height,
+                        width: 1024,
+                        color: blanc,
+                        child: ListView(
+                          controller: homeUtilisateurBloc.controllerListHome,
+                          children: [
+                            homeUtilisateurBloc.showMenu == 0
+                                ? paddingVerticalGlobal(220)
+                                : paddingVerticalGlobal(220),
+                            Center(
+                              child: SizedBox(
+                                height: 45,
+                                width: 1024,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        child: Container(
+                                            height: 45,
+                                            color: noir,
+                                            child: flashNewsUserBloc
+                                                        .flashNews.length ==
+                                                    0
+                                                ? CircularProgressIndicator()
+                                                : FlashNewsWidget(
+                                                    flashNews: flashNewsUserBloc
+                                                        .flashNews,
+                                                    havespace: false,
+                                                  ))),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            paddingVerticalGlobal(4),
+                            SectionUneWidget(),
+                            paddingVerticalGlobal(8),
+                            Center(
+                              child: SizedBox(
+                                height: 500,
+                                width: 1024,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        child: Row(
+                                      children: [
+                                        homeUtilisateurBloc.articleActualites.isNotEmpty
+                                            ? SectionActualiteWidget(
+                                                articles: homeUtilisateurBloc
+                                                    .articleActualites,
+                                              )
+                                            : SizedBox(),
+                                        papierJournalUserBloc.papierJournals.isEmpty
+                                            ? SizedBox()
+                                            : SectionEditionWidget(
+                                                journalModel: papierJournalUserBloc
+                                                    .papierJournals.last,
+                                              ),
+                                      ],
+                                    )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            paddingVerticalGlobal(32),
+                            const SectionPolitiqueWidget(),
+                            paddingVerticalGlobal(32),
+                            const SectionContributionWidget(),
+                            paddingVerticalGlobal(32),
+                            const SectionInvestigationtWidget(),
+                            paddingVerticalGlobal(32),
+                            const SectionEconomiqueWidget(),
+                            paddingVerticalGlobal(32),
+                            postsDigiteauxUserBloc.listePosts.isEmpty
+                                ? SizedBox()
+                                : SectionEtientielJourWidget(
+                                    posts: postsDigiteauxUserBloc.listePosts
+                                        .where((e) => e.type == "essentiel" && e.statusOnline =="on")
+                                        .toList()
+                                        .reversed
+                                        .toList(),
+                                  ),
+                            paddingVerticalGlobal(32),
+                            const SectionChoixRedacWidget(),
+                            paddingVerticalGlobal(32),
+                            Container(
+                              height: 650,
+                              width: 1024,
                               child: Row(
                                 children: [
-                                  Expanded(
-                                      child: Container(
-                                          height: 45,
-                                          color: noir,
-                                          child: flashNewsUserBloc
-                                                      .flashNews.length ==
-                                                  0
-                                              ? CircularProgressIndicator()
-                                              : FlashNewsWidget(
-                                                  flashNews: flashNewsUserBloc
-                                                      .flashNews,
-                                                  havespace: false,
-                                                ))),
+                                if(homeUtilisateurBloc.articleSport.isNotEmpty)  SectionMultiWidget(title: "Sport" , article: homeUtilisateurBloc.articleSport,),
+                                  paddingHorizontalGlobal(),
+                                  if(homeUtilisateurBloc.articleCultures.isNotEmpty)   SectionMultiWidget(title: "CULTURE & ART" , article: homeUtilisateurBloc.articleCultures,),
+                                  paddingHorizontalGlobal(),
+                                  if(homeUtilisateurBloc.articleAfriques.isNotEmpty) SectionMultiWidget(title: "Afrique" , article: homeUtilisateurBloc.articleAfriques,),
+                                  paddingHorizontalGlobal(),
+                                  if(homeUtilisateurBloc.articleInternationals.isNotEmpty) SectionMultiWidget(title: "International" , article: homeUtilisateurBloc.articleInternationals,),
+
                                 ],
                               ),
                             ),
-                          ),
-                          SectionUneWidget(),
-                          paddingVerticalGlobal(8),
-                          SizedBox(
-                            height: 500,
-                            width: size.width,
-                            child: Row(
-                              children: [
-                                paddingHorizontalGlobal(size.width * .1),
-                                Expanded(
-                                    child: Row(
-                                  children: [
-                                    homeUtilisateurBloc.articles.isNotEmpty
-                                        ? SectionActualiteWidget(
-                                            articles: homeUtilisateurBloc
-                                                .articleActualites,
-                                          )
-                                        : SizedBox(),
-                                    papierJournalUserBloc.papierJournals.isEmpty
-                                        ? SizedBox()
-                                        : SectionEditionWidget(
-                                            journalModel: papierJournalUserBloc
-                                                .papierJournals.last,
-                                          ),
-                                  ],
-                                )),
-                                paddingHorizontalGlobal(size.width * .1),
-                              ],
-                            ),
-                          ),
-                          paddingVerticalGlobal(32),
-                          const SectionPolitiqueWidget(),
-                          const SectionEconomiqueWidget(),
-                          const SectionInvestigationtWidget(),
-                          postsDigiteauxUserBloc.listePosts.isEmpty
-                              ? SizedBox()
-                              : SectionEtientielJourWidget(
-                                  posts: postsDigiteauxUserBloc.listePosts
-                                      .where((e) => e.type == "essentiel")
-                                      .toList()
-                                      .reversed
-                                      .toList(),
-                                ),
-                          const SectionChoixRedacWidget(),
-                          paddingVerticalGlobal(32),
-                          const SectionContributionWidget(),
-                          paddingVerticalGlobal(32),
-                          Container(
-                            height: 700,
-                            width: size.width,
-                            child: Row(
-                              children: [
-                                paddingHorizontalGlobal(size.width * .1),
-                                SectionMultiWidget(title: "Sport"),
-                                paddingHorizontalGlobal(),
-                                SectionMultiWidget(title: "CULTURE & ART"),
-                                paddingHorizontalGlobal(),
-                                SectionMultiWidget(title: "Afrique"),
-                                paddingHorizontalGlobal(),
-                                SectionMultiWidget(title: "International"),
-                                paddingHorizontalGlobal(),
-                                paddingHorizontalGlobal(size.width * .1),
-                              ],
-                            ),
-                          ),
-                          const SectionFooter(),
-                          paddingVerticalGlobal(46)
-                        ],
+                            const SectionFooter(),
+                            paddingVerticalGlobal(46)
+                          ],
+                        ),
                       ),
                     ),
                     Positioned(
@@ -175,66 +178,71 @@ class HomeUtilisateurScreen extends StatelessWidget {
                         )),
                     Positioned(
                         top: 84,
-                        child: SizedBox(
-                          height: 75,
-                          width: size.width,
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: size.width * .1,
-                              ),
-                              Expanded(
-                                  child: Container(
-                                height: 120,
-                                color: blanc,
-                                child: Row(
-                                  children: [
-                                    emissionUserBloc.emissions.length == 0
-                                        ? SizedBox()
-                                        : EmissionTopBarWidget(
-                                            emissionModel: emissionUserBloc
-                                                .suivreEmission!,
-                                          ),
-                                    Container(
-                                      width: 2,
-                                      color: rouge,
-                                    ),
-                                    paddingHorizontalGlobal(8),
-                                    homeUtilisateurBloc.topArticle == null
-                                        ? SizedBox()
-                                        : ArticleTopBarWidget(
-                                            articlesModel: homeUtilisateurBloc
-                                                .topArticle!),
-                                    Container(
-                                      width: 2,
-                                      color: rouge,
-                                    ),
-                                    paddingHorizontalGlobal(8),
-                                    emissionUserBloc.emissions.length == 0
-                                        ? SizedBox()
-                                        : EmissionTopBarWidget(
-                                            emissionModel: emissionUserBloc
-                                                .inviteEmission!,
-                                          ),
-                                  ],
-                                ),
-                              )),
-                              SizedBox(
-                                width: size.width * .1,
-                              ),
-                            ],
+                        right: 0,
+                        left: 0,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            height: 75,
+                            width: 1024,
+                            child: Row(
+                              children: [
+
+                                Expanded(
+                                    child: Container(
+                                  height: 120,
+                                  color: blanc,
+                                  child: Row(
+                                    children: [
+                                      emissionUserBloc.emissions.length == 0
+                                          ? SizedBox()
+                                          : EmissionTopBarWidget(
+                                              emissionModel: emissionUserBloc
+                                                  .suivreEmission!,
+                                            ),
+                                      Container(
+                                        width: 2,
+                                        color: rouge,
+                                      ),
+                                      paddingHorizontalGlobal(8),
+                                      homeUtilisateurBloc.topArticle == null
+                                          ? SizedBox()
+                                          : ArticleTopBarWidget(
+                                              articlesModel: homeUtilisateurBloc
+                                                  .topArticle!),
+                                      Container(
+                                        width: 2,
+                                        color: rouge,
+                                      ),
+                                      paddingHorizontalGlobal(8),
+                                      emissionUserBloc.emissions.length == 0
+                                          ? SizedBox()
+                                          : EmissionTopBarWidget(
+                                              emissionModel: emissionUserBloc
+                                                  .inviteEmission!,
+                                            ),
+                                    ],
+                                  ),
+                                )),
+
+                              ],
+                            ),
                           ),
                         )),
-                    Positioned(
+                   Positioned(
                         top: 20,
-                        left: size.width * .1,
-                        right: size.width * .1,
+                        left: 0,   // Permet d'étendre sur toute la largeur
+                        right: 0,
                         child: const TopBarMenu()),
+
+
                     MenuBarArticle(
                       categories: homeUtilisateurBloc.categories
                           .where((e) => e.showMenu == "1")
                           .toList(),
                     ),
+
+
                     if (homeUtilisateurBloc.hoverMenuClick != 0)
                       MenuRubrique(
                         number: homeUtilisateurBloc.hoverMenuClick,
@@ -243,16 +251,32 @@ class HomeUtilisateurScreen extends StatelessWidget {
                       const ExitMenuRubrique(),
                     if (!homeUtilisateurBloc.showFlashInfo)
                       Positioned(
-                        bottom: 0,
-                        child: Container(
+                        bottom: 0, // Place le widget en bas de l'écran
+                        left: 0,   // Permet d'étendre sur toute la largeur
+                        right: 0,  // Permet d'étendre sur toute la largeur
+                        child: Align(
+                          alignment: Alignment.center, // Centre horizontalement
+                          child: SizedBox(
                             height: 45,
-                            width: size.width,
-                            color: noir,
-                            child: flashNewsUserBloc.flashNews.length == 0
-                                ? CircularProgressIndicator()
-                                : FlashNewsWidget(
-                                    flashNews: flashNewsUserBloc.flashNews,
-                                  )),
+                            width: 1024,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    height: 45,
+                                    color: noir,
+                                    child: flashNewsUserBloc.flashNews.isEmpty
+                                        ? CircularProgressIndicator()
+                                        : FlashNewsWidget(
+                                      flashNews: flashNewsUserBloc.flashNews,
+                                      havespace: false,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                   ],
                 ),

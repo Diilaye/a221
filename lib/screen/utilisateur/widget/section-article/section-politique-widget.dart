@@ -18,24 +18,19 @@ class SectionPolitiqueWidget extends StatelessWidget {
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
 
     return SizedBox(
-      height: 500,
-      width: size.width,
+      height: 550,
+      width: 1024,
       child: Column(
         children: [
           paddingVerticalGlobal(),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              paddingHorizontalGlobal(size.width * .1),
               Text(
                 'Politique'.toUpperCase(),
                 style: fontFammilyDii(
                     context,
-                    size.width >= 1440
-                        ? 24
-                        : size.width >= 1024 && size.width < 1440
-                            ? 18
-                            : 14,
+                    24,
                     noir,
                     FontWeight.bold,
                     FontStyle.normal),
@@ -57,69 +52,58 @@ class SectionPolitiqueWidget extends StatelessWidget {
                     'voir +'.toUpperCase(),
                     style: fontFammilyDii(
                         context,
-                        size.width >= 1440
-                            ? 20
-                            : size.width >= 1024 && size.width < 1440
-                                ? 14
-                                : 10,
+                        14,
                         rouge,
                         FontWeight.bold,
                         FontStyle.normal),
                   ),
                 ),
               ),
-              paddingHorizontalGlobal(size.width * .1)
             ],
           ),
           paddingVerticalGlobal(),
-          Expanded(
-              child: Row(
+          SizedBox(
+            height: 450,
+              width: 1024,
+                child: Row(
             children: [
-              paddingHorizontalGlobal(size.width * .1),
-              Expanded(
-                  child: Row(
-                children: [
-                  SectionUneTernaireWidget(
-                    article: homeUtilisateurBloc.unePolitique!,
-                  ),
-                  paddingHorizontalGlobal(),
-                  homeUtilisateurBloc.articles.isEmpty
-                      ? SizedBox()
-                      : Expanded(
-                          child: Column(
-                          children: [
-                            SectionArticleTernaireWidget(
-                              articlesModel:
-                                  homeUtilisateurBloc.articlePolitiques[0],
-                              sizeTags: size.width >= 1440 ? 14 : 10,
-                              sizeTitle: size.width >= 1440 ? 14 : 12,
-                            ),
-                            paddingVerticalGlobal(),
-                            SectionArticleTernaireWidget(
-                              articlesModel:
-                                  homeUtilisateurBloc.articlePolitiques[1],
-                              sizeTags: size.width >= 1440 ? 14 : 10,
-                              sizeTitle: size.width >= 1440 ? 14 : 12,
-                            ),
-                            paddingVerticalGlobal(),
-                            SectionArticleTernaireWidget(
-                              articlesModel:
-                                  homeUtilisateurBloc.articlePolitiques[2],
-                              sizeTags: size.width >= 1440 ? 14 : 10,
-                              sizeTitle: size.width >= 1440 ? 14 : 12,
-                            ),
-                            paddingVerticalGlobal(),
-                            SectionArticleTernaireWidget(
-                              articlesModel:
-                                  homeUtilisateurBloc.articlePolitiques[3],
-                              sizeTags: size.width >= 1440 ? 14 : 10,
-                              sizeTitle: size.width >= 1440 ? 14 : 12,
-                            ),
-                          ],
-                        )),
-                ],
-              )),
-              paddingHorizontalGlobal(size.width * .1),
+              if(homeUtilisateurBloc.unePolitique != null)  SectionUneTernaireWidget(
+                article: homeUtilisateurBloc.unePolitique!,
+              ),
+              paddingHorizontalGlobal(),
+
+              if(homeUtilisateurBloc.articlePolitiques.isNotEmpty)  Expanded(
+                  child: Column(
+                    children: [
+                      SectionArticleTernaireWidget(
+                        articlesModel:
+                        homeUtilisateurBloc.articlePolitiques[0],
+                        sizeTags:  10,
+                        sizeTitle:  12,
+                      ),
+                      paddingVerticalGlobal(),
+                      SectionArticleTernaireWidget(
+                        articlesModel:
+                        homeUtilisateurBloc.articlePolitiques[1],
+                        sizeTags:  10,
+                        sizeTitle:  12,
+                      ),
+                      paddingVerticalGlobal(),
+                      SectionArticleTernaireWidget(
+                        articlesModel:
+                        homeUtilisateurBloc.articlePolitiques[2],
+                        sizeTags:  10,
+                        sizeTitle:  12,
+                      ),
+                      paddingVerticalGlobal(),
+                      SectionArticleTernaireWidget(
+                        articlesModel:
+                        homeUtilisateurBloc.articlePolitiques[3],
+                        sizeTags:  10,
+                        sizeTitle:  12,
+                      ),
+                    ],
+                  )),
             ],
           )),
           paddingVerticalGlobal(32),

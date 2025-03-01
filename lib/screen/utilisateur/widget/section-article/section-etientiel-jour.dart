@@ -12,59 +12,49 @@ class SectionEtientielJourWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-      width: size.width,
-      decoration: BoxDecoration(
-        color: bleuMarine,
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: size.width * 0),
-        child: Container(
-          decoration: BoxDecoration(color: bleuMarine, boxShadow: [
-            BoxShadow(blurRadius: 0, color: rouge.withOpacity(.7))
-          ]),
-          child: Column(
-            children: [
-              paddingVerticalGlobal(32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "En ce moment …".toUpperCase(),
-                    style: fontFammilyDii(
-                        context, 24, blanc, FontWeight.bold, FontStyle.normal),
-                  )
-                ],
-              ),
-              paddingVerticalGlobal(32),
-              SizedBox(
-                height: 350,
-                child: Row(
+    return Center(
+      child: Container(
+        width: 1024,
+        decoration: BoxDecoration(
+          color: bleuMarine,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0),
+          child: Container(
+            decoration: BoxDecoration(color: bleuMarine, boxShadow: [
+              BoxShadow(blurRadius: 0, color: rouge.withOpacity(.7))
+            ]),
+            child: Column(
+              children: [
+                paddingVerticalGlobal(32),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    paddingHorizontalGlobal(size.width * .1),
-                    Expanded(
-                        child: Image.network(
-                      BASE_URL_ASSET + posts[0].image!.url!,
-                      fit: BoxFit.contain,
-                    )),
-                    paddingHorizontalGlobal(8),
-                    Expanded(
-                        child: Image.network(
-                      BASE_URL_ASSET + posts[1].image!.url!,
-                      fit: BoxFit.contain,
-                    )),
-                    paddingHorizontalGlobal(8),
-                    Expanded(
-                        child: Image.network(
-                      BASE_URL_ASSET + posts[2].image!.url!,
-                      fit: BoxFit.contain,
-                    )),
-                    paddingHorizontalGlobal(size.width * .1),
+                    Text(
+                      "En ce moment …".toUpperCase(),
+                      style: fontFammilyDii(
+                          context, 24, blanc, FontWeight.bold, FontStyle.normal),
+                    )
                   ],
                 ),
-              ),
-              paddingVerticalGlobal(32),
-            ],
+                paddingVerticalGlobal(32),
+                SizedBox(
+                  height: 300,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: posts.map((e) => Row(children: [
+                      paddingHorizontalGlobal(8),
+                      Image.network(
+                        BASE_URL_ASSET + e.image!.url!,
+                        fit: BoxFit.contain,
+                      ),
+                      paddingHorizontalGlobal(8),
+                    ],)).toList()
+                  ),
+                ),
+                paddingVerticalGlobal(32),
+              ],
+            ),
           ),
         ),
       ),

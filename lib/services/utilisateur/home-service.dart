@@ -73,6 +73,146 @@ class HomeService {
     });
   }
 
+  Future<List<ArticlesModel>> uneArticles() async {
+    return await getResponse(url: '/articles/une').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<List<ArticlesModel>> articleActualite() async {
+    return await getResponse(url: '/articles/articleActualite').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<List<ArticlesModel>> articlePolitique() async {
+    return await getResponse(url: '/articles/articlePolitique').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<ArticlesModel?> unePolitique() async {
+    return await getResponse(url: '/articles/unePolitique').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromJson( value['body']['data']);
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<List<ArticlesModel>> articleEconomie() async {
+    return await getResponse(url: '/articles/articleEconomie').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<ArticlesModel?> uneEconomie() async {
+    return await getResponse(url: '/articles/uneEconomie').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromJson( value['body']['data']);
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<List<ArticlesModel>> articleInvestigation() async {
+    return await getResponse(url: '/articles/articleInvestigation').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<ArticlesModel?> uneInvestigation() async {
+    return await getResponse(url: '/articles/uneInvestigation').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromJson( value['body']['data']);
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<List<ArticlesModel>> articleChoixRedac() async {
+    return await getResponse(url: '/articles/articleChoixRedac').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<List<ArticlesModel>> articleContribution() async {
+    return await getResponse(url: '/articles/articleContribution').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<List<ArticlesModel>> articleSport() async {
+    return await getResponse(url: '/articles/articleSport').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<List<ArticlesModel>> articleCulture() async {
+    return await getResponse(url: '/articles/articleCulture').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<List<ArticlesModel>> articleAfrique() async {
+    return await getResponse(url: '/articles/articleAfrique').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<List<ArticlesModel>> articleInternational() async {
+    return await getResponse(url: '/articles/articleInternational').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
   Future<ArticlesModel?> ArtilceTop() async {
     return await getResponse(url: '/articles/top').then((value) async {
       if (value['status'] == 200) {

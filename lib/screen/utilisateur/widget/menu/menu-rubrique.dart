@@ -17,119 +17,118 @@ class MenuRubrique extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
     return Positioned(
-      top: 210,
+      top: 210,  // Positionné à 210 pixels du haut
+      left: 0,   // Prend toute la largeur disponible
+      right: 0,
       child: homeUtilisateurBloc.categorieMenuModel == null
           ? SizedBox()
-          : Container(
-              height: 800,
-              width: size.width,
-              color: gris,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: size.width * .1),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: Container(
-                      color: gris,
-                      child: Column(
-                        children: [
-                          paddingVerticalGlobal(32),
-                          MenuItemSectionRubrique(
-                              titre: homeUtilisateurBloc.catMenu!.titre!),
-                          paddingVerticalGlobal(32),
-                          Expanded(
-                              child: Column(
-                            children: homeUtilisateurBloc
-                                .categorieMenuModel!.sousRubrique!
-                                .map((e) => Column(
-                                      children: [
-                                        MenuItemSectionRubrique(
-                                          titre: e.titre!,
-                                          sub: 1,
-                                        ),
-                                        paddingVerticalGlobal(32),
-                                      ],
-                                    ))
-                                .toList(),
-                          )),
-                        ],
+          : Align( // Centre horizontalement
+        alignment: Alignment.center,
+        child: Container(
+          height: 800,
+          width: 1024,
+          color: gris,
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  color: gris,
+                  child: Column(
+                    children: [
+                      paddingVerticalGlobal(32),
+                      MenuItemSectionRubrique(
+                          titre: homeUtilisateurBloc.catMenu!.titre!),
+                      paddingVerticalGlobal(32),
+                      Expanded(
+                        child: Column(
+                          children: homeUtilisateurBloc
+                              .categorieMenuModel!.sousRubrique!
+                              .map((e) => Column(
+                            children: [
+                              MenuItemSectionRubrique(
+                                titre: e.titre!,
+                                sub: 1,
+                              ),
+                              paddingVerticalGlobal(32),
+                            ],
+                          ))
+                              .toList(),
+                        ),
                       ),
-                    )),
-                    paddingHorizontalGlobal(32),
-                    Expanded(
-                        flex: 4,
+                    ],
+                  ),
+                ),
+              ),
+              paddingHorizontalGlobal(32),
+              Expanded(
+                flex: 4,
+                child: Column(
+                  children: [
+                    paddingVerticalGlobal(32),
+                    if (homeUtilisateurBloc
+                        .categorieMenuModel!.articles!.length >=
+                        4)
+                      Expanded(
                         child: Column(
                           children: [
-                            paddingVerticalGlobal(32),
-                            if (homeUtilisateurBloc
-                                    .categorieMenuModel!.articles!.length >=
-                                4)
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    Expanded(
+                            Expanded(
+                              child: Row(
+                                  children: homeUtilisateurBloc
+                                      .categorieMenuModel!.articles!
+                                      .sublist(0, 4)
+                                      .toList()
+                                      .reversed
+                                      .map(
+                                        (e) => Expanded(
                                       child: Row(
-                                          children: homeUtilisateurBloc
-                                              .categorieMenuModel!.articles!
-                                              .sublist(0, 4)
-                                              .toList()
-                                              .reversed
-                                              .map(
-                                                (e) => Expanded(
-                                                  child: Row(
-                                                    children: [
-                                                      paddingHorizontalGlobal(
-                                                          8),
-                                                      Expanded(
-                                                          child:
-                                                              MenuArticleRubrique(
-                                                        article: e,
-                                                      )),
-                                                      paddingHorizontalGlobal(
-                                                          8),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
-                                              .toList()),
+                                        children: [
+                                          paddingHorizontalGlobal(8),
+                                          Expanded(
+                                              child: MenuArticleRubrique(
+                                                article: e,
+                                              )),
+                                          paddingHorizontalGlobal(8),
+                                        ],
+                                      ),
                                     ),
-                                    paddingVerticalGlobal(),
-                                    Expanded(
+                                  )
+                                      .toList()),
+                            ),
+                            paddingVerticalGlobal(),
+                            Expanded(
+                              child: Row(
+                                  children: homeUtilisateurBloc
+                                      .categorieMenuModel!.articles!
+                                      .sublist(0, 4)
+                                      .toList()
+                                      .reversed
+                                      .map(
+                                        (e) => Expanded(
                                       child: Row(
-                                          children: homeUtilisateurBloc
-                                              .categorieMenuModel!.articles!
-                                              .sublist(0, 4)
-                                              .toList()
-                                              .reversed
-                                              .map(
-                                                (e) => Expanded(
-                                                  child: Row(
-                                                    children: [
-                                                      paddingHorizontalGlobal(
-                                                          8),
-                                                      Expanded(
-                                                          child:
-                                                              MenuArticleRubrique(
-                                                        article: e,
-                                                      )),
-                                                      paddingHorizontalGlobal(
-                                                          8),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
-                                              .toList()),
+                                        children: [
+                                          paddingHorizontalGlobal(8),
+                                          Expanded(
+                                              child: MenuArticleRubrique(
+                                                article: e,
+                                              )),
+                                          paddingHorizontalGlobal(8),
+                                        ],
+                                      ),
                                     ),
-                                    paddingVerticalGlobal(150),
-                                  ],
-                                ),
-                              ),
+                                  )
+                                      .toList()),
+                            ),
+                            paddingVerticalGlobal(150),
                           ],
-                        )),
+                        ),
+                      ),
                   ],
                 ),
               ),
-            ),
-    );
+            ],
+          ),
+        ),
+      ),
+    ) ;
   }
 }

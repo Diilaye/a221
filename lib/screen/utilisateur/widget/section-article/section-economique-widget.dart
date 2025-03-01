@@ -20,24 +20,19 @@ class SectionEconomiqueWidget extends StatelessWidget {
     return homeUtilisateurBloc.articleEconomies.isEmpty
         ? SizedBox()
         : SizedBox(
-            height: 500,
-            width: size.width,
+            height: 550,
+            width: 1024,
             child: Column(
               children: [
                 paddingVerticalGlobal(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    paddingHorizontalGlobal(size.width * .1),
                     Text(
                       'économie'.toUpperCase(),
                       style: fontFammilyDii(
                           context,
-                          size.width >= 1440
-                              ? 24
-                              : size.width >= 1024 && size.width < 1440
-                                  ? 18
-                                  : 14,
+                          24,
                           noir,
                           FontWeight.bold,
                           FontStyle.normal),
@@ -53,25 +48,19 @@ class SectionEconomiqueWidget extends StatelessWidget {
                           'voir +'.toUpperCase(),
                           style: fontFammilyDii(
                               context,
-                              size.width >= 1440
-                                  ? 20
-                                  : size.width >= 1024 && size.width < 1440
-                                      ? 14
-                                      : 10,
+                               10,
                               rouge,
                               FontWeight.bold,
                               FontStyle.normal),
                         ),
                       ),
                     ),
-                    paddingHorizontalGlobal(size.width * .1)
                   ],
                 ),
                 paddingVerticalGlobal(),
                 Expanded(
                     child: Row(
                   children: [
-                    paddingHorizontalGlobal(size.width * .1),
                     homeUtilisateurBloc.articleEconomies.isEmpty
                         ? const SizedBox()
                         : Expanded(
@@ -83,29 +72,29 @@ class SectionEconomiqueWidget extends StatelessWidget {
                                   SectionArticleTernaireWidget(
                                     articlesModel:
                                         homeUtilisateurBloc.articleEconomies[0],
-                                    sizeTags: size.width >= 1440 ? 14 : 10,
-                                    sizeTitle: size.width >= 1440 ? 14 : 12,
+                                    sizeTags:  10,
+                                    sizeTitle:  12,
                                   ),
                                   paddingVerticalGlobal(),
                                   SectionArticleTernaireWidget(
                                     articlesModel:
                                         homeUtilisateurBloc.articleEconomies[1],
-                                    sizeTags: size.width >= 1440 ? 14 : 10,
-                                    sizeTitle: size.width >= 1440 ? 14 : 12,
+                                    sizeTags:  10,
+                                    sizeTitle:  12,
                                   ),
                                   paddingVerticalGlobal(),
                                   SectionArticleTernaireWidget(
                                     articlesModel:
                                         homeUtilisateurBloc.articleEconomies[3],
-                                    sizeTags: size.width >= 1440 ? 14 : 10,
-                                    sizeTitle: size.width >= 1440 ? 14 : 12,
+                                    sizeTags:  10,
+                                    sizeTitle:  12,
                                   ),
                                   paddingVerticalGlobal(),
                                   SectionArticleTernaireWidget(
                                     articlesModel:
                                         homeUtilisateurBloc.articleEconomies[4],
-                                    sizeTags: size.width >= 1440 ? 14 : 10,
-                                    sizeTitle: size.width >= 1440 ? 14 : 12,
+                                    sizeTags:  10,
+                                    sizeTitle:  12,
                                   ),
                                 ],
                               )),
@@ -117,7 +106,6 @@ class SectionEconomiqueWidget extends StatelessWidget {
                                     ),
                             ],
                           )),
-                    paddingHorizontalGlobal(size.width * .1),
                   ],
                 )),
                 paddingVerticalGlobal(32),

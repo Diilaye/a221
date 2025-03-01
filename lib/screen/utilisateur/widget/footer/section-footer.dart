@@ -12,17 +12,16 @@ class SectionFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      height: 600,
-      width: size.width,
+      height: 100,
+      width: 1024,
       color: bgFooter,
       child: Row(
         children: [
-          paddingHorizontalGlobal(size.width * .1),
           Expanded(
               child: Column(
             children: [
               paddingVerticalGlobal(32),
-              const Row(
+             /* const Row(
                 children: [
                   TitreTopFooter(titre: 'Termes et conditions'),
                   TitreTopFooter(titre: 'Règles de la communauté'),
@@ -38,6 +37,7 @@ class SectionFooter extends StatelessWidget {
                 height: .5,
                 color: blanc.withOpacity(.5),
               ),
+
               paddingVerticalGlobal(32),
               Expanded(
                 child: Row(
@@ -189,6 +189,8 @@ class SectionFooter extends StatelessWidget {
                 height: .5,
                 color: blanc.withOpacity(.5),
               ),
+
+
               paddingVerticalGlobal(32),
               Row(
                 children: [
@@ -283,21 +285,29 @@ class SectionFooter extends StatelessWidget {
                   ),
                 ],
               ),
+
+
               paddingVerticalGlobal(32),
               Container(
                 height: .5,
                 color: blanc.withOpacity(.5),
               ),
               paddingVerticalGlobal(32),
+              */
               Text(
-                "© Copyright 2024 Digital-eyes Tous droits réservés. Ngor Almadie villa 220 Dakar, 01234 Moustapha Diakhaté, président et chef de la direction",
+                "Service commerciale : ",
                 style: fontFammilyDii(
                     context,
-                    size.width >= 1440
-                        ? 12
-                        : size.width >= 1024 && size.width < 1440
-                            ? 8
-                            : 6,
+                    14,
+                    blanc,
+                    FontWeight.bold,
+                    FontStyle.normal),
+              ),
+              Text(
+                "© Copyright 2025 Digital-eyes Tous droits réservés.",
+                style: fontFammilyDii(
+                    context,
+                    14,
                     blanc,
                     FontWeight.bold,
                     FontStyle.normal),
@@ -305,7 +315,6 @@ class SectionFooter extends StatelessWidget {
               paddingVerticalGlobal(32),
             ],
           )),
-          paddingHorizontalGlobal(size.width * .1),
         ],
       ),
     );

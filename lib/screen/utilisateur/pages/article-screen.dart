@@ -6,6 +6,7 @@ import 'package:actu/screen/utilisateur/widget/emissions/article-top-bar.dart';
 import 'package:actu/screen/utilisateur/widget/emissions/emission-top-bar.dart';
 import 'package:actu/screen/utilisateur/widget/footer/section-footer.dart';
 import 'package:actu/screen/utilisateur/widget/menu/menu-bar.dart';
+import 'package:actu/screen/utilisateur/widget/menu/menu-rubrique.dart';
 import 'package:actu/screen/utilisateur/widget/menu/top-bar-menu.dart';
 import 'package:actu/utils/color-by-dii.dart';
 import 'package:actu/utils/requette-by-dii.dart';
@@ -17,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../widget/menu/exit-menu-rubrique.dart';
 
 class ArticleScreen extends StatelessWidget {
   const ArticleScreen({super.key});
@@ -331,67 +334,78 @@ class ArticleScreen extends StatelessWidget {
                           ),
                         )),
                     Positioned(
-                        top: 20,
-                        left: size.width * .1,
-                        right: size.width * .1,
-                        child: const TopBarMenu()),
-                    Positioned(
                         top: 84,
-                        child: SizedBox(
-                          height: 75,
-                          width: size.width,
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: size.width * .1,
-                              ),
-                              Expanded(
-                                  child: Container(
-                                height: 120,
-                                color: blanc,
-                                child: Row(
-                                  children: [
-                                    emissionUserBloc.emissions.length == 0
-                                        ? SizedBox()
-                                        : EmissionTopBarWidget(
+                        right: 0,
+                        left: 0,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            height: 75,
+                            width: 1024,
+                            child: Row(
+                              children: [
+
+                                Expanded(
+                                    child: Container(
+                                      height: 120,
+                                      color: blanc,
+                                      child: Row(
+                                        children: [
+                                          emissionUserBloc.emissions.length == 0
+                                              ? SizedBox()
+                                              : EmissionTopBarWidget(
                                             emissionModel: emissionUserBloc
                                                 .suivreEmission!,
                                           ),
-                                    Container(
-                                      width: 2,
-                                      color: rouge,
-                                    ),
-                                    paddingHorizontalGlobal(8),
-                                    homeUtilisateurBloc.topArticle == null
-                                        ? CircularProgressIndicator()
-                                        : ArticleTopBarWidget(
-                                            articlesModel: homeUtilisateurBloc
-                                                .topArticle!),
-                                    Container(
-                                      width: 2,
-                                      color: rouge,
-                                    ),
-                                    paddingHorizontalGlobal(8),
-                                    emissionUserBloc.emissions.length == 0
-                                        ? SizedBox()
-                                        : EmissionTopBarWidget(
+                                          Container(
+                                            width: 2,
+                                            color: rouge,
+                                          ),
+                                          paddingHorizontalGlobal(8),
+                                          homeUtilisateurBloc.topArticle == null
+                                              ? SizedBox()
+                                              : ArticleTopBarWidget(
+                                              articlesModel: homeUtilisateurBloc
+                                                  .topArticle!),
+                                          Container(
+                                            width: 2,
+                                            color: rouge,
+                                          ),
+                                          paddingHorizontalGlobal(8),
+                                          emissionUserBloc.emissions.length == 0
+                                              ? SizedBox()
+                                              : EmissionTopBarWidget(
                                             emissionModel: emissionUserBloc
                                                 .inviteEmission!,
                                           ),
-                                  ],
-                                ),
-                              )),
-                              SizedBox(
-                                width: size.width * .1,
-                              ),
-                            ],
+                                        ],
+                                      ),
+                                    )),
+
+                              ],
+                            ),
                           ),
                         )),
+                    Positioned(
+                        top: 20,
+                        left: 0,   // Permet d'étendre sur toute la largeur
+                        right: 0,
+                        child: const TopBarMenu()),
+
+
                     MenuBarArticle(
                       categories: homeUtilisateurBloc.categories
                           .where((e) => e.showMenu == "1")
                           .toList(),
                     ),
+
+
+                    if (homeUtilisateurBloc.hoverMenuClick != 0)
+                      MenuRubrique(
+                        number: homeUtilisateurBloc.hoverMenuClick,
+                      ),
+                    if (homeUtilisateurBloc.hoverMenuClick != 0)
+                      const ExitMenuRubrique(),
                   ],
                 ),
               );

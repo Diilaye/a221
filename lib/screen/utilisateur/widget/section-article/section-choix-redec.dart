@@ -16,14 +16,11 @@ class SectionChoixRedacWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
 
-    return Container(
-      height: 600,
-      width: size.width,
-      color: gris,
-      child: Padding(
-        padding: deviceName(size) == ScreenType.Desktop
-            ? EdgeInsets.symmetric(horizontal: size.width * .1)
-            : EdgeInsets.symmetric(horizontal: size.width * .01),
+    return Center(
+      child: Container(
+        height: 600,
+        width: 1024,
+        color: gris,
         child: Column(
           children: [
             paddingVerticalGlobal(),
@@ -31,96 +28,31 @@ class SectionChoixRedacWidget extends StatelessWidget {
               "à venir".toUpperCase(),
               style: fontFammilyDii(
                   context,
-                  deviceName(size) == ScreenType.Desktop
-                      ? 24
-                      : deviceName(size) == ScreenType.Tablet
-                          ? 18
-                          : 14,
+                   24,
                   noir,
                   FontWeight.bold,
                   FontStyle.normal),
             ),
             paddingVerticalGlobal(),
-            homeUtilisateurBloc.articles.isEmpty
+            homeUtilisateurBloc.articleChoixRedac.isEmpty
                 ? SizedBox()
                 : Expanded(
                     child: Row(
                     children: [
                       Expanded(
-                          child: Column(
-                        children: [
-                          Expanded(
-                              child: Column(
-                            children: [
-                              SectionArticleTernaireWidget(
-                                tagShowRigth: 1,
-                                articlesModel:
-                                    homeUtilisateurBloc.articleChoixRedac[0],
-                                sizeTags: size.width >= 1440 ? 14 : 10,
-                                sizeTitle: size.width >= 1440 ? 14 : 12,
-                              ),
-                              paddingVerticalGlobal(),
-                              SectionArticleTernaireWidget(
-                                tagShowRigth: 0,
-                                articlesModel:
-                                    homeUtilisateurBloc.articleChoixRedac[1],
-                                sizeTags: size.width >= 1440 ? 14 : 10,
-                                sizeTitle: size.width >= 1440 ? 14 : 12,
-                              ),
-                              paddingVerticalGlobal(),
-                              SectionArticleTernaireWidget(
-                                tagShowRigth: 0,
-                                articlesModel:
-                                    homeUtilisateurBloc.articleChoixRedac[2],
-                                sizeTags: size.width >= 1440 ? 14 : 10,
-                                sizeTitle: size.width >= 1440 ? 14 : 12,
-                              ),
-                            ],
+                          child: SectionDossierRedactionWidget(
+                            articles: homeUtilisateurBloc.articleChoixRedac[0],
                           )),
-                        ],
+                      paddingHorizontalGlobal(),
+                      Expanded(
+                          child: SectionDossierRedactionWidget(
+                        articles: homeUtilisateurBloc.articleChoixRedac[1],
                       )),
                       paddingHorizontalGlobal(),
                       Expanded(
                           child: SectionDossierRedactionWidget(
-                        articles: homeUtilisateurBloc.uneChoixRedac,
-                      )),
-                      paddingHorizontalGlobal(),
-                      Expanded(
-                          child: Column(
-                        children: [
-                          Expanded(
-                              child: Column(
-                            children: [
-                              SectionArticleTernaireWidget(
-                                tagShowRigth: 1,
-                                showRigth: 1,
-                                articlesModel:
-                                    homeUtilisateurBloc.articleChoixRedac[3],
-                                sizeTags: size.width >= 1440 ? 14 : 10,
-                                sizeTitle: size.width >= 1440 ? 14 : 12,
-                              ),
-                              paddingVerticalGlobal(),
-                              SectionArticleTernaireWidget(
-                                tagShowRigth: 0,
-                                showRigth: 1,
-                                articlesModel:
-                                    homeUtilisateurBloc.articleChoixRedac[4],
-                                sizeTags: size.width >= 1440 ? 14 : 10,
-                                sizeTitle: size.width >= 1440 ? 14 : 12,
-                              ),
-                              paddingVerticalGlobal(),
-                              SectionArticleTernaireWidget(
-                                tagShowRigth: 0,
-                                showRigth: 1,
-                                articlesModel:
-                                    homeUtilisateurBloc.articleChoixRedac[5],
-                                sizeTags: size.width >= 1440 ? 14 : 10,
-                                sizeTitle: size.width >= 1440 ? 14 : 12,
-                              ),
-                            ],
+                            articles: homeUtilisateurBloc.articleChoixRedac[2],
                           )),
-                        ],
-                      )),
                     ],
                   )),
             paddingVerticalGlobal(),

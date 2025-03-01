@@ -20,11 +20,8 @@ class FlashNewsWidget extends StatelessWidget {
 
     return Row(
       children: [
-        paddingHorizontalGlobal(4),
-        if (havespace)
-          SizedBox(
-            width: size.width * .1,
-          ),
+
+
         Icon(
           CupertinoIcons.clock,
           color: blanc,
@@ -119,10 +116,7 @@ class FlashNewsWidget extends StatelessWidget {
             ),
           ),
         ),
-        if (havespace)
-          SizedBox(
-            width: size.width * .1,
-          ),
+
         paddingHorizontalGlobal(),
       ],
     );

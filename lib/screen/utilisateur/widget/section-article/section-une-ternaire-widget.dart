@@ -34,8 +34,8 @@ class SectionUneTernaireWidget extends StatelessWidget {
                 },
                 child: Image.network(
                   BASE_URL_ASSET + article.imageArticle!.url!,
-                  height: 500,
-                  width: 1200,
+                  height: 450,
+                  width: 600,
                   fit: BoxFit.fill,
                 ),
               )),

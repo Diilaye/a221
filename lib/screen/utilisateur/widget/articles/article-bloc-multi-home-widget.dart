@@ -23,166 +23,93 @@ class ArticleBlocMultiHomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
     Size size = MediaQuery.of(context).size;
-    return Expanded(
-        flex: 4,
+    return SizedBox(
+        height: 250,
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
-          child: Stack(
+          child: Column(
             children: [
-              Card(
-                elevation: card,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0),
+              Expanded(
+
+                child: GestureDetector(
+                  onTap: () {
+                    homeUtilisateurBloc.setAticle(article!);
+
+                    js.context.callMethod('open', [
+                      'https://a221.net/article/${article!.slug!}',
+                      '_self'
+                    ]);
+                  },
+                  child: Image.network(
+                    BASE_URL_ASSET + article!.imageArticle!.url!,
+                    height: 250,
+                    width: 500,
+                    fit: BoxFit.fill,
+                  ),
                 ),
+              ),
+              Expanded(
                 child: Column(
                   children: [
-                    Expanded(
-                      flex: size.width >= 1440
-                          ? 2
-                          : size.width >= 1024 && size.width < 1440
-                              ? 1
-                              : 1,
-                      child: GestureDetector(
-                        onTap: () {
-                          homeUtilisateurBloc.setAticle(article!);
-
-                          js.context.callMethod('open', [
-                            'https://a221.net/article/${article!.slug!}',
-                            '_self'
-                          ]);
-                        },
-                        child: Image.network(
-                          BASE_URL_ASSET + article!.imageArticle!.url!,
-                          height: 200,
-                          width: 500,
-                          fit: BoxFit.cover,
+                    paddingVerticalGlobal(4),
+                    Row(
+                      children: [
+                        // paddingHorizontalGlobal(8),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              js.context.callMethod('open', [
+                                'https://a221.net/tag/${article!.tags!.slug}',
+                                '_self'
+                              ]);
+                            },
+                            child: Text(article!.tags!.titre!,
+                                style: fontFammilyDii(
+                                    context,
+                                    13,
+                                    rouge,
+                                    FontWeight.bold,
+                                    FontStyle.normal)),
+                          ),
                         ),
-                      ),
+                        paddingHorizontalGlobal(8),
+                      ],
                     ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          paddingVerticalGlobal(4),
-                          Row(
-                            children: [
-                              // paddingHorizontalGlobal(8),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    homeUtilisateurBloc.setAticle(article!);
+                    Row(
+                      children: [
+                        // paddingHorizontalGlobal(8),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              homeUtilisateurBloc.setAticle(article!);
 
-                                    js.context.callMethod('open', [
-                                      'https://a221.net/article/${article!.slug!}',
-                                      '_self'
-                                    ]);
-                                  },
-                                  child: Text(article!.titre!,
-                                      overflow: TextOverflow.clip,
-                                      style: fontFammilyDii(
-                                          context,
-                                          size.width >= 1440
-                                              ? 12
-                                              : size.width >= 1024 &&
-                                                      size.width < 1440
-                                                  ? 10
-                                                  : 8,
-                                          noir,
-                                          FontWeight.w400,
-                                          FontStyle.normal)),
-                                ),
-                              ),
-                              paddingHorizontalGlobal(8),
-                            ],
+                              js.context.callMethod('open', [
+                                'https://a221.net/article/${article!.slug!}',
+                                '_self'
+                              ]);
+                            },
+                            child: Text(article!.titre!,
+                                overflow: TextOverflow.clip,
+                                style: fontFammilyDii(
+                                    context,
+                                    13,
+                                    noir,
+                                    FontWeight.w400,
+                                    FontStyle.normal)),
                           ),
-                          paddingVerticalGlobal(4),
-                          Row(
-                            children: [
-                              // paddingHorizontalGlobal(8),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    js.context.callMethod('open', [
-                                      'https://a221.net/tag/${article!.tags!.slug}',
-                                      '_self'
-                                    ]);
-                                  },
-                                  child: Text(article!.tags!.titre!,
-                                      style: fontFammilyDii(
-                                          context,
-                                          size.width >= 1440
-                                              ? 16
-                                              : size.width >= 1024 &&
-                                                      size.width < 1440
-                                                  ? 14
-                                                  : 12,
-                                          noir,
-                                          FontWeight.bold,
-                                          FontStyle.normal)),
-                                ),
-                              ),
-                              paddingHorizontalGlobal(8),
-                            ],
-                          ),
-                        ],
-                      ),
+                        ),
+                        paddingHorizontalGlobal(8),
+                      ],
                     ),
                     paddingVerticalGlobal(4),
                   ],
                 ),
               ),
-              Positioned(
-                top: size.width >= 1440
-                    ? 194
-                    : size.width >= 1024 && size.width < 1440
-                        ? 145
-                        : 14,
-                left: 4,
-                child: Row(
-                  children: [
-                    // paddingHorizontalGlobal(8),
-                    Container(
-                      color: rouge,
-                      height: size.width >= 1440
-                          ? 30
-                          : size.width >= 1024 && size.width < 1440
-                              ? 25
-                              : 20,
-                      child: Row(
-                        children: [
-                          paddingHorizontalGlobal(
-                            size.width >= 1440
-                                ? 6
-                                : size.width >= 1024 && size.width < 1440
-                                    ? 4
-                                    : 2,
-                          ),
-                          Text(article!.categorie!.titre!,
-                              style: fontFammilyDii(
-                                  context,
-                                  size.width >= 1440
-                                      ? 14
-                                      : size.width >= 1024 && size.width < 1440
-                                          ? 10
-                                          : 8,
-                                  blanc,
-                                  FontWeight.bold,
-                                  FontStyle.normal)),
-                          paddingHorizontalGlobal(
-                            size.width >= 1440
-                                ? 6
-                                : size.width >= 1024 && size.width < 1440
-                                    ? 4
-                                    : 2,
-                          ),
-                        ],
-                      ),
-                    ),
-                    paddingHorizontalGlobal(8),
-                  ],
-                ),
-              )
+              paddingVerticalGlobal(4),
             ],
           ),
+
+
         ));
   }
 }

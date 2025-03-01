@@ -21,14 +21,13 @@ class SectionInvestigationtWidget extends StatelessWidget {
         ? const SizedBox()
         : Container(
             height: 600,
-            width: size.width,
+            width: 1024,
             color: rouge,
             child: Column(
               children: [
                 paddingVerticalGlobal(32),
                 Row(
                   children: [
-                    paddingHorizontalGlobal(size.width * .1),
                     Expanded(
                         flex: 2,
                         child: Row(
@@ -37,11 +36,7 @@ class SectionInvestigationtWidget extends StatelessWidget {
                               'Révélation'.toUpperCase(),
                               style: fontFammilyDii(
                                   context,
-                                  size.width >= 1440
-                                      ? 24
-                                      : size.width >= 1024 && size.width < 1440
-                                          ? 18
-                                          : 14,
+                                  24,
                                   blanc,
                                   FontWeight.bold,
                                   FontStyle.normal),
@@ -62,12 +57,7 @@ class SectionInvestigationtWidget extends StatelessWidget {
                                   'voir +'.toUpperCase(),
                                   style: fontFammilyDii(
                                       context,
-                                      size.width >= 1440
-                                          ? 20
-                                          : size.width >= 1024 &&
-                                                  size.width < 1440
-                                              ? 14
-                                              : 10,
+                                      10,
                                       blanc,
                                       FontWeight.bold,
                                       FontStyle.normal),
@@ -78,14 +68,12 @@ class SectionInvestigationtWidget extends StatelessWidget {
                           ],
                         )),
                     Expanded(flex: 1, child: SizedBox()),
-                    paddingHorizontalGlobal(size.width * .1),
                   ],
                 ),
                 paddingVerticalGlobal(16),
                 Expanded(
                   child: Row(
                     children: [
-                      paddingHorizontalGlobal(size.width * .1),
                       Expanded(
                         child: Row(
                           children: [
@@ -93,12 +81,13 @@ class SectionInvestigationtWidget extends StatelessWidget {
                                 flex: 2,
                                 child: Column(
                                   children: [
-                                    ArticleLesPlusLueUneWidget(
+                                  if( homeUtilisateurBloc.uneInvestigations != null)  ArticleLesPlusLueUneWidget(
                                       article:
                                           homeUtilisateurBloc.uneInvestigations,
                                     ),
                                     paddingVerticalGlobal(),
-                                    Expanded(
+                                   if(homeUtilisateurBloc
+                                       .articleInvestigations.isNotEmpty) Expanded(
                                         flex: 3,
                                         child: Row(
                                           children: homeUtilisateurBloc
@@ -117,7 +106,7 @@ class SectionInvestigationtWidget extends StatelessWidget {
                                         )),
                                   ],
                                 )),
-                            Expanded(
+                          if(homeUtilisateurBloc.articleActualites.isNotEmpty)  Expanded(
                                 flex: 1,
                                 child: Card(
                                   elevation: 4,
@@ -134,23 +123,18 @@ class SectionInvestigationtWidget extends StatelessWidget {
                                             'Les plus lues'.toUpperCase(),
                                             style: fontFammilyDii(
                                                 context,
-                                                size.width >= 1440
-                                                    ? 18
-                                                    : size.width >= 1024 &&
-                                                            size.width < 1440
-                                                        ? 14
-                                                        : 10,
+                                                14,
                                                 noir,
                                                 FontWeight.w600,
                                                 FontStyle.normal),
                                           ),
                                         ],
                                       ),
-                                      ...homeUtilisateurBloc.articles
+                                      ...homeUtilisateurBloc.articleActualites
                                           .sublist(0, 5)
                                           .map((e) => ArticleLesPlusLue(
                                                 nombre: homeUtilisateurBloc
-                                                        .articles
+                                                        .articleActualites
                                                         .indexOf(e) +
                                                     1,
                                                 article: e,
@@ -162,7 +146,6 @@ class SectionInvestigationtWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                      paddingHorizontalGlobal(size.width * .1),
                     ],
                   ),
                 ),

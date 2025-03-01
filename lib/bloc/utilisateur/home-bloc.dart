@@ -121,100 +121,6 @@ class HomeUtilisateurBloc with ChangeNotifier {
 
   allArticles() async {
     articles = await homeService.allAricles();
-
-    articles = articles.reversed.toList();
-    articleUnes =
-        articles.where((e) => e.typeUne == "une").toList().sublist(0, 5);
-
-    uneArticle = articleUnes[0];
-    uneArticleMobile = articleUnes[0];
-    notifyListeners();
-
-    articlePolitiques = articles
-        .where(
-            (e) => e.categorie!.titre == 'POLITIQUE' && e.typeUne != "rubrique")
-        .toList();
-
-    articleActualites = articles
-        .where((e) =>
-            e.categorie!.titre == 'ACTUALITES' && e.typeUne != "rubrique")
-        .toList();
-
-    unePolitique = articles.firstWhere(
-        (e) => e.categorie!.titre == 'POLITIQUE' && e.typeUne! == "rubrique");
-
-    articleEconomies = articles
-        .where(
-            (e) => e.categorie!.titre == 'ECONOMIE' && e.typeUne! != "rubrique")
-        .toList();
-
-    uneEconomie = articles.firstWhere(
-        (e) => e.categorie!.titre == 'ECONOMIE' && e.typeUne! == "rubrique");
-
-    articleInvestigations = articles
-        .where((e) =>
-            e.categorie!.titre == 'INVESTIGATION' && e.typeUne! != "rubrique")
-        .toList()
-        .reversed
-        .toList();
-
-    uneInvestigations = articles.firstWhere((e) =>
-        e.categorie!.titre == 'INVESTIGATION' && e.typeUne == "rubrique");
-    articleSport = articles
-        .where(
-            (e) => e.categorie!.titre == 'SPORTS' && e.typeUne! != "rubrique")
-        .toList();
-
-    uneSport = articles.firstWhere(
-        (e) => e.categorie!.titre == 'SPORTS' && e.typeUne == "rubrique");
-
-    articleChoixRedac = articles
-        .where((e) =>
-            e.categorie!.titre == 'CHOIX DE LA REDACTION' &&
-            e.typeUne! != "rubrique")
-        .toList();
-
-    uneChoixRedac = articles.firstWhere((e) =>
-        e.categorie!.titre == 'CHOIX DE LA REDACTION' &&
-        e.typeUne! == "rubrique");
-
-    articleContributions = articles
-        .where((e) =>
-            e.categorie!.titre == 'CONTRIBUTION & ANALYSE' &&
-            e.typeUne != "rubrique")
-        .toList();
-
-    articleSport = articles
-        .where(
-            (e) => e.categorie!.titre == 'SPORTS' && e.typeUne! != "rubrique")
-        .toList();
-
-    uneSport = articles.firstWhere(
-        (e) => e.categorie!.titre == 'SPORTS' && e.typeUne != "rubrique");
-
-    articleCultures = articles
-        .where((e) =>
-            e.categorie!.titre == 'CULTURE & ART' && e.typeUne != "rubrique")
-        .toList();
-
-    uneCulture = articles.firstWhere(
-        (e) => e.categorie!.titre == 'POLITIQUE' && e.typeUne != "rubrique");
-
-    articleAfriques = articles
-        .where(
-            (e) => e.categorie!.titre == 'AFRIQUE' && e.typeUne != "rubrique")
-        .toList();
-
-    uneAfrique = articles.firstWhere(
-        (e) => e.categorie!.titre == 'AFRIQUE' && e.typeUne != "rubrique");
-
-    articleInternationals = articles
-        .where((e) =>
-            e.categorie!.titre == 'INTERNATIONAL' && e.typeUne != "rubrique")
-        .toList();
-
-    uneInternational = articles.firstWhere((e) =>
-        e.categorie!.titre == 'INTERNATIONAL' && e.typeUne != "rubrique");
     notifyListeners();
   }
 
@@ -274,15 +180,15 @@ class HomeUtilisateurBloc with ChangeNotifier {
   Timer? timer;
 
   setUneTop() async {
-    // timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-    //   if (uneTop == 4) {
-    //     uneTop = 0;
-    //   } else {
-    //     uneTop++;
-    //   }
-    //   notifyListeners();
-    //   setUneArticle(uneTop);
-    // });
+     timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+       if (uneTop == 4) {
+         uneTop = 0;
+       } else {
+         uneTop++;
+       }
+       notifyListeners();
+       setUneArticle(uneTop);
+     });
   }
 
   setTopClick(int i) {
@@ -308,10 +214,95 @@ class HomeUtilisateurBloc with ChangeNotifier {
     notifyListeners();
   }
 
+  uneArticlesFunc() async {
+    articleUnes = await homeService.uneArticles();
+    uneArticle = articleUnes[0];
+    uneArticleMobile = articleUnes[0];
+    notifyListeners();
+  }
+
+  articleActualiteFunc() async {
+    articleActualites = await homeService.articleActualite();
+    notifyListeners();
+  }
+
+  articlePolitiqueFunc() async {
+    articlePolitiques = await homeService.articlePolitique();
+    notifyListeners();
+  }
+
+  unePolitiqueFunc() async {
+    unePolitique = await homeService.unePolitique();
+    notifyListeners();
+  }
+
+  articleEconomieFunc() async {
+    articleEconomies = await homeService.articleEconomie();
+    notifyListeners();
+  }
+
+  uneEconomieFunc() async {
+    uneEconomie = await homeService.uneEconomie();
+    notifyListeners();
+  }
+
+  articleInvestigationFunc() async {
+    articleInvestigations = await homeService.articleInvestigation();
+    notifyListeners();
+  }
+
+  uneInvestigationFunc() async {
+    uneInvestigations = await homeService.uneInvestigation();
+    notifyListeners();
+  }
+
+  articleChoixRedacFunc() async {
+    articleChoixRedac = await homeService.articleChoixRedac();
+    notifyListeners();
+  }
+
+  articleContributionFunc() async {
+    articleContributions  = await homeService.articleContribution();
+    notifyListeners();
+  }
+
+  articleSportFunc() async {
+    articleSport  = await homeService.articleSport();
+    notifyListeners();
+  }
+
+  articleCultureFunc() async {
+    articleCultures  = await homeService.articleCulture();
+    notifyListeners();
+  }
+
+  articleAfriqueFunc() async {
+    articleAfriques  = await homeService.articleAfrique();
+    notifyListeners();
+  }
+
+  articleInternationalFunc() async {
+    articleInternationals  = await homeService.articleInternational();
+    notifyListeners();
+  }
+
   HomeUtilisateurBloc() {
     allRubrique();
     getTopArticle();
-
+    uneArticlesFunc();
+    articleActualiteFunc();
+    unePolitiqueFunc();
+    articlePolitiqueFunc();
+    articleContributionFunc();
+    uneEconomieFunc();
+    articleEconomieFunc();
+    uneInvestigationFunc();
+    articleInvestigationFunc();
+    articleChoixRedacFunc();
+    articleSportFunc();
+    articleCultureFunc();
+    articleAfriqueFunc();
+    articleInternationalFunc();
     allArticles();
     setUneTop();
     controllerListHome.addListener(() {

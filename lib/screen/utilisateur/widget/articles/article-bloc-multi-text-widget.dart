@@ -19,8 +19,8 @@ class ArticleBlocMultiTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
     Size size = MediaQuery.of(context).size;
-    return Expanded(
-        flex: 1,
+    return SizedBox(
+        height: 100,
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
@@ -44,11 +44,8 @@ class ArticleBlocMultiTextWidget extends StatelessWidget {
                         child: Text(article!.titre!,
                             style: fontFammilyDii(
                                 context,
-                                size.width >= 1440
-                                    ? 12
-                                    : size.width >= 1024 && size.width < 1440
-                                        ? 8
-                                        : 6,
+                               12
+                                    ,
                                 noir,
                                 FontWeight.bold,
                                 FontStyle.normal)),
@@ -64,11 +61,8 @@ class ArticleBlocMultiTextWidget extends StatelessWidget {
                         extractFirstTwoSentences(article!.description!, 1),
                         textStyle: fontFammilyDii(
                             context,
-                            size.width >= 1440
-                                ? 10
-                                : size.width >= 1024 && size.width < 1440
-                                    ? 6
-                                    : 6,
+                            10
+                                ,
                             noir,
                             FontWeight.w300,
                             FontStyle.normal),

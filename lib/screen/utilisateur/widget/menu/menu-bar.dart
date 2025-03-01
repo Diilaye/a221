@@ -40,11 +40,7 @@ class _MenuBarArticleState extends State<MenuBarArticle> {
       } else {
         liste.add(Row(
           children: [
-            paddingHorizontalGlobal(size.width >= 1440
-                ? 40
-                : size.width <= 1024 && size.width > 1440
-                    ? 20
-                    : 12),
+            paddingHorizontalGlobal(12),
             ItemRubriqueMenu(
               title: widget.categories[i].titre!,
               i: i + 1,
@@ -184,62 +180,69 @@ class _MenuBarArticleState extends State<MenuBarArticle> {
           )
         : Positioned(
             top: widget.top,
-            left: size.width * .1,
-            right: size.width * .1,
-            child: Column(
-              children: [
-                paddingHorizontalGlobal(),
-                Container(
-                  height: 45,
-                  decoration: BoxDecoration(
-                      color: blanc,
-                      boxShadow: [BoxShadow(color: noir, blurRadius: .5)]),
-                  child: Row(
-                    children: [
-                      paddingHorizontalGlobal(),
-                      MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        onEnter: (event) => homeUtilisateurBloc.setHoverMenu(9),
-                        onExit: (event) => homeUtilisateurBloc.setHoverMenu(0),
-                        child: GestureDetector(
-                          onTap: () {
-                            homeUtilisateurBloc.setHoverMenuClick(0, null);
-                            context.go("/");
-                          },
-                          child: Icon(
-                            CupertinoIcons.home,
-                            size: 20,
-                            color: homeUtilisateurBloc.hoverMenu == 9
-                                ? rouge
-                                : noir,
+            left: 0,   // Permet d'étendre sur toute la largeur
+            right: 0,
+            child: Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 1024,
+                child: Column(
+                  children: [
+                    paddingHorizontalGlobal(),
+                    Container(
+                      height: 45,
+
+                      decoration: BoxDecoration(
+                          color: blanc,
+                          boxShadow: [BoxShadow(color: noir, blurRadius: .5)]),
+                      child: Row(
+                        children: [
+                          paddingHorizontalGlobal(),
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            onEnter: (event) => homeUtilisateurBloc.setHoverMenu(9),
+                            onExit: (event) => homeUtilisateurBloc.setHoverMenu(0),
+                            child: GestureDetector(
+                              onTap: () {
+                                homeUtilisateurBloc.setHoverMenuClick(0, null);
+                                context.go("/");
+                              },
+                              child: Icon(
+                                CupertinoIcons.home,
+                                size: 20,
+                                color: homeUtilisateurBloc.hoverMenu == 9
+                                    ? rouge
+                                    : noir,
+                              ),
+                            ),
                           ),
-                        ),
+                          Expanded(
+                            child: Row(
+                              children: getAllCategories(size),
+                            ),
+                          ),
+                          paddingHorizontalGlobal(8),
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            onEnter: (event) =>
+                                homeUtilisateurBloc.setHoverMenu(10),
+                            onExit: (event) => homeUtilisateurBloc.setHoverMenu(0),
+                            child: Icon(
+                              CupertinoIcons.search,
+                              size: 20,
+                              color: homeUtilisateurBloc.hoverMenu == 10
+                                  ? rouge
+                                  : noir,
+                            ),
+                          ),
+                          paddingHorizontalGlobal(),
+                        ],
                       ),
-                      Expanded(
-                        child: Row(
-                          children: getAllCategories(size),
-                        ),
-                      ),
-                      paddingHorizontalGlobal(16),
-                      MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        onEnter: (event) =>
-                            homeUtilisateurBloc.setHoverMenu(10),
-                        onExit: (event) => homeUtilisateurBloc.setHoverMenu(0),
-                        child: Icon(
-                          CupertinoIcons.search,
-                          size: 20,
-                          color: homeUtilisateurBloc.hoverMenu == 10
-                              ? rouge
-                              : noir,
-                        ),
-                      ),
-                      paddingHorizontalGlobal(),
-                    ],
-                  ),
+                    ),
+                    paddingHorizontalGlobal(),
+                  ],
                 ),
-                paddingHorizontalGlobal(),
-              ],
+              ),
             ),
           );
   }

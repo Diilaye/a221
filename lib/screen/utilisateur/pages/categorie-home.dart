@@ -360,85 +360,77 @@ class CategorieHome extends StatelessWidget {
                           )),
                       Positioned(
                           top: 84,
-                          child: SizedBox(
-                            height: 75,
-                            width: size.width,
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: size.width * .1,
-                                ),
-                                Expanded(
-                                    child: Container(
-                                  height: 120,
-                                  color: blanc,
-                                  child: Row(
-                                    children: [
-                                      emissionUserBloc.emissions.length == 0
-                                          ? SizedBox()
-                                          : EmissionTopBarWidget(
+                          right: 0,
+                          left: 0,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: SizedBox(
+                              height: 75,
+                              width: 1024,
+                              child: Row(
+                                children: [
+
+                                  Expanded(
+                                      child: Container(
+                                        height: 120,
+                                        color: blanc,
+                                        child: Row(
+                                          children: [
+                                            emissionUserBloc.emissions.length == 0
+                                                ? SizedBox()
+                                                : EmissionTopBarWidget(
                                               emissionModel: emissionUserBloc
                                                   .suivreEmission!,
                                             ),
-                                      Container(
-                                        width: 2,
-                                        color: rouge,
-                                      ),
-                                      paddingHorizontalGlobal(8),
-                                      homeUtilisateurBloc.topArticle == null
-                                          ? CircularProgressIndicator()
-                                          : ArticleTopBarWidget(
-                                              articlesModel: homeUtilisateurBloc
-                                                  .topArticle!),
-                                      Container(
-                                        width: 2,
-                                        color: rouge,
-                                      ),
-                                      paddingHorizontalGlobal(8),
-                                      emissionUserBloc.emissions.length == 0
-                                          ? SizedBox()
-                                          : EmissionTopBarWidget(
+                                            Container(
+                                              width: 2,
+                                              color: rouge,
+                                            ),
+                                            paddingHorizontalGlobal(8),
+                                            homeUtilisateurBloc.topArticle == null
+                                                ? SizedBox()
+                                                : ArticleTopBarWidget(
+                                                articlesModel: homeUtilisateurBloc
+                                                    .topArticle!),
+                                            Container(
+                                              width: 2,
+                                              color: rouge,
+                                            ),
+                                            paddingHorizontalGlobal(8),
+                                            emissionUserBloc.emissions.length == 0
+                                                ? SizedBox()
+                                                : EmissionTopBarWidget(
                                               emissionModel: emissionUserBloc
                                                   .inviteEmission!,
                                             ),
-                                    ],
-                                  ),
-                                )),
-                                SizedBox(
-                                  width: size.width * .1,
-                                ),
-                              ],
+                                          ],
+                                        ),
+                                      )),
+
+                                ],
+                              ),
                             ),
                           )),
                       Positioned(
                           top: 20,
-                          left: size.width * .1,
-                          right: size.width * .1,
+                          left: 0,   // Permet d'étendre sur toute la largeur
+                          right: 0,
                           child: const TopBarMenu()),
+
+
                       MenuBarArticle(
                         categories: homeUtilisateurBloc.categories
                             .where((e) => e.showMenu == "1")
                             .toList(),
                       ),
+
+
                       if (homeUtilisateurBloc.hoverMenuClick != 0)
                         MenuRubrique(
                           number: homeUtilisateurBloc.hoverMenuClick,
                         ),
                       if (homeUtilisateurBloc.hoverMenuClick != 0)
                         const ExitMenuRubrique(),
-                      if (!homeUtilisateurBloc.showFlashInfo)
-                        Positioned(
-                          bottom: 0,
-                          child: Container(
-                              height: 45,
-                              width: size.width,
-                              color: noir,
-                              child: flashNewsUserBloc.flashNews.length == 0
-                                  ? CircularProgressIndicator()
-                                  : FlashNewsWidget(
-                                      flashNews: flashNewsUserBloc.flashNews,
-                                    )),
-                        ),
                     ],
                   ),
           );

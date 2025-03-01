@@ -21,11 +21,11 @@ class SectionContributionWidget extends StatelessWidget {
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
 
     return Center(
-      child: homeUtilisateurBloc.articles.isEmpty
+      child: homeUtilisateurBloc.articleContributions.isEmpty
           ? SizedBox()
           : SizedBox(
-              height: 650,
-              width: size.width * .8,
+              height: 600,
+              width: 1024,
               child: Column(
                 children: [
                   paddingVerticalGlobal(),
@@ -33,18 +33,14 @@ class SectionContributionWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Expanded(
-                        flex: 2,
+                        flex: 1,
                         child: Row(
                           children: [
                             Text(
                               'Contribution & analyse'.toUpperCase(),
                               style: fontFammilyDii(
                                   context,
-                                  size.width >= 1440
-                                      ? 24
-                                      : size.width >= 1024 && size.width < 1440
-                                          ? 18
-                                          : 14,
+                                  24,
                                   noir,
                                   FontWeight.bold,
                                   FontStyle.normal),
@@ -58,12 +54,7 @@ class SectionContributionWidget extends StatelessWidget {
                                 'voir +'.toUpperCase(),
                                 style: fontFammilyDii(
                                     context,
-                                    size.width >= 1440
-                                        ? 20
-                                        : size.width >= 1024 &&
-                                                size.width < 1440
-                                            ? 14
-                                            : 10,
+                                    10,
                                     rouge,
                                     FontWeight.bold,
                                     FontStyle.normal),
@@ -79,7 +70,7 @@ class SectionContributionWidget extends StatelessWidget {
                             children: [
                               Text(
                                 postsDigiteauxUserBloc.listePosts
-                                    .lastWhere((e) => e.type == "commercial")
+                                    .lastWhere((e) => e.type == "commercial" && e.statusOnline =="on")
                                     .titre!
                                     .toUpperCase(),
                                 style: fontFammilyDii(
@@ -99,14 +90,13 @@ class SectionContributionWidget extends StatelessWidget {
                     ],
                   ),
                   paddingVerticalGlobal(),
-                  Expanded(
+                  SizedBox(
+                    height: 00500,
+                    width: 1024,
                     child: Row(
                       children: [
                         Expanded(
-                            child: Row(
-                          children: [
-                            Expanded(
-                                child: Column(
+                            child: Column(
                               children: [
                                 SectionArticleQuatrenaireWidget(
                                   article: homeUtilisateurBloc
@@ -123,8 +113,8 @@ class SectionContributionWidget extends StatelessWidget {
                                     child: Column(
                                       children: [
                                         SectionArticleTernaireWidget(
-                                            sizeTags: 12,
-                                            sizeTitle: 14,
+                                            sizeTags: 10,
+                                            sizeTitle: 12,
                                             articlesModel: homeUtilisateurBloc
                                                 .articleContributions[2]),
                                         paddingVerticalGlobal(8),
@@ -138,24 +128,16 @@ class SectionContributionWidget extends StatelessWidget {
                                             sizeTitle: 12,
                                             articlesModel: homeUtilisateurBloc
                                                 .articleContributions[3]),
-                                        paddingVerticalGlobal(8),
-                                        Container(
-                                          height: .5,
-                                          color: noir,
-                                        ),
-                                        paddingVerticalGlobal(8),
-                                        SectionArticleTernaireWidget(
-                                            sizeTags: 10,
-                                            sizeTitle: 12,
-                                            articlesModel: homeUtilisateurBloc
-                                                .articleContributions[4]),
+
                                       ],
                                     ))
                               ],
                             )),
-                            paddingHorizontalGlobal(),
-                            Expanded(
-                                child: Column(
+                        paddingHorizontalGlobal(),
+                        SizedBox(
+                            width: 345,
+                            height: 500,
+                            child: Column(
                               children: [
                                 SectionArticleQuatrenaireWidget(
                                   article: homeUtilisateurBloc
@@ -187,40 +169,29 @@ class SectionContributionWidget extends StatelessWidget {
                                             sizeTitle: 12,
                                             articlesModel: homeUtilisateurBloc
                                                 .articleContributions[6]),
-                                        paddingVerticalGlobal(8),
-                                        Container(
-                                          height: .5,
-                                          color: noir,
-                                        ),
-                                        paddingVerticalGlobal(8),
-                                        SectionArticleTernaireWidget(
-                                            sizeTags: 10,
-                                            sizeTitle: 10,
-                                            articlesModel: homeUtilisateurBloc
-                                                .articleContributions[7]),
+
                                       ],
                                     ))
                               ],
                             )),
-                            paddingHorizontalGlobal(),
-                            Expanded(
-                                flex: 1,
-                                child: Container(
-                                  color: blanc,
-                                  height: 650,
-                                  width: 300,
-                                  child: Image.network(
-                                    BASE_URL_ASSET +
-                                        postsDigiteauxUserBloc.listePosts
-                                            .lastWhere(
-                                                (e) => e.type == "commercial")
-                                            .image!
-                                            .url!,
-                                    fit: BoxFit.fitHeight,
-                                  ),
-                                ))
-                          ],
-                        )),
+                        paddingHorizontalGlobal(),
+
+                        Expanded(
+                            flex: 1,
+                            child: Container(
+                              color: blanc,
+                              height: 500,
+                              width: 340,
+                              child: Image.network(
+                                BASE_URL_ASSET +
+                                    postsDigiteauxUserBloc.listePosts
+                                        .lastWhere(
+                                            (e) => e.type == "commercial")
+                                        .image!
+                                        .url!,
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ))
                       ],
                     ),
                   ),

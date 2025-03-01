@@ -92,7 +92,7 @@ class SectionArticleQuatrenaireWidget extends StatelessWidget {
                           },
                           child: Text(
                             article.titre!,
-                            style: fontFammilyDii(context, 14, noir,
+                            style: fontFammilyDii(context, 12, noir,
                                 FontWeight.w600, FontStyle.normal),
                           ),
                         ),
