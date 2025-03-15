@@ -23,8 +23,12 @@ import 'package:actu/screen/utilisateur/widget/section-article/section-politique
 import 'package:actu/screen/utilisateur/widget/section-article/section-sport-widget.dart';
 import 'package:actu/screen/utilisateur/widget/section-article/section-une-widget.dart';
 import 'package:actu/utils/color-by-dii.dart';
+import 'package:actu/utils/requette-by-dii.dart';
 import 'package:actu/utils/responsive-ui.dart';
+import 'package:actu/utils/widgets/font-fammily-dii.dart';
 import 'package:actu/utils/widgets/padding-global.dart';
+import 'package:actu/utils/yWebUtils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -138,6 +142,122 @@ class HomeUtilisateurScreen extends StatelessWidget {
                             paddingVerticalGlobal(32),
                             const SectionChoixRedacWidget(),
                             paddingVerticalGlobal(32),
+                           if(homeUtilisateurBloc.videos.isNotEmpty) Container(
+                              height: 350,
+                              width: 1024,
+                              color: bleuMarine,
+                              child: Column(
+                                children: [
+                                  paddingVerticalGlobal(),
+                                  Row(
+                                    children: [
+                                      paddingHorizontalGlobal(),
+                                      Text('Vidéo',style: fontFammilyDii(
+                                      context,
+                                      24,
+                                      blanc,
+                                      FontWeight.bold,
+                                      FontStyle.normal), ),
+                                      const Spacer(),
+                                      Container(
+                                        height: 25,
+                                        width: 25,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(25),
+                                          border: Border.all(color: blanc  , width: .5)
+                                        ),
+                                        child: Center(
+                                          child: Icon(CupertinoIcons.arrow_left , color: blanc, size: 12,),
+                                        ),
+                                      ),
+                                      paddingHorizontalGlobal(8),
+                                      Container(
+                                        height: 25,
+                                        width: 25,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(25),
+                                            border: Border.all(color: blanc  , width: .5)
+                                        ),
+                                        child: Center(
+                                          child: Icon(CupertinoIcons.arrow_right , color: blanc, size: 12,),
+                                        ),
+                                      ),
+                                      paddingHorizontalGlobal(),
+                                    ],
+                                  ),
+                                  paddingVerticalGlobal(4),
+                                  Container(
+                                    height: 294,
+                                    width: 1024,
+                                    child: ListView(
+                                      scrollDirection: Axis.horizontal,
+                                      children: homeUtilisateurBloc.videos.where((e) => e.statusOnline == "on" && e.isLive =="off" ).map((el) => Row(
+                                        children: [
+                                          paddingHorizontalGlobal(8),
+                                          GestureDetector(
+                                            onTap: () => showDialog(
+                                              context: context,
+                                              builder: (c) {
+                                                return AlertDialog(
+                                                  backgroundColor: noir,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.all(Radius.circular(0.0))),
+                                                  contentPadding: EdgeInsets.only(top: 0.0),
+                                                  title: Text(el.titre!, style: fontFammilyDii(context, 24, blanc, FontWeight.w400, FontStyle.normal),),
+                                                  content:YoutubeHtmlWidget(urlY: el.url!,),
+                                                );
+                                              }
+                                            ),
+                                            child: Container(
+                                              width: 325,
+                                              height: 294,
+                                              child: Stack(
+                                                children: [
+                                                  Image.network(BASE_URL_ASSET+el.imageFile!.url! , height: 190,width: 325, fit: BoxFit.fill,),
+                                                  Positioned(
+                                                      top: 85,
+                                                      left: 140,
+                                                      child: Icon(Icons.play_circle_fill_outlined , color: blanc, size: 45,)),
+                                                  Positioned(
+                                                      top: 190,
+                                                      child: SizedBox(
+                                                        width: 325,
+                                                        height: 89,
+                                                        child: Column(
+                                                          children: [
+                                                            paddingVerticalGlobal(8),
+                                                            Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                    width: 325,
+                                                                    child: Text(el.emission!  , style: fontFammilyDii(context, 16, rouge, FontWeight.w600, FontStyle.normal),)),
+                                                              ],
+                                                            ),
+                                                            paddingVerticalGlobal(4),
+                                                            Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                    width: 325,
+                                                                    child: Text(el.titre!, style: fontFammilyDii(context, 14, blanc, FontWeight.w400, FontStyle.normal),)),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ))
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )).toList(),
+                                    ),
+                                  ),
+                                  paddingVerticalGlobal(4),
+
+                                ],
+                              ),
+                            ),
+                            paddingVerticalGlobal(32),
                             Container(
                               height: 650,
                               width: 1024,
@@ -178,61 +298,58 @@ class HomeUtilisateurScreen extends StatelessWidget {
                         )),
                     Positioned(
                         top: 84,
-                        right: 0,
-                        left: 0,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: SizedBox(
-                            height: 75,
-                            width: 1024,
-                            child: Row(
-                              children: [
+                        left: (size.width - 1024) / 2,
+                        right: (size.width - 1024) / 2,
+                        child: SizedBox(
+                          height: 75,
+                          width: 1024,
+                          child: Row(
+                            children: [
 
-                                Expanded(
-                                    child: Container(
-                                  height: 120,
-                                  color: blanc,
-                                  child: Row(
-                                    children: [
-                                      emissionUserBloc.emissions.length == 0
-                                          ? SizedBox()
-                                          : EmissionTopBarWidget(
-                                              emissionModel: emissionUserBloc
-                                                  .suivreEmission!,
-                                            ),
-                                      Container(
-                                        width: 2,
-                                        color: rouge,
-                                      ),
-                                      paddingHorizontalGlobal(8),
-                                      homeUtilisateurBloc.topArticle == null
-                                          ? SizedBox()
-                                          : ArticleTopBarWidget(
-                                              articlesModel: homeUtilisateurBloc
-                                                  .topArticle!),
-                                      Container(
-                                        width: 2,
-                                        color: rouge,
-                                      ),
-                                      paddingHorizontalGlobal(8),
-                                      emissionUserBloc.emissions.length == 0
-                                          ? SizedBox()
-                                          : EmissionTopBarWidget(
-                                              emissionModel: emissionUserBloc
-                                                  .inviteEmission!,
-                                            ),
-                                    ],
-                                  ),
-                                )),
+                              Expanded(
+                                  child: Container(
+                                height: 120,
+                                color: blanc,
+                                child: Row(
+                                  children: [
+                                    emissionUserBloc.emissions.length == 0
+                                        ? SizedBox()
+                                        : EmissionTopBarWidget(
+                                            emissionModel: emissionUserBloc
+                                                .suivreEmission!,
+                                          ),
+                                    Container(
+                                      width: 2,
+                                      color: rouge,
+                                    ),
+                                    paddingHorizontalGlobal(8),
+                                    homeUtilisateurBloc.topArticle == null
+                                        ? SizedBox()
+                                        : ArticleTopBarWidget(
+                                            articlesModel: homeUtilisateurBloc
+                                                .topArticle!),
+                                    Container(
+                                      width: 2,
+                                      color: rouge,
+                                    ),
+                                    paddingHorizontalGlobal(8),
+                                    emissionUserBloc.emissions.length == 0
+                                        ? SizedBox()
+                                        : EmissionTopBarWidget(
+                                            emissionModel: emissionUserBloc
+                                                .inviteEmission!,
+                                          ),
+                                  ],
+                                ),
+                              )),
 
-                              ],
-                            ),
+                            ],
                           ),
                         )),
                    Positioned(
                         top: 20,
-                        left: 0,   // Permet d'étendre sur toute la largeur
-                        right: 0,
+                       left: (size.width - 1024) / 2,
+                       right: (size.width - 1024) / 2,
                         child: const TopBarMenu()),
 
 
@@ -252,32 +369,42 @@ class HomeUtilisateurScreen extends StatelessWidget {
                     if (!homeUtilisateurBloc.showFlashInfo)
                       Positioned(
                         bottom: 0, // Place le widget en bas de l'écran
-                        left: 0,   // Permet d'étendre sur toute la largeur
-                        right: 0,  // Permet d'étendre sur toute la largeur
-                        child: Align(
-                          alignment: Alignment.center, // Centre horizontalement
-                          child: SizedBox(
-                            height: 45,
-                            width: 1024,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    height: 45,
-                                    color: noir,
-                                    child: flashNewsUserBloc.flashNews.isEmpty
-                                        ? CircularProgressIndicator()
-                                        : FlashNewsWidget(
-                                      flashNews: flashNewsUserBloc.flashNews,
-                                      havespace: false,
-                                    ),
+                        left: (size.width - 1024) / 2,
+                        right: (size.width - 1024) / 2, // Permet d'étendre sur toute la largeur
+                        child: SizedBox(
+                          height: 45,
+                          width: 1024,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  height: 45,
+                                  color: noir,
+                                  child: flashNewsUserBloc.flashNews.isEmpty
+                                      ? CircularProgressIndicator()
+                                      : FlashNewsWidget(
+                                    flashNews: flashNewsUserBloc.flashNews,
+                                    havespace: false,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
+
+                    if(homeUtilisateurBloc.showLiveYoutube) Positioned(
+                      top: 70,
+                      left: (size.width - 1024) / 2,
+                      right: (size.width - 1024) / 2,
+                      child: Container(
+                        color: noir,
+                          width: 1024,
+                          child: Center(
+
+                              child: SizedBox(
+                                  width: 1024,
+                                  child: YoutubeHtmlWidget(urlY: homeUtilisateurBloc.videos.where((e) => e.isLive == "on").first.url!)))),)
                   ],
                 ),
               );

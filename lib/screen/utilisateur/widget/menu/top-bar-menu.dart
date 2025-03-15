@@ -21,7 +21,7 @@ class TopBarMenu extends StatelessWidget {
         ? Center(
           child: Container(
               height: 60,
-              width: 1024,
+              width: size.width,
               decoration: BoxDecoration(
                   color: blanc,
                   borderRadius: BorderRadius.circular(2),
@@ -465,75 +465,44 @@ class TopBarMenu extends StatelessWidget {
                         cursor: SystemMouseCursors.click,
                         onEnter: (e) => homeUtilisateurBloc.setHover(3),
                         onExit: (e) => homeUtilisateurBloc.setHover(0),
-                        child: Container(
-                          height: 60,
-                          color: homeUtilisateurBloc.hover == 3
-                              ? noir.withOpacity(.05)
-                              : blanc,
-                          child: Row(
-                            children: [
-                              paddingHorizontalGlobal(
-                                size.width >= 1440
-                                    ? 8
-                                    : size.width <= 1024 && size.width > 1440
-                                        ? 6
-                                        : 4,
-                              ),
-                              SvgPicture.asset(
-                                "assets/images/live_actu.svg",
-                                height: size.width >= 1440
-                                    ? 14
-                                    : size.width <= 1024 && size.width > 1440
-                                        ? 10
-                                        : 6,
-                                width: size.width >= 1440
-                                    ? 14
-                                    : size.width <= 1024 && size.width > 1440
-                                        ? 10
-                                        : 6,
-                              ),
-                              paddingHorizontalGlobal(
-                                size.width >= 1440
-                                    ? 8
-                                    : size.width <= 1024 && size.width > 1440
-                                        ? 6
-                                        : 4,
-                              ),
-                              Text(
-                                "En direct".toUpperCase(),
-                                style: TextStyle(
-                                    fontSize: size.width >= 1440
-                                        ? 12
-                                        : size.width <= 1024 && size.width > 1440
-                                            ? 10
-                                            : 8,
-                                    color: noir,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              paddingHorizontalGlobal(
-                                size.width >= 1440
-                                    ? 8
-                                    : size.width <= 1024 && size.width > 1440
-                                        ? 6
-                                        : 4,
-                              ),
-                              Icon(
-                                CupertinoIcons.chevron_down,
-                                size: size.width >= 1440
-                                    ? 12
-                                    : size.width <= 1024 && size.width > 1440
-                                        ? 10
-                                        : 8,
-                                color: noir,
-                              ),
-                              paddingHorizontalGlobal(
-                                size.width >= 1440
-                                    ? 8
-                                    : size.width <= 1024 && size.width > 1440
-                                        ? 6
-                                        : 4,
-                              ),
-                            ],
+                        child: GestureDetector(
+                        onTap: () => homeUtilisateurBloc.setShowLiveYoutube(),
+                          child: Container(
+                            height: 60,
+                            color: homeUtilisateurBloc.hover == 3
+                                ? rouge.withOpacity(.05)
+                                : blanc,
+                            child: Row(
+                              children: [
+                                paddingHorizontalGlobal(
+                                  4,
+                                ),
+                                SvgPicture.asset(
+                                  "assets/images/live_actu.svg",
+                                  height:10,
+                                  width: 10 ,
+                                ),
+                                paddingHorizontalGlobal(
+                                  4,
+                                ),
+                                Text(
+                                  "En direct".toUpperCase(),
+                                  style: TextStyle(
+                                      fontSize:  12,
+                                      color: noir,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                paddingHorizontalGlobal( 4,
+                                ),
+                                Icon(
+                                  CupertinoIcons.chevron_down,
+                                  size:  8,
+                                  color: noir,
+                                ),
+                                paddingHorizontalGlobal( 4,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

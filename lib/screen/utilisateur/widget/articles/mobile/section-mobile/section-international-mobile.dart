@@ -38,9 +38,9 @@ class SectionInternationalMobile extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 homeUtilisateurBloc
-                    .setAticle(homeUtilisateurBloc.uneInternational!);
+                    .setAticle(homeUtilisateurBloc.articleInternationals.first);
                 js.context.callMethod('open', [
-                  'https://a221.net/article/${homeUtilisateurBloc.uneInternational!.slug!}',
+                  'https://a221.net/article/${homeUtilisateurBloc.articleInternationals.first.slug!}',
                   '_self'
                 ]);
               },
@@ -60,7 +60,7 @@ class SectionInternationalMobile extends StatelessWidget {
                       child: Image.network(
                         BASE_URL_ASSET +
                             homeUtilisateurBloc
-                                .uneInternational!.imageArticle!.url!,
+                                .articleInternationals.first.imageArticle!.url!,
                         height: 300,
                         width: size.width * .92,
                         fit: BoxFit.cover,
@@ -71,7 +71,7 @@ class SectionInternationalMobile extends StatelessWidget {
                       children: [
                         paddingHorizontalGlobal(12),
                         Text(
-                            homeUtilisateurBloc.uneInternational!.tags!.titre!
+                            homeUtilisateurBloc.articleInternationals.first.tags!.titre!
                                 .toUpperCase(),
                             style: fontFammilyDii(context, 14, rouge,
                                 FontWeight.bold, FontStyle.normal)),
@@ -92,7 +92,7 @@ class SectionInternationalMobile extends StatelessWidget {
                             ),
                             TextSpan(
                               text:
-                                  homeUtilisateurBloc.uneInternational!.titre!,
+                                  homeUtilisateurBloc.articleInternationals.first.titre!,
                               style: fontFammilyDii(context, 20, noir,
                                   FontWeight.w500, FontStyle.normal),
                             ),
@@ -103,7 +103,7 @@ class SectionInternationalMobile extends StatelessWidget {
                     paddingVerticalGlobal(),
                     Column(
                       children: homeUtilisateurBloc.articleInternationals
-                          .sublist(0, 5)
+                          .sublist(1, 5)
                           .map((e) => Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 4.0),

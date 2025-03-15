@@ -87,7 +87,7 @@ class SectionContributionMobile extends StatelessWidget {
           ),
           Column(
             children: homeUtilisateurBloc.articleContributions
-                .sublist(0, 5)
+                .sublist(1, 6)
                 .map((e) => Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4.0),
                       child: ArticlecontributionSecondaire(

@@ -295,7 +295,7 @@ class SectionFooter extends StatelessWidget {
               paddingVerticalGlobal(32),
               */
               Text(
-                "Service commerciale : ",
+                "Service commercial : 33 820 81 45 / 33 820 84 24 ",
                 style: fontFammilyDii(
                     context,
                     14,
@@ -303,6 +303,7 @@ class SectionFooter extends StatelessWidget {
                     FontWeight.bold,
                     FontStyle.normal),
               ),
+              paddingVerticalGlobal(2),
               Text(
                 "© Copyright 2025 Digital-eyes Tous droits réservés.",
                 style: fontFammilyDii(

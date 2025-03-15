@@ -61,13 +61,13 @@ class ArtilceInvestiogationMobile extends StatelessWidget {
                               child: Text(
                             article.tags!.titre!,
                             overflow: TextOverflow.fade,
-                            style: fontFammilyDii(context, 16, noir,
+                            style: fontFammilyDii(context, 14, blanc,
                                 FontWeight.w700, FontStyle.normal),
                           )),
                           paddingHorizontalGlobal(8)
                         ],
                       ),
-                      paddingVerticalGlobal(4),
+                      paddingVerticalGlobal(0),
                       Row(
                         children: [
                           paddingHorizontalGlobal(8),

@@ -32,7 +32,7 @@ class SectionChoixDeLaRedactionMobile extends StatelessWidget {
           ),
         ),
         UneArticlePolitique(
-          article: homeUtilisateurBloc.uneChoixRedac!,
+          article: homeUtilisateurBloc.articleChoixRedac[0],
         ),
         Row(
           children: [
@@ -52,7 +52,7 @@ class SectionChoixDeLaRedactionMobile extends StatelessWidget {
               Expanded(
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: homeUtilisateurBloc.articleChoixRedac
+                  children: homeUtilisateurBloc.articleChoixRedac.sublist(1)
                       .map((e) => Padding(
                             padding: const EdgeInsets.only(right: 8.0),
                             child: ArticlePolitiqueSecondaireMobile(

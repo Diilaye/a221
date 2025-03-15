@@ -35,9 +35,9 @@ class SectionAfriqueMobile extends StatelessWidget {
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
               onTap: () {
-                homeUtilisateurBloc.setAticle(homeUtilisateurBloc.uneAfrique!);
+                homeUtilisateurBloc.setAticle(homeUtilisateurBloc.articleAfriques.first);
                 js.context.callMethod('open', [
-                  'https://a221.net/article/${homeUtilisateurBloc.uneAfrique!.slug!}',
+                  'https://a221.net/article/${homeUtilisateurBloc.articleAfriques.first.slug!}',
                   '_self'
                 ]);
               },
@@ -56,7 +56,7 @@ class SectionAfriqueMobile extends StatelessWidget {
                       ),
                       child: Image.network(
                         BASE_URL_ASSET +
-                            homeUtilisateurBloc.uneAfrique!.imageArticle!.url!,
+                            homeUtilisateurBloc.articleAfriques.first.imageArticle!.url!,
                         height: 300,
                         width: size.width * .92,
                         fit: BoxFit.cover,
@@ -67,7 +67,7 @@ class SectionAfriqueMobile extends StatelessWidget {
                       children: [
                         paddingHorizontalGlobal(12),
                         Text(
-                            homeUtilisateurBloc.uneAfrique!.tags!.titre!
+                            homeUtilisateurBloc.articleAfriques.first.tags!.titre!
                                 .toUpperCase(),
                             style: fontFammilyDii(context, 14, rouge,
                                 FontWeight.bold, FontStyle.normal)),
@@ -87,7 +87,7 @@ class SectionAfriqueMobile extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: homeUtilisateurBloc.uneAfrique!.titre!,
+                              text: homeUtilisateurBloc.articleAfriques.first.titre!,
                               style: fontFammilyDii(context, 20, noir,
                                   FontWeight.w500, FontStyle.normal),
                             ),
@@ -98,7 +98,7 @@ class SectionAfriqueMobile extends StatelessWidget {
                     paddingVerticalGlobal(),
                     Column(
                       children: homeUtilisateurBloc.articleAfriques
-                          .sublist(0, 5)
+                          .sublist(1, 5)
                           .map((e) => Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 4.0),

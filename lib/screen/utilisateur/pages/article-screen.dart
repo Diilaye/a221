@@ -19,6 +19,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../bloc/administrateur/post-digiteaux-bloc.dart';
 import '../widget/menu/exit-menu-rubrique.dart';
 
 class ArticleScreen extends StatelessWidget {
@@ -29,6 +30,7 @@ class ArticleScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
     final emissionUserBloc = Provider.of<EmissionUserBloc>(context);
+    final postsDigiteauxBloc = Provider.of<PostsDigiteauxBloc>(context);
 
     return homeUtilisateurBloc.articleSlug == null
         ? const SizedBox()
@@ -55,7 +57,7 @@ class ArticleScreen extends StatelessWidget {
                           paddingVerticalGlobal(220),
                           Center(
                             child: Container(
-                              width: size.width * .8,
+                              width: 1024,
                               color: blanc,
                               child: Column(
                                 children: [
@@ -132,21 +134,27 @@ class ArticleScreen extends StatelessWidget {
                                   paddingVerticalGlobal(),
                                   SizedBox(
                                     // height: 500,
-                                    width: size.width * .8,
+                                    width: 1024,
                                     child: Row(
                                       children: [
                                         paddingHorizontalGlobal(),
                                         Container(
                                           // height: 500,
-                                          width: (size.width * .8) - 32,
+                                          width: 650,
                                           child: Image.network(
                                             BASE_URL_ASSET +
                                                 homeUtilisateurBloc.articleSlug!
                                                     .imageArticle!.url!,
                                             // height: 500,
-                                            width: (size.width * .8) - 32,
-                                            fit: BoxFit.contain,
+                                            width: 650,
+                                            fit: BoxFit.fill,
                                           ),
+                                        ),
+                                        paddingHorizontalGlobal(8),
+                                        Container(
+                                          height: 500,
+                                          width: 320,
+                                          child: Image.network(BASE_URL_ASSET+postsDigiteauxBloc.posts.where((e) => e.statusOnline =="on" && e.type =="article-right").first.image!.url! , fit: BoxFit.fill,),
                                         ),
                                         paddingHorizontalGlobal(),
                                       ],
@@ -159,12 +167,28 @@ class ArticleScreen extends StatelessWidget {
                                         child: HtmlWidget(
                                           homeUtilisateurBloc
                                               .articleSlug!.description!,
-                                          // textStyle: fontFammilyDii(
-                                          //     context,
-                                          //     20,
-                                          //     noir,
-                                          //     FontWeight.w400,
-                                          //     FontStyle.normal),
+                                          customStylesBuilder: (element) {
+                                            if (element.classes.contains('ql-size-large')) {
+                                              return {
+                                                'font-size': '32px',
+                                                'font-weight': 'bold',
+                                                'color': 'rgb(192, 57, 43)',
+                                              };
+                                            }
+                                            if (element.classes.contains('ql-align-center')) {
+                                              return {
+                                                'text-align': 'center',
+                                              };
+                                            }
+                                            if (element.classes.contains('ql-align-justify')) {
+                                              return {
+                                                'text-align': 'justify',
+                                              };
+                                            }
+                                            return  { 'fontSize': '16px', 'text-align': 'justify' , 'line-height': '1.5','word-wrap': 'break-word'};
+                                          },
+                                          textStyle: TextStyle(fontSize: 16, color: Colors.black),
+
                                         ),
                                       ),
                                       paddingHorizontalGlobal(),
@@ -252,20 +276,17 @@ class ArticleScreen extends StatelessWidget {
                           ),
                           paddingVerticalGlobal(),
                           Center(
-                            child: Container(
+                            child: SizedBox(
                               height: 200,
-                              color: jaune,
-                              width: size.width * .8,
-                              child: Center(
-                                child: Text('Espace Pub'),
-                              ),
+                              width: 1024,
+                              child:Image.network(BASE_URL_ASSET+postsDigiteauxBloc.posts.where((e) => e.statusOnline =="on" && e.type =="article-top").first.image!.url! ,fit: BoxFit.fill,),
                             ),
                           ),
                           paddingVerticalGlobal(),
                           Center(
                             child: Container(
                               color: blanc,
-                              width: size.width * .8,
+                              width: 1024,
                               child: Column(
                                 children: [
                                   paddingVerticalGlobal(),
@@ -313,7 +334,7 @@ class ArticleScreen extends StatelessWidget {
                           ),
                           paddingVerticalGlobal(),
                           const SectionFooter(),
-                          paddingVerticalGlobal(50),
+                          paddingVerticalGlobal(2),
                         ],
                       ),
                     )),

@@ -37,9 +37,9 @@ class SectionSportMobile extends StatelessWidget {
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
               onTap: () {
-                homeUtilisateurBloc.setAticle(homeUtilisateurBloc.uneSport!);
+                homeUtilisateurBloc.setAticle(homeUtilisateurBloc.articleSport[0]);
                 js.context.callMethod('open', [
-                  'https://a221.net/article/${homeUtilisateurBloc.uneSport!.slug!}',
+                  'https://a221.net/article/${homeUtilisateurBloc.articleSport[0].slug!}',
                   '_self'
                 ]);
               },
@@ -58,7 +58,7 @@ class SectionSportMobile extends StatelessWidget {
                       ),
                       child: Image.network(
                         BASE_URL_ASSET +
-                            homeUtilisateurBloc.uneSport!.imageArticle!.url!,
+                            homeUtilisateurBloc.articleSport[0].imageArticle!.url!,
                         height: 300,
                         width: size.width * .92,
                         fit: BoxFit.cover,
@@ -69,7 +69,7 @@ class SectionSportMobile extends StatelessWidget {
                       children: [
                         paddingHorizontalGlobal(12),
                         Text(
-                            homeUtilisateurBloc.uneSport!.tags!.titre!
+                            homeUtilisateurBloc.articleSport[0].tags!.titre!
                                 .toUpperCase(),
                             style: fontFammilyDii(context, 14, rouge,
                                 FontWeight.bold, FontStyle.normal)),
@@ -89,7 +89,7 @@ class SectionSportMobile extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: homeUtilisateurBloc.uneSport!.titre!,
+                              text: homeUtilisateurBloc.articleSport[0].titre!,
                               style: fontFammilyDii(context, 20, noir,
                                   FontWeight.w500, FontStyle.normal),
                             ),
@@ -100,7 +100,7 @@ class SectionSportMobile extends StatelessWidget {
                     paddingVerticalGlobal(),
                     Column(
                       children: homeUtilisateurBloc.articleSport
-                          .sublist(0, 5)
+                          .sublist(1, 5)
                           .map((e) => Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 4.0),

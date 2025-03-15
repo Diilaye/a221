@@ -15,11 +15,10 @@ class FooterMobile extends StatelessWidget {
       color: bgFooter,
       child: Row(
         children: [
-          paddingHorizontalGlobal(size.width * .1),
           Expanded(
               child: Column(
             children: [
-              paddingVerticalGlobal(32),
+            /*  paddingVerticalGlobal(32),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -64,6 +63,7 @@ class FooterMobile extends StatelessWidget {
                 height: .5,
                 color: blanc.withOpacity(.5),
               ),
+
               paddingVerticalGlobal(),
               Column(
                 children: [
@@ -406,9 +406,18 @@ class FooterMobile extends StatelessWidget {
                 height: .5,
                 color: blanc.withOpacity(.5),
               ),
+
+             */
               paddingVerticalGlobal(),
               Text(
-                "© Copyright 2024 Digital-eyes Tous droits réservés. Ngor Almadie villa 220 Dakar, 01234 Moustapha Diakhaté, président et chef de la direction",
+                "Service commerciale : ",
+                textAlign: TextAlign.center,
+                style: fontFammilyDii(
+                    context, 12, blanc, FontWeight.bold, FontStyle.normal),
+              ),
+              paddingVerticalGlobal(),
+              Text(
+                "© Copyright 2024 Digital-eyes Tous droits réservés.",
                 textAlign: TextAlign.center,
                 style: fontFammilyDii(
                     context, 12, blanc, FontWeight.bold, FontStyle.normal),
@@ -416,7 +425,6 @@ class FooterMobile extends StatelessWidget {
               paddingVerticalGlobal(32),
             ],
           )),
-          paddingHorizontalGlobal(size.width * .1),
         ],
       ),
     );

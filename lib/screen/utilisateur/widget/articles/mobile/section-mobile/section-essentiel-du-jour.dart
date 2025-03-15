@@ -32,24 +32,14 @@ class SectionEssentielDuJour extends StatelessWidget {
               height: 350,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: [
-                  paddingHorizontalGlobal(16),
-                  Image.network(
-                    BASE_URL_ASSET + posts[0].image!.url!,
-                    fit: BoxFit.contain,
-                  ),
+                children: posts.map((e) => Row(children: [
                   paddingHorizontalGlobal(8),
                   Image.network(
-                    BASE_URL_ASSET + posts[1].image!.url!,
+                    BASE_URL_ASSET + e.image!.url!,
                     fit: BoxFit.contain,
+
                   ),
-                  paddingHorizontalGlobal(8),
-                  Image.network(
-                    BASE_URL_ASSET + posts[2].image!.url!,
-                    fit: BoxFit.contain,
-                  ),
-                  paddingHorizontalGlobal(16),
-                ],
+                ],)).toList(),
               )),
           paddingVerticalGlobal(32),
         ],

@@ -5,6 +5,7 @@ import 'package:actu/utils/requette-by-dii.dart';
 import 'package:actu/utils/widgets/font-fammily-dii.dart';
 import 'package:actu/utils/widgets/padding-global.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'dart:js' as js;
 
@@ -28,11 +29,13 @@ class _LaUneTopArticleState extends State<LaUneTopArticle> {
       child: GestureDetector(
         onTap: () async {
           homeUtilisateurBloc.setAticle(homeUtilisateurBloc.uneArticle!);
-          js.context.callMethod('open', [
+        /*  js.context.callMethod('open', [
             'https://a221.net/article/${homeUtilisateurBloc.uneArticle!.slug!}',
             '_self'
           ]);
-          // context.go('/article/${homeUtilisateurBloc.uneArticle!.slug!}');
+
+         */
+           context.go('/article/${homeUtilisateurBloc.uneArticle!.slug!}');
         },
         child: Image.network(
           BASE_URL_ASSET +

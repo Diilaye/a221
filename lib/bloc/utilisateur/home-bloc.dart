@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:actu/models/administrateur/article-model.dart';
 import 'package:actu/models/administrateur/categorie-model.dart';
 import 'package:actu/models/administrateur/flash-news-model.dart';
+import 'package:actu/models/administrateur/video-youtube-model.dart';
 import 'package:actu/models/utilisateur/categorie-menu-model.dart';
 import 'package:actu/models/utilisateur/tag-menu-model.dart';
 import 'package:actu/services/utilisateur/home-service.dart';
@@ -109,6 +110,13 @@ class HomeUtilisateurBloc with ChangeNotifier {
   ArticlesModel? uneArticle;
   ArticlesModel? uneArticleMobile;
 
+  List<VideoYoutubeModel> videos = [];
+
+  allVideo() async {
+    videos = await homeService.allVideos();
+    notifyListeners();
+  }
+
   setUneArticle(int i) async {
     uneArticle = articleUnes[i];
     notifyListeners();
@@ -140,6 +148,13 @@ class HomeUtilisateurBloc with ChangeNotifier {
 
   setShowFlashInfo(bool _) {
     showFlashInfo = _;
+    notifyListeners();
+  }
+
+  bool showLiveYoutube = false ;
+
+  setShowLiveYoutube() {
+    showLiveYoutube = showLiveYoutube == true ? false : true;
     notifyListeners();
   }
 
@@ -299,6 +314,7 @@ class HomeUtilisateurBloc with ChangeNotifier {
     uneInvestigationFunc();
     articleInvestigationFunc();
     articleChoixRedacFunc();
+    allVideo();
     articleSportFunc();
     articleCultureFunc();
     articleAfriqueFunc();

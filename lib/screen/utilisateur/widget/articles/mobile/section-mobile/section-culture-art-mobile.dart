@@ -37,9 +37,9 @@ class SectionCultureArtMobile extends StatelessWidget {
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
               onTap: () {
-                homeUtilisateurBloc.setAticle(homeUtilisateurBloc.uneCulture!);
+                homeUtilisateurBloc.setAticle(homeUtilisateurBloc.articleCultures.first);
                 js.context.callMethod('open', [
-                  'https://a221.net/article/${homeUtilisateurBloc.uneCulture!.slug!}',
+                  'https://a221.net/article/${homeUtilisateurBloc.articleCultures.first.slug!}',
                   '_self'
                 ]);
               },
@@ -58,7 +58,7 @@ class SectionCultureArtMobile extends StatelessWidget {
                       ),
                       child: Image.network(
                         BASE_URL_ASSET +
-                            homeUtilisateurBloc.uneCulture!.imageArticle!.url!,
+                            homeUtilisateurBloc.articleCultures.first.imageArticle!.url!,
                         height: 300,
                         width: size.width * .92,
                         fit: BoxFit.cover,
@@ -69,7 +69,7 @@ class SectionCultureArtMobile extends StatelessWidget {
                       children: [
                         paddingHorizontalGlobal(12),
                         Text(
-                            homeUtilisateurBloc.uneCulture!.tags!.titre!
+                            homeUtilisateurBloc.articleCultures.first.tags!.titre!
                                 .toUpperCase(),
                             style: fontFammilyDii(context, 14, rouge,
                                 FontWeight.bold, FontStyle.normal)),
@@ -89,7 +89,7 @@ class SectionCultureArtMobile extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: homeUtilisateurBloc.uneCulture!.titre!,
+                              text: homeUtilisateurBloc.articleCultures.first.titre!,
                               style: fontFammilyDii(context, 20, noir,
                                   FontWeight.w500, FontStyle.normal),
                             ),
@@ -100,7 +100,7 @@ class SectionCultureArtMobile extends StatelessWidget {
                     paddingVerticalGlobal(),
                     Column(
                       children: homeUtilisateurBloc.articleCultures
-                          .sublist(0, 5)
+                          .sublist(1, 5)
                           .map((e) => Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 4.0),

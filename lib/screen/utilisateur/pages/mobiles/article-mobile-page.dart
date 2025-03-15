@@ -131,8 +131,28 @@ class ArticlMobileScreen extends StatelessWidget {
                             Expanded(
                               child: HtmlWidget(
                                 homeUtilisateurBloc.articleSlug!.description!,
-                                textStyle: fontFammilyDii(context, 14, noir,
-                                    FontWeight.w400, FontStyle.normal),
+
+                                customStylesBuilder: (element) {
+                                  if (element.classes.contains('ql-size-large')) {
+                                    return {
+                                      'font-size': '32px',
+                                      'font-weight': 'bold',
+                                      'color': 'rgb(192, 57, 43)',
+                                    };
+                                  }
+                                  if (element.classes.contains('ql-align-center')) {
+                                    return {
+                                      'text-align': 'center',
+                                    };
+                                  }
+                                  if (element.classes.contains('ql-align-justify')) {
+                                    return {
+                                      'text-align': 'justify',
+                                    };
+                                  }
+                                  return  { 'fontSize': '16px', 'text-align': 'justify' , 'line-height': '1.5','word-wrap': 'break-word'};
+                                },
+                                textStyle: TextStyle(fontSize: 16, color: Colors.black),
                               ),
                             ),
                             paddingHorizontalGlobal(),
@@ -144,8 +164,6 @@ class ArticlMobileScreen extends StatelessWidget {
                             paddingHorizontalGlobal(),
                             GestureDetector(
                                 onTap: () async {
-                                  print(
-                                      'https://jeunespace.com/article/${homeUtilisateurBloc.articleSlug!.slug!}');
                                   final result = await Share.share(
                                       "https://a221.net/article/${homeUtilisateurBloc.articleSlug!.slug!}");
 
@@ -197,11 +215,11 @@ class ArticlMobileScreen extends StatelessWidget {
                           height: 300,
                           child: ListView(
                               scrollDirection: Axis.horizontal,
-                              children: homeUtilisateurBloc.articles
+                              children: homeUtilisateurBloc.articles.reversed
                                   .where((el) =>
-                                      (el.categorie!.id! ==
+                                      (el.tags!.id! ==
                                           homeUtilisateurBloc
-                                              .articleSlug!.categorie!.id) &&
+                                              .articleSlug!.tags!.id) &&
                                       el.id! !=
                                           homeUtilisateurBloc.articleSlug!.id!)
                                   .map((e) => Row(
@@ -226,7 +244,9 @@ class ArticlMobileScreen extends StatelessWidget {
           )),
           if (homeUtilisateurBloc.showMenuMobile == 1)
             const Positioned(top: 60, child: MenuMobile()),
-          const Positioned(child: TopBarMenu()),
+          const Positioned(
+              top: 0,
+              child: TopBarMenu()),
         ],
       ),
     );

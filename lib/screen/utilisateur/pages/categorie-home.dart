@@ -25,6 +25,9 @@ import 'package:flutter/material.dart';
 // import 'package:meta_seo/meta_seo.dart';
 import 'package:provider/provider.dart';
 
+import '../../../bloc/administrateur/post-digiteaux-bloc.dart';
+import '../../../utils/requette-by-dii.dart';
+
 class CategorieHome extends StatelessWidget {
   const CategorieHome({
     super.key,
@@ -38,7 +41,7 @@ class CategorieHome extends StatelessWidget {
     final flashNewsUserBloc = Provider.of<FlashNewsUserBloc>(context);
 
     final emissionUserBloc = Provider.of<EmissionUserBloc>(context);
-
+    final postsDigiteauxBloc = Provider.of<PostsDigiteauxBloc>(context);
     return deviceName(size) == ScreenType.Mobile
         ? const CategorieMobileScreen()
         : Scaffold(
@@ -66,13 +69,10 @@ class CategorieHome extends StatelessWidget {
                                 : paddingVerticalGlobal(220),
                             paddingVerticalGlobal(),
                             Center(
-                              child: Container(
+                              child: SizedBox(
                                 height: 200,
-                                width: size.width * .6,
-                                color: jaune,
-                                child: Center(
-                                  child: Text('Espace Pub'),
-                                ),
+                                width: 1024,
+                                child: Image.network(BASE_URL_ASSET+postsDigiteauxBloc.posts.where((e) => e.statusOnline =="on" && e.type =="article-top").first.image!.url! ,fit: BoxFit.fill,),
                               ),
                             ),
                             paddingVerticalGlobal(),
@@ -80,7 +80,7 @@ class CategorieHome extends StatelessWidget {
                               child: Card(
                                 elevation: .4,
                                 child: Container(
-                                  width: size.width * .6,
+                                  width: 1024,
                                   color: blanc,
                                   child: Column(
                                     children: [
@@ -106,7 +106,7 @@ class CategorieHome extends StatelessWidget {
                                       paddingVerticalGlobal(),
                                       Container(
                                         height: 2,
-                                        width: size.width * .8,
+                                        width: 1024,
                                         decoration: BoxDecoration(
                                             color: bleuMarine,
                                             borderRadius:
@@ -114,7 +114,7 @@ class CategorieHome extends StatelessWidget {
                                       ),
                                       paddingVerticalGlobal(),
                                       SizedBox(
-                                        width: size.width * .8,
+                                        width: 1024,
                                         height: (homeUtilisateurBloc
                                                         .categorieMenuModel!
                                                         .articles!
@@ -360,8 +360,8 @@ class CategorieHome extends StatelessWidget {
                           )),
                       Positioned(
                           top: 84,
-                          right: 0,
-                          left: 0,
+                          left: (size.width - 1024) / 2,
+                          right: (size.width - 1024) / 2,
                           child: Align(
                             alignment: Alignment.center,
                             child: SizedBox(
@@ -413,8 +413,8 @@ class CategorieHome extends StatelessWidget {
                           )),
                       Positioned(
                           top: 20,
-                          left: 0,   // Permet d'étendre sur toute la largeur
-                          right: 0,
+                          left: (size.width - 1024) / 2,
+                          right: (size.width - 1024) / 2,
                           child: const TopBarMenu()),
 
 

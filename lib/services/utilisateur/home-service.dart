@@ -4,6 +4,7 @@ import 'package:actu/models/administrateur/emission-model.dart';
 import 'package:actu/models/administrateur/flash-news-model.dart';
 import 'package:actu/models/administrateur/journal-papier-model.dart';
 import 'package:actu/models/administrateur/post-digiteaux-model.dart';
+import 'package:actu/models/administrateur/video-youtube-model.dart';
 import 'package:actu/models/utilisateur/categorie-menu-model.dart';
 import 'package:actu/models/utilisateur/tag-menu-model.dart';
 import 'package:actu/utils/requette-by-dii.dart';
@@ -207,6 +208,16 @@ class HomeService {
     return await getResponse(url: '/articles/articleInternational').then((value) async {
       if (value['status'] == 200) {
         return ArticlesModel.fromList(data: value['body']['data']);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<List<VideoYoutubeModel>> allVideos() async {
+    return await getResponse(url: '/videos/').then((value) async {
+      if (value['status'] == 200) {
+        return VideoYoutubeModel.fromList(data: value['body']['data']);
       } else {
         return [];
       }
