@@ -24,7 +24,7 @@ class SectionContributionWidget extends StatelessWidget {
       child: homeUtilisateurBloc.articleContributions.isEmpty
           ? SizedBox()
           : SizedBox(
-              height: 600,
+              height: 650,
               width: 1024,
               child: Column(
                 children: [
@@ -47,14 +47,21 @@ class SectionContributionWidget extends StatelessWidget {
                             ),
                             const Spacer(),
                             GestureDetector(
-                              onTap: () => context.go(
-                                '/categorie/${homeUtilisateurBloc.articleContributions.first.categorie!.slug!.toLowerCase()}',
-                              ),
+                              onTap: () async {
+                                await homeUtilisateurBloc.setCatMenu(homeUtilisateurBloc
+                                    .categories
+                                    .firstWhere((e) => e.titre! == "CONTRIBUTION & ANALYSE"));
+
+                                context.go(
+                                  '/categorie/${homeUtilisateurBloc.articleContributions.first.categorie!.slug!.toLowerCase()}',
+                                );
+                                await homeUtilisateurBloc.setCategorieMenu();
+                              } ,
                               child: Text(
                                 'voir +'.toUpperCase(),
                                 style: fontFammilyDii(
                                     context,
-                                    10,
+                                    14,
                                     rouge,
                                     FontWeight.bold,
                                     FontStyle.normal),
@@ -75,12 +82,7 @@ class SectionContributionWidget extends StatelessWidget {
                                     .toUpperCase(),
                                 style: fontFammilyDii(
                                     context,
-                                    size.width >= 1440
-                                        ? 20
-                                        : size.width >= 1024 &&
-                                                size.width < 1440
-                                            ? 14
-                                            : 10,
+                                   14,
                                     noir,
                                     FontWeight.bold,
                                     FontStyle.normal),
@@ -91,11 +93,13 @@ class SectionContributionWidget extends StatelessWidget {
                   ),
                   paddingVerticalGlobal(),
                   SizedBox(
-                    height: 00500,
+                    height: 550,
                     width: 1024,
                     child: Row(
                       children: [
-                        Expanded(
+                        SizedBox(
+                            width: 345,
+                            height: 550,
                             child: Column(
                               children: [
                                 SectionArticleQuatrenaireWidget(
@@ -136,7 +140,7 @@ class SectionContributionWidget extends StatelessWidget {
                         paddingHorizontalGlobal(),
                         SizedBox(
                             width: 345,
-                            height: 500,
+                            height: 550,
                             child: Column(
                               children: [
                                 SectionArticleQuatrenaireWidget(
@@ -180,7 +184,7 @@ class SectionContributionWidget extends StatelessWidget {
                             flex: 1,
                             child: Container(
                               color: blanc,
-                              height: 500,
+                              height: 600,
                               width: 340,
                               child: Image.network(
                                 BASE_URL_ASSET +

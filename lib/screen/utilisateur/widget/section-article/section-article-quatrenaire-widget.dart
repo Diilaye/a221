@@ -21,86 +21,92 @@ class SectionArticleQuatrenaireWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Expanded(
       flex: 2,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Stack(
-          children: [
-            Container(
-              color: blanc,
-            ),
-            Positioned(
-                child: GestureDetector(
-              onTap: () {
-                homeUtilisateurBloc.setAticle(article);
-                js.context.callMethod('open',
-                    ['https://a221.net/article/${article.slug!}', '_self']);
-                // context.go('/article/${article.slug!}');
-              },
-              child: Container(
-                height: 200,
-                // width: size.width * .2,
-                decoration: BoxDecoration(
-                    color: blanc,
-                    image: DecorationImage(
-                        image: NetworkImage(
-                            BASE_URL_ASSET + article.imageArticle!.url!),
-                        fit: BoxFit.cover)),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Stack(
+            children: [
+              Container(
+                color: blanc,
               ),
-            )),
-            Positioned(
-                top: 170,
-                left: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    context.go('/tag/${article.tags!.slug!}');
-                  },
-                  child: Container(
-                    height: 30,
-                    // width: 150,
-                    color: blanc,
-                    child: Row(
-                      children: [
-                        paddingHorizontalGlobal(8),
-                        Text(
-                          article.tags!.titre!.toUpperCase(),
-                          style: fontFammilyDii(context, 10, rouge,
-                              FontWeight.bold, FontStyle.normal),
-                        ),
-                        paddingHorizontalGlobal(8),
-                      ],
+              Positioned(
+                  child: GestureDetector(
+                onTap: () {
+                  homeUtilisateurBloc.setAticle(article);
+                  js.context.callMethod('open',
+                      ['https://a221.net/article/${article.slug!}', '_self']);
+                  // context.go('/article/${article.slug!}');
+                },
+                child: Container(
+                  height: 200,
+                  width: 350,
+                  decoration: BoxDecoration(
+                      color: blanc,
+                      image: DecorationImage(
+                          image: NetworkImage(
+                              BASE_URL_ASSET + article.imageArticle!.url!),
+                          fit: BoxFit.fill)),
+                ),
+              )),
+              Positioned(
+                  top: 170,
+                  left: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      context.go('/tag/${article.tags!.slug!}');
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 170,
+                      color: blanc,
+                      child: Row(
+                        children: [
+                          paddingHorizontalGlobal(8),
+                          Expanded(
+                            child: Text(
+                              article.tags!.titre!.toUpperCase(),
+                              style: fontFammilyDii(context, 12, rouge,
+                                  FontWeight.bold, FontStyle.normal),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          paddingHorizontalGlobal(8),
+                        ],
+                      ),
                     ),
-                  ),
-                )),
-            Positioned(
-                top: 200,
-                width: size.width * .27,
-                height: 120,
-                child: Column(
-                  children: [
-                    paddingVerticalGlobal(),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            homeUtilisateurBloc.setAticle(article);
-                            js.context.callMethod('open', [
-                              'https://a221.net/article/${article.slug!}',
-                              '_self'
-                            ]);
-                            // context.go('/article/${article.slug!}');
-                          },
-                          child: Text(
-                            article.titre!,
-                            style: fontFammilyDii(context, 12, noir,
-                                FontWeight.w600, FontStyle.normal),
+                  )),
+              Positioned(
+                  top: 200,
+                  width: 350,
+                  height: 120,
+                  child: Column(
+                    children: [
+                      paddingVerticalGlobal(),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              homeUtilisateurBloc.setAticle(article);
+                              js.context.callMethod('open', [
+                                'https://a221.net/article/${article.slug!}',
+                                '_self'
+                              ]);
+                              // context.go('/article/${article.slug!}');
+                            },
+                            child: Text(
+                              article.titre!,
+                              style: fontFammilyDii(context, 12, noir,
+                                  FontWeight.w600, FontStyle.normal),
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
-                ))
-          ],
+                      )
+                    ],
+                  ))
+            ],
+          ),
         ),
       ),
     );

@@ -50,7 +50,7 @@ class ArticleBlocMultiUneLueWidget extends StatelessWidget {
                       },
                       child: Image.network(
                         BASE_URL_ASSET + article!.imageArticle!.url!,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                         height: 300,
                         width: 300,
                       ),
@@ -70,7 +70,7 @@ class ArticleBlocMultiUneLueWidget extends StatelessWidget {
                               child: Text(article!.tags!.titre!,
                                   style: fontFammilyDii(
                                       context,
-                                      size.width >= 1440 ? 14 : 10,
+                                      12,
                                       color,
                                       FontWeight.bold,
                                       FontStyle.normal)),
@@ -92,52 +92,35 @@ class ArticleBlocMultiUneLueWidget extends StatelessWidget {
                                   '_self'
                                 ]);
                               },
-                              child: Text(article!.titre!,
-                                  style: fontFammilyDii(
-                                      context,
-                                      size.width >= 1440 ? 14 : 10,
-                                      noir,
-                                      FontWeight.w700,
-                                      FontStyle.normal)),
+                              child: HtmlWidget(
+                                article!.titre!,
+                                customStylesBuilder: (element) {
+
+                                  if (element.classes.contains('ql-align-center')) {
+                                    return {
+                                      'text-align': 'center',
+                                    };
+                                  }
+                                  if (element.classes.contains('ql-align-justify')) {
+                                    return {
+                                      'text-align': 'justify',
+                                    };
+                                  }
+                                  return  { 'fontSize': '12px', 'text-align': 'justify' , 'line-height': '1.5','word-wrap': 'break-word', 'font-weigth':'700'};
+                                },
+                                textStyle: TextStyle(fontSize: 12, color: noir),
+                              ) ,
+
+
                             ),
                           ),
                           paddingHorizontalGlobal(8),
                         ],
                       ),
-                      paddingVerticalGlobal(4),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              homeUtilisateurBloc.setAticle(article!);
-                              js.context.callMethod('open', [
-                                'https://a221.net/article/${article!.slug!}',
-                                '_self'
-                              ]);
-                            },
-                            child: HtmlWidget(
-                              extractFirstTwoSentences(
-                                  article!.description!, 1),
-                              textStyle: fontFammilyDii(
-                                  context,
-                                  size.width >= 1440
-                                      ? 14
-                                      : size.width >= 1024 && size.width < 1440
-                                          ? 10
-                                          : 10,
-                                  noir,
-                                  FontWeight.w300,
-                                  FontStyle.normal),
-                            ),
-                          ),
-                        ),
-                      ),
-                      paddingVerticalGlobal(4)
+
                     ],
                   ),
                 ),
-                paddingVerticalGlobal(8),
               ],
             ),
           ),

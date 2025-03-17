@@ -24,7 +24,7 @@ class JournalScreen extends StatelessWidget {
     return Stack(
       children: [
         if (addArticleBloc.showUpdate == 0)
-          ListView(
+         addArticleBloc.articlePagination== null? const SizedBox() : ListView(
             children: [
               paddingVerticalGlobal(size.height * .02),
               Row(
@@ -118,7 +118,17 @@ class JournalScreen extends StatelessWidget {
                                         underline: const SizedBox(),
                                         padding: const EdgeInsets.all(0),
                                         onChanged: (v) {
-                                          categorieBloc.setCategorie(v);
+                                          if(v==null) {
+                                            categorieBloc.setCategorie(null);
+                                            addArticleBloc.setCategorie(null);
+                                            addArticleBloc.allCatPagination(addArticleBloc.page);
+                                          }else {
+                                            categorieBloc.setCategorie(v);
+                                            addArticleBloc.setCategorie(v);
+                                            addArticleBloc.allCatPagination(addArticleBloc.page);
+                                          }
+
+
                                         }),
                                     paddingHorizontalGlobal(8),
                                   ],
@@ -203,7 +213,7 @@ class JournalScreen extends StatelessWidget {
                     ],
                   ),
                   paddingVerticalGlobal(),
-                  SizedBox(
+                 SizedBox(
                     height: 700,
                     width: size.width,
                     child: Card(
@@ -295,14 +305,14 @@ class JournalScreen extends StatelessWidget {
                             ],
                           ),
                           paddingVerticalGlobal(8),
-                          Expanded(
+                         Expanded(
                               child: Row(
                             children: [
                               paddingHorizontalGlobal(8),
                               Expanded(
                                 child: ListView(
-                                  children: addArticleBloc.articles
-                                      .where((e) {
+                                  children: addArticleBloc.articlePagination!.articles!
+                                     .where((e) {
                                         if (addArticleBloc.rechercheT.isEmpty) {
                                           if (categorieBloc.categorie == null) {
                                             if (e.statusOnline! ==
@@ -357,190 +367,184 @@ class JournalScreen extends StatelessWidget {
                                           }
                                         }
                                       })
-                                      .map((e) => Container(
+
+
+                                      .map((e) => e==null ? SizedBox(): Container(
                                             height: 50,
                                             color: blanc,
-                                            child: Row(
-                                              children: [
-                                                paddingHorizontalGlobal(8),
-                                                Expanded(
-                                                    child: Row(children: [
-                                                  Text(
-                                                    "#${e.id!.substring(0, 7)}",
-                                                    style: fontFammilyDii(
-                                                        context,
-                                                        12,
-                                                        noir,
-                                                        FontWeight.w500,
-                                                        FontStyle.normal),
-                                                  )
-                                                ])),
-                                                Expanded(
-                                                    child: Row(
-                                                  children: [
-                                                    CircleAvatar(
-                                                      backgroundColor:
-                                                          bleuMarine,
-                                                      radius: 16,
-                                                      child: Center(
-                                                        child: Text(
-                                                          '${e.author!.prenom!.substring(0, 1)} ${e.author!.nom!.substring(0, 1)}',
-                                                          style: fontFammilyDii(
-                                                              context,
-                                                              10,
-                                                              blanc,
-                                                              FontWeight.w500,
-                                                              FontStyle.normal),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    paddingHorizontalGlobal(4),
-                                                    Text(
-                                                      '${e.author!.prenom!} ${e.author!.nom!}',
+                                          child: Row(
+                                            children: [
+                                              paddingHorizontalGlobal(8),
+                                              Expanded(
+                                                  child: Row(children: [
+                                                    e.id ==null ? Text("") : Text(
+                                                      "#${e.id!.substring(0, 7)}",
                                                       style: fontFammilyDii(
                                                           context,
                                                           12,
                                                           noir,
                                                           FontWeight.w500,
                                                           FontStyle.normal),
-                                                    ),
-                                                  ],
-                                                )),
-                                                // Expanded(
-                                                //     child: Row(
-                                                //   children: [
-                                                //     Text(
-                                                //       e.date!
-                                                //           .split("T")[0]
-                                                //           .split("-")
-                                                //           .reversed
-                                                //           .join('/'),
-                                                //       style: fontFammilyDii(
-                                                //           context,
-                                                //           12,
-                                                //           noir,
-                                                //           FontWeight.w500,
-                                                //           FontStyle.normal),
-                                                //     ),
-                                                //   ],
-                                                // )),
-                                                Expanded(
-                                                    child: Row(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Center(
-                                                            child: Text(
-                                                          e.categorie!.titre!,
-                                                          style: fontFammilyDii(
-                                                              context,
-                                                              12,
-                                                              noir,
-                                                              FontWeight.w500,
-                                                              FontStyle.normal),
-                                                        )),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                )),
-                                                Expanded(
-                                                    flex: 2,
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Text(
-                                                            e.titre!,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style:
-                                                                fontFammilyDii(
-                                                                    context,
-                                                                    14,
-                                                                    noir,
-                                                                    FontWeight
-                                                                        .w500,
-                                                                    FontStyle
-                                                                        .normal),
+                                                    )
+                                                  ])),
+
+                                            Expanded(
+                                                  child: e.author==null ? Text("") : Row(
+                                                    children: [
+                                                      CircleAvatar(
+                                                        backgroundColor:
+                                                        bleuMarine,
+                                                        radius: 16,
+                                                        child: Center(
+                                                          child: e.author!.nom == null ? Text("") :  Text(
+                                                            "${e.author!.prenom!.substring(0,1)}${e.author!.nom!.substring(0,1)}",
+                                                            style: fontFammilyDii(
+                                                                context,
+                                                                10,
+                                                                blanc,
+                                                                FontWeight.w500,
+                                                                FontStyle.normal),
                                                           ),
                                                         ),
-                                                      ],
-                                                    )),
-                                                Expanded(
-                                                    child: Row(
-                                                  children: [
-                                                    paddingHorizontalGlobal(),
-                                                    Icon(
-                                                      CupertinoIcons
-                                                          .circle_fill,
-                                                      size: 10,
-                                                      color: e.statusOnline! ==
+                                                      ),
+
+                                                      paddingHorizontalGlobal(4),
+                                                      e.author!.nom==null ? Text(""): Text(
+                                                        '${e.author!.prenom!} ${e.author!.nom!}',
+                                                        style: fontFammilyDii(
+                                                            context,
+                                                            12,
+                                                            noir,
+                                                            FontWeight.w500,
+                                                            FontStyle.normal),
+                                                      ),
+
+
+                                                    ],
+                                                  )),
+
+
+
+                                              Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Center(
+                                                              child: e.categorie==null? Text("") : Text(
+                                                                e.categorie!.titre!,
+                                                                style: fontFammilyDii(
+                                                                    context,
+                                                                    12,
+                                                                    noir,
+                                                                    FontWeight.w500,
+                                                                    FontStyle.normal),
+                                                              )),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  )),
+
+                                              Expanded(
+                                                  flex: 2,
+                                                  child: Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: e.titre  == null? Text("") : Text(
+                                                          e.titre!,
+                                                          overflow:
+                                                          TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                          fontFammilyDii(
+                                                              context,
+                                                              14,
+                                                              noir,
+                                                              FontWeight
+                                                                  .w500,
+                                                              FontStyle
+                                                                  .normal),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )),
+
+                                              Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      paddingHorizontalGlobal(),
+                                                      Icon(
+                                                        CupertinoIcons
+                                                            .circle_fill,
+                                                        size: 10,
+                                                        color: e.statusOnline! ==
+                                                            "on"
+                                                            ? vertSport
+                                                            : rouge,
+                                                      ),
+                                                      paddingHorizontalGlobal(4),
+                                                      Text(
+                                                        e.statusOnline! == "on"
+                                                            ? 'En ligne'
+                                                            : 'Broullions',
+                                                        style: fontFammilyDii(
+                                                            context,
+                                                            14,
+                                                            noir,
+                                                            FontWeight.w500,
+                                                            FontStyle.normal),
+                                                      ),
+                                                    ],
+                                                  )),
+
+                                              Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      paddingHorizontalGlobal(6),
+                                                      IconButton(
+                                                          onPressed: () =>
+                                                              addArticleBloc
+                                                                  .setArticle(
+                                                                  e, 1),
+                                                          tooltip:
+                                                          "Modifier l'article",
+                                                          icon: Icon(
+                                                              CupertinoIcons
+                                                                  .pen)),
+                                                      paddingHorizontalGlobal(6),
+                                                      IconButton(
+                                                          onPressed: () async =>
+                                                              dialogRequest(
+                                                                  title:
+                                                                  'Vous êtes sur de vouloir suprimer cette article',
+                                                                  context:
+                                                                  context)
+                                                                  .then(
+                                                                      (value) async {
+                                                                    if (value) {
+                                                                      addArticleBloc
+                                                                          .setArticle(
+                                                                          e, 0);
+                                                                      addArticleBloc
+                                                                          .activeArticle();
+                                                                    }
+                                                                  }),
+                                                          tooltip: e.statusOnline! ==
                                                               "on"
-                                                          ? vertSport
-                                                          : rouge,
-                                                    ),
-                                                    paddingHorizontalGlobal(4),
-                                                    Text(
-                                                      e.statusOnline! == "on"
-                                                          ? 'En ligne'
-                                                          : 'Broullions',
-                                                      style: fontFammilyDii(
-                                                          context,
-                                                          14,
-                                                          noir,
-                                                          FontWeight.w500,
-                                                          FontStyle.normal),
-                                                    ),
-                                                  ],
-                                                )),
-                                                Expanded(
-                                                    child: Row(
-                                                  children: [
-                                                    paddingHorizontalGlobal(6),
-                                                    IconButton(
-                                                        onPressed: () =>
-                                                            addArticleBloc
-                                                                .setArticle(
-                                                                    e, 1),
-                                                        tooltip:
-                                                            "Modifier l'article",
-                                                        icon: Icon(
-                                                            CupertinoIcons
-                                                                .pen)),
-                                                    paddingHorizontalGlobal(6),
-                                                    IconButton(
-                                                        onPressed: () async =>
-                                                            dialogRequest(
-                                                                    title:
-                                                                        'Vous êtes sur de vouloir suprimer cette article',
-                                                                    context:
-                                                                        context)
-                                                                .then(
-                                                                    (value) async {
-                                                              if (value) {
-                                                                addArticleBloc
-                                                                    .setArticle(
-                                                                        e, 0);
-                                                                addArticleBloc
-                                                                    .activeArticle();
-                                                              }
-                                                            }),
-                                                        tooltip: e.statusOnline! ==
-                                                                "on"
-                                                            ? "Suprimer l'article"
-                                                            : "Remettre en ligne",
-                                                        icon: e.statusOnline! ==
-                                                                "on"
-                                                            ? Icon(
-                                                                CupertinoIcons
-                                                                    .delete)
-                                                            : Icon(Icons
-                                                                .accessibility)),
-                                                  ],
-                                                )),
-                                                paddingHorizontalGlobal(8),
-                                              ],
-                                            ),
+                                                              ? "Suprimer l'article"
+                                                              : "Remettre en ligne",
+                                                          icon: e.statusOnline! ==
+                                                              "on"
+                                                              ? Icon(
+                                                              CupertinoIcons
+                                                                  .delete)
+                                                              : Icon(Icons
+                                                              .accessibility)),
+                                                    ],
+                                                  )),
+                                              paddingHorizontalGlobal(8),
+                                            ],
+                                          ) ,
                                           ))
                                       .toList(),
                                 ),
@@ -548,51 +552,67 @@ class JournalScreen extends StatelessWidget {
                               paddingHorizontalGlobal(8)
                             ],
                           )),
+
+
                           paddingVerticalGlobal(8)
                         ],
                       ),
                     ),
                   ),
+
+
                   paddingVerticalGlobal(),
-                  Row(
+                  addArticleBloc.articlePagination!.page ==null ? Text("") :  Row(
                     children: [
                       paddingHorizontalGlobal(8),
                       Text(
-                        "Affichage de 1 à 10 sur 50 articles",
+                        "Affichage page N° ${addArticleBloc.articlePagination!.page!}".toUpperCase(),
                         style: fontFammilyDii(context, 14, noir.withOpacity(.7),
                             FontWeight.w700, FontStyle.normal),
                       ),
                       const Spacer(),
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
+                      GestureDetector(
+                        onTap: () => addArticleBloc.setPage(addArticleBloc.articlePagination!.page!-1),
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: SizedBox(
+                                height: 30,
+                                width: 50,
+                                child: Center(
+                                    child: Icon(
+                                  CupertinoIcons.chevron_left,
+                                  size: 14,
+                                  color: noir,
+                                ))),
+                          ),
                         ),
-                        child: SizedBox(
-                            height: 30,
-                            width: 50,
-                            child: Center(
-                                child: Icon(
-                              CupertinoIcons.chevron_left,
-                              size: 14,
-                              color: noir,
-                            ))),
                       ),
                       paddingHorizontalGlobal(8),
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
+                      GestureDetector(
+                        onTap: () => addArticleBloc.setPage(addArticleBloc.articlePagination!.page!+1),
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: SizedBox(
+                                height: 30,
+                                width: 50,
+                                child: Center(
+                                    child: Icon(
+                                  CupertinoIcons.chevron_right,
+                                  size: 14,
+                                  color: noir,
+                                ))),
+                          ),
                         ),
-                        child: SizedBox(
-                            height: 30,
-                            width: 50,
-                            child: Center(
-                                child: Icon(
-                              CupertinoIcons.chevron_right,
-                              size: 14,
-                              color: noir,
-                            ))),
                       ),
                       paddingHorizontalGlobal(),
                     ],

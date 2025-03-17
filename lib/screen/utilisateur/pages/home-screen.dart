@@ -83,8 +83,7 @@ class HomeUtilisateurScreen extends StatelessWidget {
                                                     0
                                                 ? CircularProgressIndicator()
                                                 : FlashNewsWidget(
-                                                    flashNews: flashNewsUserBloc
-                                                        .flashNews,
+                                                    flashNews: flashNewsUserBloc.flashNews.reversed.toList(),
                                                     havespace: false,
                                                   ))),
                                   ],
@@ -383,7 +382,7 @@ class HomeUtilisateurScreen extends StatelessWidget {
                                   child: flashNewsUserBloc.flashNews.isEmpty
                                       ? CircularProgressIndicator()
                                       : FlashNewsWidget(
-                                    flashNews: flashNewsUserBloc.flashNews,
+                                    flashNews: flashNewsUserBloc.flashNews.reversed.toList(),
                                     havespace: false,
                                   ),
                                 ),

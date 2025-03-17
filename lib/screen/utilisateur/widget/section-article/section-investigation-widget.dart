@@ -17,140 +17,152 @@ class SectionInvestigationtWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
 
-    return homeUtilisateurBloc.articles.isEmpty
-        ? const SizedBox()
-        : Container(
+    return
+
+         Container(
             height: 600,
             width: 1024,
             color: rouge,
-            child: Column(
-              children: [
-                paddingVerticalGlobal(32),
-                Row(
-                  children: [
-                    Expanded(
-                        flex: 2,
-                        child: Row(
-                          children: [
-                            Text(
-                              'Révélation'.toUpperCase(),
-                              style: fontFammilyDii(
-                                  context,
-                                  24,
-                                  blanc,
-                                  FontWeight.bold,
-                                  FontStyle.normal),
-                            ),
-                            const Spacer(),
-                            MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: GestureDetector(
-                                onTap: () async {
-                                  await homeUtilisateurBloc.setCatMenu(
-                                      homeUtilisateurBloc.categories.firstWhere(
-                                          (e) => e.titre! == "INVESTIGATION"));
-                                  await homeUtilisateurBloc.setCategorieMenu();
-                                  context.go(
-                                      '/categorie/${homeUtilisateurBloc.categories.firstWhere((e) => e.titre! == "INVESTIGATION").slug!.toLowerCase().replaceAll("é", "e")}');
-                                },
-                                child: Text(
-                                  'voir +'.toUpperCase(),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  paddingVerticalGlobal(32),
+                  SizedBox(
+                    height: 25,
+                    width: 1000,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            flex: 2,
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Révélation'.toUpperCase(),
                                   style: fontFammilyDii(
                                       context,
-                                      10,
+                                      24,
                                       blanc,
                                       FontWeight.bold,
                                       FontStyle.normal),
                                 ),
-                              ),
-                            ),
-                            paddingHorizontalGlobal(size.width * .02),
-                          ],
-                        )),
-                    Expanded(flex: 1, child: SizedBox()),
-                  ],
-                ),
-                paddingVerticalGlobal(16),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                                flex: 2,
-                                child: Column(
-                                  children: [
-                                  if( homeUtilisateurBloc.uneInvestigations != null)  ArticleLesPlusLueUneWidget(
-                                      article:
-                                          homeUtilisateurBloc.uneInvestigations,
+                                const Spacer(),
+                                MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      await homeUtilisateurBloc.setCatMenu(
+                                          homeUtilisateurBloc.categories.firstWhere(
+                                              (e) => e.titre! == "INVESTIGATION"));
+
+                                      context.go(
+                                          '/categorie/${homeUtilisateurBloc.categories.firstWhere((e) => e.titre! == "INVESTIGATION").slug!.toLowerCase().replaceAll("é", "e")}');
+                                      await homeUtilisateurBloc.setCategorieMenu();
+                                    },
+                                    child: Text(
+                                      'voir +'.toUpperCase(),
+                                      style: fontFammilyDii(
+                                          context,
+                                          14,
+                                          blanc,
+                                          FontWeight.bold,
+                                          FontStyle.normal),
                                     ),
-                                    paddingVerticalGlobal(),
-                                   if(homeUtilisateurBloc
-                                       .articleInvestigations.isNotEmpty) Expanded(
-                                        flex: 3,
-                                        child: Row(
-                                          children: homeUtilisateurBloc
-                                              .articleInvestigations
-                                              .sublist(0, 3)
-                                              .map(
-                                                (e) => Expanded(
-                                                    child:
-                                                        ArticleBlocMultiUneLueWidget(
-                                                  card: 0,
-                                                  color: rouge,
-                                                  article: e,
-                                                )),
-                                              )
-                                              .toList(),
-                                        )),
-                                  ],
-                                )),
-                          if(homeUtilisateurBloc.articleActualites.isNotEmpty)  Expanded(
-                                flex: 1,
-                                child: Card(
-                                  elevation: 4,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(0),
                                   ),
+                                ),
+                                paddingHorizontalGlobal(size.width * .02),
+                              ],
+                            )),
+                        Expanded(flex: 1, child: SizedBox()),
+                      ],
+                    ),
+                  ),
+                  paddingVerticalGlobal(16),
+                  SizedBox(
+                    height: 500,
+                    width: 1000,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  flex: 2,
                                   child: Column(
                                     children: [
+                                    if( homeUtilisateurBloc.uneInvestigations != null)  Expanded(
+                                      flex:3,
+                                      child: ArticleLesPlusLueUneWidget(
+                                          article:
+                                              homeUtilisateurBloc.uneInvestigations,
+                                        ),
+                                    ),
                                       paddingVerticalGlobal(),
-                                      Row(
-                                        children: [
-                                          paddingHorizontalGlobal(),
-                                          Text(
-                                            'Les plus lues'.toUpperCase(),
-                                            style: fontFammilyDii(
-                                                context,
-                                                14,
-                                                noir,
-                                                FontWeight.w600,
-                                                FontStyle.normal),
-                                          ),
-                                        ],
-                                      ),
-                                      ...homeUtilisateurBloc.articleActualites
-                                          .sublist(0, 5)
-                                          .map((e) => ArticleLesPlusLue(
-                                                nombre: homeUtilisateurBloc
-                                                        .articleActualites
-                                                        .indexOf(e) +
-                                                    1,
-                                                article: e,
-                                              ))
-                                          .toList(),
+                                     if(homeUtilisateurBloc
+                                         .articleInvestigations.isNotEmpty) Expanded(
+                                          flex: 2,
+                                          child: Row(
+                                            children: homeUtilisateurBloc
+                                                .articleInvestigations
+                                                .sublist(0, 3)
+                                                .map(
+                                                  (e) => Expanded(
+                                                      child:
+                                                          ArticleBlocMultiUneLueWidget(
+                                                    card: 0,
+                                                    color: rouge,
+                                                    article: e,
+                                                  )),
+                                                )
+                                                .toList(),
+                                          )),
                                     ],
-                                  ),
-                                )),
-                          ],
+                                  )),
+                            if(homeUtilisateurBloc.articleActualites.isNotEmpty)  Expanded(
+                                  flex: 1,
+                                  child: Card(
+                                    elevation: 4,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(0),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        paddingVerticalGlobal(),
+                                        Row(
+                                          children: [
+                                            paddingHorizontalGlobal(),
+                                            Text(
+                                              'Les plus lues'.toUpperCase(),
+                                              style: fontFammilyDii(
+                                                  context,
+                                                  14,
+                                                  noir,
+                                                  FontWeight.w600,
+                                                  FontStyle.normal),
+                                            ),
+                                          ],
+                                        ),
+                                        ...homeUtilisateurBloc.articleActualites
+                                            .sublist(0, 5)
+                                            .map((e) => ArticleLesPlusLue(
+                                                  nombre: homeUtilisateurBloc
+                                                          .articleActualites
+                                                          .indexOf(e) +
+                                                      1,
+                                                  article: e,
+                                                ))
+                                            .toList(),
+                                      ],
+                                    ),
+                                  )),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                paddingVerticalGlobal(32),
-              ],
+                ],
+              ),
             ),
           );
   }

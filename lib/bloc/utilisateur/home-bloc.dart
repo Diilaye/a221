@@ -44,6 +44,7 @@ class HomeUtilisateurBloc with ChangeNotifier {
 
   setCatMenu(CategorieModel? c) {
     catMenu = c;
+    print(catMenu!.toJson());
     showMenuMobile = 0;
     notifyListeners();
   }
@@ -55,12 +56,15 @@ class HomeUtilisateurBloc with ChangeNotifier {
 
   setCategorieMenu() async {
     categorieMenuModel = await homeService.categorieMenu(catMenu!.id!);
+    print(categorieMenuModel!.articles!.length);
     showMenuMobile = 0;
     notifyListeners();
   }
 
   setCategorieMenuIndex(String id) async {
+    print(id);
     categorieMenuModel = await homeService.categorieMenuName(id);
+    print(categorieMenuModel!.articles!.length);
     notifyListeners();
   }
 
@@ -180,8 +184,8 @@ class HomeUtilisateurBloc with ChangeNotifier {
     hoverMenuClick = 0;
     catMenu = cat;
 
-    notifyListeners();
-    await setCategorieMenu();
+    //notifyListeners();
+   // await setCategorieMenu();
     notifyListeners();
   }
 
@@ -233,6 +237,7 @@ class HomeUtilisateurBloc with ChangeNotifier {
     articleUnes = await homeService.uneArticles();
     uneArticle = articleUnes[0];
     uneArticleMobile = articleUnes[0];
+    setUneTop();
     notifyListeners();
   }
 
@@ -309,10 +314,10 @@ class HomeUtilisateurBloc with ChangeNotifier {
     unePolitiqueFunc();
     articlePolitiqueFunc();
     articleContributionFunc();
-    uneEconomieFunc();
-    articleEconomieFunc();
     uneInvestigationFunc();
     articleInvestigationFunc();
+    uneEconomieFunc();
+    articleEconomieFunc();
     articleChoixRedacFunc();
     allVideo();
     articleSportFunc();
@@ -320,7 +325,6 @@ class HomeUtilisateurBloc with ChangeNotifier {
     articleAfriqueFunc();
     articleInternationalFunc();
     allArticles();
-    setUneTop();
     controllerListHome.addListener(() {
       if (controllerListHome.position.pixels > 100) {
         setShowFlashInfo(false);

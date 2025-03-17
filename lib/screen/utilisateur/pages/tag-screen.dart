@@ -26,6 +26,9 @@ import 'package:flutter/material.dart';
 // import 'package:meta_seo/meta_seo.dart';
 import 'package:provider/provider.dart';
 
+import '../../../bloc/administrateur/post-digiteaux-bloc.dart';
+import '../../../utils/requette-by-dii.dart';
+
 class TagHomeScreen extends StatelessWidget {
   const TagHomeScreen({
     super.key,
@@ -37,7 +40,7 @@ class TagHomeScreen extends StatelessWidget {
 
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
     final flashNewsUserBloc = Provider.of<FlashNewsUserBloc>(context);
-
+    final postsDigiteauxBloc = Provider.of<PostsDigiteauxBloc>(context);
     final emissionUserBloc = Provider.of<EmissionUserBloc>(context);
 
     return deviceName(size) == ScreenType.Mobile
@@ -66,14 +69,11 @@ class TagHomeScreen extends StatelessWidget {
                                 ? paddingVerticalGlobal(220)
                                 : paddingVerticalGlobal(220),
                             paddingVerticalGlobal(),
-                            Center(
-                              child: Container(
+                            if(postsDigiteauxBloc.posts.isNotEmpty)  Center(
+                              child: SizedBox(
                                 height: 200,
-                                width: size.width * .6,
-                                color: jaune,
-                                child: Center(
-                                  child: Text('Espace Pub'),
-                                ),
+                                width: 1024,
+                                child: Image.network(BASE_URL_ASSET+postsDigiteauxBloc.posts.where((e) => e.statusOnline =="on" && e.type =="article-top").first.image!.url! ,fit: BoxFit.fill,),
                               ),
                             ),
                             paddingVerticalGlobal(),
@@ -154,60 +154,58 @@ class TagHomeScreen extends StatelessWidget {
                           )),
                       Positioned(
                           top: 84,
+                          left: (size.width - 1024) / 2,
+                          right: (size.width - 1024) / 2,
                           child: SizedBox(
                             height: 75,
-                            width: size.width,
+                            width: 1024,
                             child: Row(
                               children: [
-                                SizedBox(
-                                  width: size.width * .1,
-                                ),
+
                                 Expanded(
                                     child: Container(
-                                  height: 120,
-                                  color: blanc,
-                                  child: Row(
-                                    children: [
-                                      emissionUserBloc.emissions.length == 0
-                                          ? SizedBox()
-                                          : EmissionTopBarWidget(
-                                              emissionModel: emissionUserBloc
-                                                  .suivreEmission!,
-                                            ),
-                                      Container(
-                                        width: 2,
-                                        color: rouge,
-                                      ),
-                                      paddingHorizontalGlobal(8),
-                                      homeUtilisateurBloc.topArticle == null
-                                          ? CircularProgressIndicator()
-                                          : ArticleTopBarWidget(
+                                      height: 120,
+                                      color: blanc,
+                                      child: Row(
+                                        children: [
+                                          emissionUserBloc.emissions.length == 0
+                                              ? SizedBox()
+                                              : EmissionTopBarWidget(
+                                            emissionModel: emissionUserBloc
+                                                .suivreEmission!,
+                                          ),
+                                          Container(
+                                            width: 2,
+                                            color: rouge,
+                                          ),
+                                          paddingHorizontalGlobal(8),
+                                          homeUtilisateurBloc.topArticle == null
+                                              ? SizedBox()
+                                              : ArticleTopBarWidget(
                                               articlesModel: homeUtilisateurBloc
                                                   .topArticle!),
-                                      Container(
-                                        width: 2,
-                                        color: rouge,
+                                          Container(
+                                            width: 2,
+                                            color: rouge,
+                                          ),
+                                          paddingHorizontalGlobal(8),
+                                          emissionUserBloc.emissions.length == 0
+                                              ? SizedBox()
+                                              : EmissionTopBarWidget(
+                                            emissionModel: emissionUserBloc
+                                                .inviteEmission!,
+                                          ),
+                                        ],
                                       ),
-                                      paddingHorizontalGlobal(8),
-                                      emissionUserBloc.emissions.length == 0
-                                          ? SizedBox()
-                                          : EmissionTopBarWidget(
-                                              emissionModel: emissionUserBloc
-                                                  .inviteEmission!,
-                                            ),
-                                    ],
-                                  ),
-                                )),
-                                SizedBox(
-                                  width: size.width * .1,
-                                ),
+                                    )),
+
                               ],
                             ),
                           )),
                       Positioned(
                           top: 20,
-                          left: size.width * .1,
-                          right: size.width * .1,
+                          left: (size.width - 1024) / 2,
+                          right: (size.width - 1024) / 2,
                           child: const TopBarMenu()),
                       MenuBarArticle(
                         categories: homeUtilisateurBloc.categories

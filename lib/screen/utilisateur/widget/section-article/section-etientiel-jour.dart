@@ -31,7 +31,7 @@ class SectionEtientielJourWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "En ce moment …".toUpperCase(),
+                      "L’essentiel".toUpperCase(),
                       style: fontFammilyDii(
                           context, 24, blanc, FontWeight.bold, FontStyle.normal),
                     )

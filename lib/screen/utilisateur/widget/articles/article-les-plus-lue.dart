@@ -124,12 +124,11 @@ class ArticleLesPlusLue extends StatelessWidget {
                               article!.titre!,
                               style: fontFammilyDii(
                                   context,
-                                  deviceName(size) == ScreenType.Desktop
-                                      ? 10
-                                      : 8,
+                                  12,
                                   noir,
                                   FontWeight.w600,
                                   FontStyle.normal),
+                              overflow: TextOverflow.ellipsis,
                             ),
                             paddingVerticalGlobal(4),
                             Row(children: [

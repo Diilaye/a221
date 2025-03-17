@@ -47,7 +47,7 @@ class SectionArticleTernaireWidget extends StatelessWidget {
                       BASE_URL_ASSET + articlesModel.imageArticle!.url!,
                       height: 150,
                       width: 150,
-                      fit: BoxFit.fill,
+                      fit: BoxFit.contain,
                     ),
                   ),
                   paddingHorizontalGlobal(8),
@@ -76,7 +76,7 @@ class SectionArticleTernaireWidget extends StatelessWidget {
                                   children: [
                                     paddingHorizontalGlobal(6),
                                     Text(
-                                      articlesModel.tags!.titre!,
+                                      articlesModel.tags!.titre!.toUpperCase(),
                                       style: fontFammilyDii(
                                           context,
                                           sizeTags,
@@ -158,7 +158,7 @@ class SectionArticleTernaireWidget extends StatelessWidget {
                                   children: [
                                     paddingHorizontalGlobal(6),
                                     Text(
-                                      articlesModel.tags!.titre!,
+                                      articlesModel.tags!.titre!.toUpperCase(),
                                       style: fontFammilyDii(
                                           context,
                                           sizeTags,

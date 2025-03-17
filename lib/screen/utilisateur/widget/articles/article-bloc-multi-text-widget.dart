@@ -58,14 +58,23 @@ class ArticleBlocMultiTextWidget extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
-                        extractFirstTwoSentences(article!.description!, 1),
-                        textStyle: fontFammilyDii(
-                            context,
-                            10
-                                ,
-                            noir,
-                            FontWeight.w300,
-                            FontStyle.normal),
+                        extractFirstTwoSentences(
+                            article!.description!, 1),
+                        customStylesBuilder: (element) {
+
+                          if (element.classes.contains('ql-align-center')) {
+                            return {
+                              'text-align': 'center',
+                            };
+                          }
+                          if (element.classes.contains('ql-align-justify')) {
+                            return {
+                              'text-align': 'justify',
+                            };
+                          }
+                          return  { 'fontSize': '10px', 'text-align': 'justify' , 'line-height': '1.5','word-wrap': 'break-word'};
+                        },
+                        textStyle: TextStyle(fontSize: 10, color: noir),
                       ),
                     ),
                   ),

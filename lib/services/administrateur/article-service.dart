@@ -38,12 +38,27 @@ class ArticleService {
     });
   }
 
-  Future<List<ArticlesModel>> all() async {
-    return await getResponse(url: '/articles').then((value) async {
+    Future<ArticlePagination?> all(int page) async {
+    return await getResponse(url: '/articles?page=$page').then((value) async {
       if (value['status'] == 200) {
-        return ArticlesModel.fromList(data: value['body']['data']);
+        return ArticlePagination.fromJson(value['body']);
       } else {
-        return [];
+        return null;
+      }
+    });
+  }
+
+  bool hasEmptyField(Map<String, dynamic> json) {
+    return json.values.any((value) => value == null || value.toString().trim().isEmpty);
+  }
+
+  Future<ArticlePagination?> allCategorie(int page, String idCat) async {
+    return await getResponse(url: '/articles/cat?page=$page&categorie=$idCat').then((value) async {
+
+      if (value['status'] == 200) {
+        return ArticlePagination.fromJson(value['body']);
+      } else {
+        return null;
       }
     });
   }

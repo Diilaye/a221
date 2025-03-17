@@ -62,6 +62,7 @@ class ArticleLesPlusLueUneWidget extends StatelessWidget {
                           child: Row(
                             children: [
                               paddingHorizontalGlobal(6),
+
                               Text(
                                 article!.tags!.titre!,
                                 style: fontFammilyDii(
@@ -92,19 +93,24 @@ class ArticleLesPlusLueUneWidget extends StatelessWidget {
                         '_self'
                       ]);
                     },
-                    child: Text(
+                    child: HtmlWidget(
                       article!.titre!,
-                      style: fontFammilyDii(
-                          context,
-                          size.width >= 1440
-                              ? 14
-                              : size.width >= 1024 && size.width < 1440
-                                  ? 12
-                                  : 10,
-                          blanc,
-                          FontWeight.bold,
-                          FontStyle.normal),
-                    ),
+                      customStylesBuilder: (element) {
+
+                        if (element.classes.contains('ql-align-center')) {
+                          return {
+                            'text-align': 'center',
+                          };
+                        }
+                        if (element.classes.contains('ql-align-justify')) {
+                          return {
+                            'text-align': 'justify',
+                          };
+                        }
+                        return  { 'fontSize': '16px', 'text-align': 'justify' , 'line-height': '1.5','word-wrap': 'break-word', 'font-weigth':'bolder'};
+                      },
+                      textStyle: TextStyle(fontSize: 16, color: blanc),
+                    ) ,
                   ),
                   paddingVerticalGlobal(4),
                   Expanded(
@@ -117,41 +123,28 @@ class ArticleLesPlusLueUneWidget extends StatelessWidget {
                         ]);
                       },
                       child: HtmlWidget(
-                        extractFirstTwoSentences(article!.description!, 1),
-                        textStyle: fontFammilyDii(
-                            context,
-                            size.width >= 1440
-                                ? 13
-                                : size.width >= 1024 && size.width < 1440
-                                    ? 10
-                                    : 8,
-                            blanc,
-                            FontWeight.w300,
-                            FontStyle.normal),
+                        extractFirstTwoSentences(
+                            article!.description!, 1),
+                        customStylesBuilder: (element) {
+
+                          if (element.classes.contains('ql-align-center')) {
+                            return {
+                              'text-align': 'center',
+                            };
+                          }
+                          if (element.classes.contains('ql-align-justify')) {
+                            return {
+                              'text-align': 'justify',
+                            };
+                          }
+                          return  { 'fontSize': '12px', 'text-align': 'justify' , 'line-height': '1.5','word-wrap': 'break-word'};
+                        },
+                        textStyle: TextStyle(fontSize: 12, color: blanc),
                       ),
                     ),
                   ),
                   paddingVerticalGlobal(6),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: [
-                  //     Container(
-                  //       height: 35,
-                  //       color: blanc,
-                  //       child: Row(
-                  //         children: [
-                  //           paddingHorizontalGlobal(8),
-                  //           Text(
-                  //             "Lire la suite ...",
-                  //             style: fontFammilyDii(context, 12, rouge,
-                  //                 FontWeight.bold, FontStyle.normal),
-                  //           ),
-                  //           paddingHorizontalGlobal(8),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
+
                 ],
               )),
               paddingHorizontalGlobal(8),

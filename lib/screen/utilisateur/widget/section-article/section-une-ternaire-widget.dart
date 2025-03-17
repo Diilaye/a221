@@ -19,89 +19,75 @@ class SectionUneTernaireWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
 
-    return Expanded(
+    return SizedBox(
+        height: 520,
+        width: 600,
         child: MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Column(
         children: [
-          Expanded(
-              flex: 2,
-              child: GestureDetector(
+          GestureDetector(
+            onTap: () {
+              homeUtilisateurBloc.setAticle(article);
+              js.context.callMethod('open',
+                  ['https://a221.net/article/${article.slug!}', '_self']);
+            },
+            child: Image.network(
+              BASE_URL_ASSET + article.imageArticle!.url!,
+              height: 440,
+              width: 600,
+              fit: BoxFit.contain,
+            ),
+          ),
+          paddingVerticalGlobal(8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              GestureDetector(
                 onTap: () {
-                  homeUtilisateurBloc.setAticle(article);
-                  js.context.callMethod('open',
-                      ['https://a221.net/article/${article.slug!}', '_self']);
+                  context.go('/tag/${article.tags!.slug!}');
                 },
-                child: Image.network(
-                  BASE_URL_ASSET + article.imageArticle!.url!,
-                  height: 450,
-                  width: 600,
-                  fit: BoxFit.fill,
-                ),
-              )),
-          Expanded(
-              flex: 1,
-              child: Column(
-                children: [
-                  paddingVerticalGlobal(8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                child: Container(
+
+                  color: rouge,
+                  child: Row(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          context.go('/tag/${article.tags!.slug!}');
-                        },
-                        child: Container(
-                          height: 30,
-                          color: rouge,
-                          child: Row(
-                            children: [
-                              paddingHorizontalGlobal(6),
-                              Text(
-                                article.tags!.titre!.toUpperCase(),
-                                style: fontFammilyDii(
-                                    context,
-                                    size.width >= 1440
-                                        ? 14
-                                        : size.width >= 1024 &&
-                                                size.width < 1440
-                                            ? 12
-                                            : 10,
-                                    blanc,
-                                    FontWeight.bold,
-                                    FontStyle.normal),
-                              ),
-                              paddingHorizontalGlobal(6),
-                            ],
-                          ),
-                        ),
+                      paddingHorizontalGlobal(6),
+                      Text(
+                        article.tags!.titre!.toUpperCase(),
+                        style: fontFammilyDii(
+                            context,
+                             18  ,
+                            blanc,
+                            FontWeight.bold,
+                            FontStyle.normal),
                       ),
+                      paddingHorizontalGlobal(6),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      homeUtilisateurBloc.setAticle(article);
-                      js.context.callMethod('open', [
-                        'https://a221.net/article/${article.slug!}',
-                        '_self'
-                      ]);
-                    },
-                    child: Text(
-                      article.titre!,
-                      style: fontFammilyDii(
-                          context,
-                          size.width >= 1440
-                              ? 18
-                              : size.width >= 1024 && size.width < 1440
-                                  ? 18
-                                  : 10,
-                          noir,
-                          FontWeight.bold,
-                          FontStyle.normal),
-                    ),
-                  )
-                ],
-              )),
+                ),
+              ),
+            ],
+          ),
+          paddingVerticalGlobal(4),
+          GestureDetector(
+            onTap: () {
+              homeUtilisateurBloc.setAticle(article);
+              js.context.callMethod('open', [
+                'https://a221.net/article/${article.slug!}',
+                '_self'
+              ]);
+            },
+            child: Text(
+              article.titre!,
+              style: fontFammilyDii(
+                  context,
+                   16,
+                  noir,
+                  FontWeight.bold,
+                  FontStyle.normal),
+            ),
+          )
         ],
       ),
     ));

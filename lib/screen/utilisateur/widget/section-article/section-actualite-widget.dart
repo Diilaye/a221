@@ -31,7 +31,7 @@ class SectionActualiteWidget extends StatelessWidget {
                 if (deviceName(size) == ScreenType.Mobile)
                   paddingHorizontalGlobal(32),
                 Text(
-                  'Actualité'.toUpperCase(),
+                  'Actualités'.toUpperCase(),
                   style: fontFammilyDii(
                       context,
                       24,
@@ -47,10 +47,11 @@ class SectionActualiteWidget extends StatelessWidget {
                       await homeUtilisateurBloc.setCatMenu(homeUtilisateurBloc
                           .categories
                           .firstWhere((e) => e.titre! == "ACTUALITES"));
-                      await homeUtilisateurBloc.setCategorieMenu();
+
 
                       context.go(
-                          '/categorie/${homeUtilisateurBloc.categories.firstWhere((e) => e.titre! == "ACTUALITES").slug!.toLowerCase()}');
+                          '/categorie/actualites');
+                      await homeUtilisateurBloc.setCategorieMenu();
                     },
                     child: Text(
                       'voir +'.toUpperCase(),
@@ -85,26 +86,26 @@ class SectionActualiteWidget extends StatelessWidget {
                           paddingVerticalGlobal(),
                           SectionArticleTernaireWidget(
                             articlesModel: articles[0],
-                            sizeTags:  10,
-                            sizeTitle:  12,
+                            sizeTags:  13,
+                            sizeTitle:  15,
                           ),
                           paddingVerticalGlobal(),
                           SectionArticleTernaireWidget(
                             articlesModel: articles[1],
-                            sizeTags: 10,
-                            sizeTitle: 12,
+                            sizeTags: 13,
+                            sizeTitle: 15,
+                          ),
+                          paddingVerticalGlobal(),
+                          SectionArticleTernaireWidget(
+                            articlesModel: articles[2],
+                            sizeTags: 13,
+                            sizeTitle: 15,
                           ),
                           paddingVerticalGlobal(),
                           SectionArticleTernaireWidget(
                             articlesModel: articles[3],
-                            sizeTags: 10,
-                            sizeTitle: 12,
-                          ),
-                          paddingVerticalGlobal(),
-                          SectionArticleTernaireWidget(
-                            articlesModel: articles[4],
-                            sizeTags: 10,
-                            sizeTitle: 12,
+                            sizeTags: 13,
+                            sizeTitle: 15,
                           ),
                         ],
                       )),

@@ -18,7 +18,7 @@ class SectionPolitiqueWidget extends StatelessWidget {
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
 
     return SizedBox(
-      height: 550,
+      height: 600,
       width: 1024,
       child: Column(
         children: [
@@ -43,10 +43,11 @@ class SectionPolitiqueWidget extends StatelessWidget {
                     await homeUtilisateurBloc.setCatMenu(homeUtilisateurBloc
                         .categories
                         .firstWhere((e) => e.titre! == "POLITIQUE"));
-                    await homeUtilisateurBloc.setCategorieMenu();
+
 
                     context.go(
                         '/categorie/${homeUtilisateurBloc.categories.firstWhere((e) => e.titre! == "POLITIQUE").slug!.toLowerCase()}');
+                    await homeUtilisateurBloc.setCategorieMenu();
                   },
                   child: Text(
                     'voir +'.toUpperCase(),
@@ -59,54 +60,56 @@ class SectionPolitiqueWidget extends StatelessWidget {
                   ),
                 ),
               ),
+              paddingHorizontalGlobal(),
             ],
           ),
           paddingVerticalGlobal(),
           SizedBox(
-            height: 450,
+            height: 520,
               width: 1024,
                 child: Row(
             children: [
               if(homeUtilisateurBloc.unePolitique != null)  SectionUneTernaireWidget(
                 article: homeUtilisateurBloc.unePolitique!,
               ),
-              paddingHorizontalGlobal(),
+              paddingHorizontalGlobal(24),
 
-              if(homeUtilisateurBloc.articlePolitiques.isNotEmpty)  Expanded(
+              if(homeUtilisateurBloc.articlePolitiques.isNotEmpty)  SizedBox(
+                height: 520,
+                  width: 400,
                   child: Column(
                     children: [
                       SectionArticleTernaireWidget(
                         articlesModel:
                         homeUtilisateurBloc.articlePolitiques[0],
-                        sizeTags:  10,
-                        sizeTitle:  12,
+                        sizeTags:  13,
+                        sizeTitle:  15,
                       ),
                       paddingVerticalGlobal(),
                       SectionArticleTernaireWidget(
                         articlesModel:
                         homeUtilisateurBloc.articlePolitiques[1],
-                        sizeTags:  10,
-                        sizeTitle:  12,
+                        sizeTags:  13,
+                        sizeTitle:  15,
                       ),
                       paddingVerticalGlobal(),
                       SectionArticleTernaireWidget(
                         articlesModel:
                         homeUtilisateurBloc.articlePolitiques[2],
-                        sizeTags:  10,
-                        sizeTitle:  12,
+                        sizeTags:  13,
+                        sizeTitle:  15,
                       ),
                       paddingVerticalGlobal(),
                       SectionArticleTernaireWidget(
                         articlesModel:
                         homeUtilisateurBloc.articlePolitiques[3],
-                        sizeTags:  10,
-                        sizeTitle:  12,
+                        sizeTags:  13,
+                        sizeTitle:  15,
                       ),
                     ],
                   )),
             ],
           )),
-          paddingVerticalGlobal(32),
         ],
       ),
     );

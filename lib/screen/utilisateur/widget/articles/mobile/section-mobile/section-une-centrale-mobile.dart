@@ -52,18 +52,18 @@ class SectionUneCentraleMobile extends StatelessWidget {
             children: [
               paddingHorizontalGlobal(8),
               Expanded(
-                  child: ListView(
+                  child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                children: homeUtilisateurBloc.articleUnes.reversed
-                    .map((e) => Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: UneCentraleSecondaire(
-                            article: e,
-                            index: homeUtilisateurBloc.articleUnes.indexOf(e),
-                          ),
-                        ))
-                    .toList(),
-              )),
+                itemCount: homeUtilisateurBloc.articleUnes.length  ,
+                itemBuilder: (context , i) => homeUtilisateurBloc.articleUnes[i].id !=homeUtilisateurBloc.uneArticleMobile!.id! ?  Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: UneCentraleSecondaire(
+                    article: homeUtilisateurBloc.articleUnes[i],
+                    index: i,
+                  ),
+                ) :const  SizedBox()),
+
+        ),
               paddingHorizontalGlobal(8),
             ],
           ),

@@ -410,7 +410,7 @@ class FooterMobile extends StatelessWidget {
              */
               paddingVerticalGlobal(),
               Text(
-                "Service commerciale : ",
+                "Service commercial : 33 820 81 45 / 33 820 84 24 ",
                 textAlign: TextAlign.center,
                 style: fontFammilyDii(
                     context, 12, blanc, FontWeight.bold, FontStyle.normal),

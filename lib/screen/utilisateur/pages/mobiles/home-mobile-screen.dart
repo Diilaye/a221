@@ -26,6 +26,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../widget/articles/mobile/section-mobile/section-actualite-mobile.dart';
+
 class HomeMobileScreen extends StatelessWidget {
   const HomeMobileScreen({super.key});
 
@@ -82,6 +84,7 @@ class HomeMobileScreen extends StatelessWidget {
                                 ),
                               ),
                         const SectionUneCentraleMobile(),
+                        const SectionActualiteMobile(),
                         const SectionPolitiqueMobile(),
                         const SectionEditionDuJour(),
                         const SectionEconomiqueMobile(),
@@ -97,7 +100,7 @@ class HomeMobileScreen extends StatelessWidget {
 
                         const SectionChoixDeLaRedactionMobile(),
 
-                        const SectionContributionMobile(),
+                       const SectionContributionMobile(),
                        postsDigiteauxUserBloc.listePosts.isEmpty
                             ? const SizedBox()
                             : SectionPostCommercialDuJour(

@@ -11,7 +11,8 @@ import 'dart:js' as js;
 
 class ArticleEconomiqueSecondaire extends StatelessWidget {
   final ArticlesModel article;
-  const ArticleEconomiqueSecondaire({super.key, required this.article});
+  final Color color ;
+  const ArticleEconomiqueSecondaire({super.key, required this.article ,  this.color =const   Color(0xffB30014)});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class ArticleEconomiqueSecondaire extends StatelessWidget {
                         Text(
                           article.tags!.titre!,
                           overflow: TextOverflow.ellipsis,
-                          style: fontFammilyDii(context, 16, rouge,
+                          style: fontFammilyDii(context, 16, color,
                               FontWeight.w600, FontStyle.normal),
                         ),
                       ],
@@ -59,7 +60,7 @@ class ArticleEconomiqueSecondaire extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.only(right: 4.0),
                               child:
-                                  Icon(Icons.article, size: 20.0, color: rouge),
+                                  Icon(Icons.article, size: 20.0, color: color),
                             ),
                           ),
                           TextSpan(

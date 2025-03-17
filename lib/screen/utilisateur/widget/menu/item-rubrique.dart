@@ -40,11 +40,12 @@ class ItemRubriqueMenu extends StatelessWidget {
                   await homeUtilisateurBloc.setCatMenu(
                       homeUtilisateurBloc.categories.firstWhere((e) =>
                           e.titre!.toUpperCase() == title.toUpperCase()));
-                  await homeUtilisateurBloc.setCategorieMenu();
+
                   // ignore: use_build_context_synchronously
                   context.go(
                       '/categorie/${homeUtilisateurBloc.categories.firstWhere((e) => e.titre!.toUpperCase() == title.toUpperCase()).slug!.toLowerCase().replaceAll("é", "e")}');
-                },
+                  await homeUtilisateurBloc.setCategorieMenu();
+                  },
                 child: Container(
                   height: 45,
                   color: color,
@@ -75,10 +76,11 @@ class ItemRubriqueMenu extends StatelessWidget {
                 await homeUtilisateurBloc.setCatMenu(
                     homeUtilisateurBloc.categories.firstWhere(
                         (e) => e.titre!.toUpperCase() == title.toUpperCase()));
-                await homeUtilisateurBloc.setCategorieMenu();
+
                 // ignore: use_build_context_synchronously
                 context.go(
                     '/categorie/${homeUtilisateurBloc.categories.firstWhere((e) => e.titre!.toUpperCase() == title.toUpperCase()).slug!.toLowerCase().replaceAll("é", "e")}');
+                await homeUtilisateurBloc.setCategorieMenu();
               },
               child: Row(
                 children: [

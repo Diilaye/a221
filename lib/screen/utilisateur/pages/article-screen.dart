@@ -9,6 +9,7 @@ import 'package:actu/screen/utilisateur/widget/menu/menu-bar.dart';
 import 'package:actu/screen/utilisateur/widget/menu/menu-rubrique.dart';
 import 'package:actu/screen/utilisateur/widget/menu/top-bar-menu.dart';
 import 'package:actu/utils/color-by-dii.dart';
+import 'package:actu/utils/date-showing-dii.dart';
 import 'package:actu/utils/requette-by-dii.dart';
 import 'package:actu/utils/responsive-ui.dart';
 import 'package:actu/utils/widgets/font-fammily-dii.dart';
@@ -61,7 +62,15 @@ class ArticleScreen extends StatelessWidget {
                               color: blanc,
                               child: Column(
                                 children: [
+                                  if(postsDigiteauxBloc.posts.isNotEmpty)  Center(
+                                    child: SizedBox(
+                                      height: 200,
+                                      width: 1024,
+                                      child:Image.network(BASE_URL_ASSET+postsDigiteauxBloc.posts.where((e) => e.statusOnline =="on" && e.type =="article-top").first.image!.url! ,fit: BoxFit.fill,),
+                                    ),
+                                  ),
                                   paddingVerticalGlobal(),
+
                                   Row(
                                     children: [
                                       paddingHorizontalGlobal(),
@@ -118,13 +127,14 @@ class ArticleScreen extends StatelessWidget {
                                   //     paddingHorizontalGlobal(),
                                   //   ],
                                   // ),
+
                                   paddingVerticalGlobal(8),
                                   Row(
                                     children: [
                                       paddingHorizontalGlobal(),
                                       Expanded(
                                           child: Text(
-                                        "Par ${homeUtilisateurBloc.articleSlug!.author!.prenom} ${homeUtilisateurBloc.articleSlug!.author!.nom}",
+                                        "Par ${homeUtilisateurBloc.articleSlug!.author!.prenom} ${homeUtilisateurBloc.articleSlug!.author!.nom}, Le ${showDate(homeUtilisateurBloc.articleSlug!.date!)}",
                                         style: fontFammilyDii(context, 12, noir,
                                             FontWeight.w400, FontStyle.normal),
                                       )),
@@ -151,7 +161,7 @@ class ArticleScreen extends StatelessWidget {
                                           ),
                                         ),
                                         paddingHorizontalGlobal(8),
-                                        Container(
+                                        if(postsDigiteauxBloc.posts.isNotEmpty)  Container(
                                           height: 500,
                                           width: 320,
                                           child: Image.network(BASE_URL_ASSET+postsDigiteauxBloc.posts.where((e) => e.statusOnline =="on" && e.type =="article-right").first.image!.url! , fit: BoxFit.fill,),
@@ -274,14 +284,7 @@ class ArticleScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          paddingVerticalGlobal(),
-                          Center(
-                            child: SizedBox(
-                              height: 200,
-                              width: 1024,
-                              child:Image.network(BASE_URL_ASSET+postsDigiteauxBloc.posts.where((e) => e.statusOnline =="on" && e.type =="article-top").first.image!.url! ,fit: BoxFit.fill,),
-                            ),
-                          ),
+
                           paddingVerticalGlobal(),
                           Center(
                             child: Container(
@@ -302,7 +305,7 @@ class ArticleScreen extends StatelessWidget {
                                     ],
                                   ),
                                   paddingVerticalGlobal(),
-                                  SizedBox(
+                                  if(homeUtilisateurBloc.articles.isNotEmpty)  SizedBox(
                                     height: 300,
                                     child: ListView(
                                         scrollDirection: Axis.horizontal,

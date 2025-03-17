@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:js' as js;
 class TopBarMenu extends StatelessWidget {
   const TopBarMenu({super.key});
 
@@ -51,7 +51,8 @@ class TopBarMenu extends StatelessWidget {
                     onExit: (e) => homeUtilisateurBloc.setHover(0),
                     child: GestureDetector(
                       onTap: () {
-                        context.go('/');
+                        js.context.callMethod(
+                            'open', ['https://a221.net/', '_self']);
                       },
                       child: Container(
                         height: 60,
@@ -382,7 +383,8 @@ class TopBarMenu extends StatelessWidget {
                         // onExit: (e) => homeUtilisateurBloc.setHover(0),
                         child: GestureDetector(
                           onTap: () {
-                            context.go('/');
+                            js.context.callMethod(
+                                'open', ['https://a221.net/', '_self']);
                           },
                           child: Container(
                             height: 60,

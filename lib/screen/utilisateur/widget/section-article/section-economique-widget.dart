@@ -20,7 +20,7 @@ class SectionEconomiqueWidget extends StatelessWidget {
     return homeUtilisateurBloc.articleEconomies.isEmpty
         ? SizedBox()
         : SizedBox(
-            height: 550,
+            height: 600,
             width: 1024,
             child: Column(
               children: [
@@ -41,9 +41,16 @@ class SectionEconomiqueWidget extends StatelessWidget {
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
-                        onTap: () => context.go(
-                          '/categorie/${homeUtilisateurBloc.articleEconomies.first.categorie!.slug!.toLowerCase()}',
-                        ),
+                        onTap: ()async {
+                            await homeUtilisateurBloc.setCatMenu(
+                            homeUtilisateurBloc.categories.firstWhere(
+                            (e) => e.titre! == "ECONOMIE"));
+                            context.go(
+                              '/categorie/${homeUtilisateurBloc.articleEconomies.first.categorie!.slug!.toLowerCase()}',
+                            );
+                            await homeUtilisateurBloc.setCategorieMenu();
+
+    } ,
                         child: Text(
                           'voir +'.toUpperCase(),
                           style: fontFammilyDii(
@@ -55,6 +62,7 @@ class SectionEconomiqueWidget extends StatelessWidget {
                         ),
                       ),
                     ),
+                    paddingHorizontalGlobal(),
                   ],
                 ),
                 paddingVerticalGlobal(),
@@ -72,29 +80,29 @@ class SectionEconomiqueWidget extends StatelessWidget {
                                   SectionArticleTernaireWidget(
                                     articlesModel:
                                         homeUtilisateurBloc.articleEconomies[0],
-                                    sizeTags:  10,
-                                    sizeTitle:  12,
+                                    sizeTags:  13,
+                        sizeTitle:  15,
                                   ),
                                   paddingVerticalGlobal(),
                                   SectionArticleTernaireWidget(
                                     articlesModel:
                                         homeUtilisateurBloc.articleEconomies[1],
-                                    sizeTags:  10,
-                                    sizeTitle:  12,
+                                    sizeTags:  13,
+                        sizeTitle:  15,
                                   ),
                                   paddingVerticalGlobal(),
                                   SectionArticleTernaireWidget(
                                     articlesModel:
                                         homeUtilisateurBloc.articleEconomies[3],
-                                    sizeTags:  10,
-                                    sizeTitle:  12,
+                                    sizeTags:  13,
+                        sizeTitle:  15,
                                   ),
                                   paddingVerticalGlobal(),
                                   SectionArticleTernaireWidget(
                                     articlesModel:
                                         homeUtilisateurBloc.articleEconomies[4],
-                                    sizeTags:  10,
-                                    sizeTitle:  12,
+                                    sizeTags:  13,
+                        sizeTitle:  15,
                                   ),
                                 ],
                               )),

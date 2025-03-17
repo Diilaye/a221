@@ -53,10 +53,13 @@ class UneCentraleSecondaire extends StatelessWidget {
                         child: Row(
                           children: [
                             paddingHorizontalGlobal(4),
-                            Text(
-                              article.tags!.titre!,
-                              style: fontFammilyDii(context, 13, blanc,
-                                  FontWeight.bold, FontStyle.normal),
+                            Expanded(
+                              child: Text(
+                                article.tags!.titre!,
+                                style: fontFammilyDii(context, 13, blanc,
+                                    FontWeight.bold, FontStyle.normal),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                             paddingHorizontalGlobal(4),
                           ],

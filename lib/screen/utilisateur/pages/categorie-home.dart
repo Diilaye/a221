@@ -68,7 +68,7 @@ class CategorieHome extends StatelessWidget {
                                 ? paddingVerticalGlobal(220)
                                 : paddingVerticalGlobal(220),
                             paddingVerticalGlobal(),
-                            Center(
+                          if(postsDigiteauxBloc.posts.isNotEmpty)  Center(
                               child: SizedBox(
                                 height: 200,
                                 width: 1024,
@@ -138,6 +138,7 @@ class CategorieHome extends StatelessWidget {
                                                     .map(
                                                       (e) => SizedBox(
                                                         height: 300,
+                                                        width: 300,
                                                         child:
                                                             ArticleBlocMultiWidget(
                                                           article: e,
@@ -147,185 +148,7 @@ class CategorieHome extends StatelessWidget {
                                                     .toList(),
                                               ),
                                             ),
-                                            // paddingHorizontalGlobal(32),
-                                            // Expanded(
-                                            //     child: Column(
-                                            //   mainAxisAlignment:
-                                            //       MainAxisAlignment.start,
-                                            //   children: [
-                                            //     SizedBox(
-                                            //       height: 100,
-                                            //       child: SectionArticleTernaireWidget(
-                                            //           tagShowRigth: 0,
-                                            //           showRigth: 0,
-                                            //           sizeTags: 12,
-                                            //           sizeTitle: 12,
-                                            //           articlesModel: homeUtilisateurBloc
-                                            //               .articles
-                                            //               .lastWhere((e) =>
-                                            //                   (e.categorie!
-                                            //                           .id! ==
-                                            //                       homeUtilisateurBloc
-                                            //                           .categorieMenuModel!
-                                            //                           .categorie!
-                                            //                           .id!) &&
-                                            //                   e.typeUne! ==
-                                            //                       "rubrique")),
-                                            //     ),
-                                            //     paddingVerticalGlobal(32),
-                                            //     Container(
-                                            //       height: 500,
-                                            //       decoration: const BoxDecoration(
-                                            //           image: DecorationImage(
-                                            //               image: NetworkImage(
-                                            //                   "https://tpc.googlesyndication.com/simgad/1642461998111929762"),
-                                            //               fit: BoxFit.cover)),
-                                            //     ),
-                                            //     paddingVerticalGlobal(32),
-                                            //     Container(
-                                            //       height: 650,
-                                            //       decoration: BoxDecoration(
-                                            //           border: Border(
-                                            //               top: BorderSide(
-                                            //                   width: 5,
-                                            //                   color: noir))),
-                                            //       child: Column(
-                                            //         children: [
-                                            //           paddingVerticalGlobal(),
-                                            //           Row(
-                                            //             children: [
-                                            //               paddingHorizontalGlobal(),
-                                            //               Text(
-                                            //                 'Les plus lus'
-                                            //                     .toUpperCase(),
-                                            //                 style:
-                                            //                     fontFammilyDii(
-                                            //                         context,
-                                            //                         18,
-                                            //                         noir,
-                                            //                         FontWeight
-                                            //                             .w600,
-                                            //                         FontStyle
-                                            //                             .normal),
-                                            //               ),
-                                            //             ],
-                                            //           ),
-                                            //           Expanded(
-                                            //             child: Column(
-                                            //               children:
-                                            //                   homeUtilisateurBloc
-                                            //                       .articles
-                                            //                       .sublist(1, 6)
-                                            //                       .map(
-                                            //                         (e) =>
-                                            //                             ArticleLesPlusLue(
-                                            //                           nombre: homeUtilisateurBloc
-                                            //                               .articles
-                                            //                               .indexOf(
-                                            //                                   e),
-                                            //                           article:
-                                            //                               e,
-                                            //                         ),
-                                            //                       )
-                                            //                       .toList(),
-                                            //             ),
-                                            //           ),
-                                            //         ],
-                                            //       ),
-                                            //     ),
-                                            //     paddingVerticalGlobal(32),
-                                            //     Container(
-                                            //       height: 500,
-                                            //       decoration: BoxDecoration(
-                                            //           color: gris,
-                                            //           border: Border(
-                                            //               top: BorderSide(
-                                            //                   width: 5,
-                                            //                   color: noir))),
-                                            //       child: Column(
-                                            //         children: [
-                                            //           paddingVerticalGlobal(),
-                                            //           Row(
-                                            //             children: [
-                                            //               paddingHorizontalGlobal(),
-                                            //               Text(
-                                            //                 "édition du jour"
-                                            //                     .toUpperCase(),
-                                            //                 style:
-                                            //                     fontFammilyDii(
-                                            //                         context,
-                                            //                         16,
-                                            //                         noir,
-                                            //                         FontWeight
-                                            //                             .w900,
-                                            //                         FontStyle
-                                            //                             .normal),
-                                            //               )
-                                            //             ],
-                                            //           ),
-                                            //           paddingVerticalGlobal(4),
-                                            //           Row(
-                                            //             children: [
-                                            //               paddingHorizontalGlobal(),
-                                            //               Text(
-                                            //                 "Daté du mercredi 24 juillet 2024"
-                                            //                     .toUpperCase(),
-                                            //                 style:
-                                            //                     fontFammilyDii(
-                                            //                         context,
-                                            //                         10,
-                                            //                         noir,
-                                            //                         FontWeight
-                                            //                             .w300,
-                                            //                         FontStyle
-                                            //                             .normal),
-                                            //               )
-                                            //             ],
-                                            //           ),
-                                            //           paddingVerticalGlobal(),
-                                            //           Expanded(
-                                            //               child: Image.asset(
-                                            //             "assets/images/unejournal2.jpg",
-                                            //             fit: BoxFit.contain,
-                                            //           )),
-                                            //           paddingVerticalGlobal(),
-                                            //           Row(
-                                            //             children: [
-                                            //               paddingHorizontalGlobal(),
-                                            //               Expanded(
-                                            //                 child: Container(
-                                            //                   height: 45,
-                                            //                   color: noir,
-                                            //                   child: Center(
-                                            //                     child: Text(
-                                            //                       'Lire le journal numérique',
-                                            //                       style: fontFammilyDii(
-                                            //                           context,
-                                            //                           14,
-                                            //                           blanc,
-                                            //                           FontWeight
-                                            //                               .bold,
-                                            //                           FontStyle
-                                            //                               .normal),
-                                            //                     ),
-                                            //                   ),
-                                            //                 ),
-                                            //               ),
-                                            //               paddingHorizontalGlobal(),
-                                            //             ],
-                                            //           ),
-                                            //           paddingVerticalGlobal(),
-                                            //         ],
-                                            //       ),
-                                            //     ),
-                                            //     paddingVerticalGlobal(),
-                                            //     Container(
-                                            //       height: 300,
-                                            //       color: jaune,
-                                            //     ),
-                                            //     paddingVerticalGlobal(),
-                                            //   ],
-                                            // )),
+
                                             paddingHorizontalGlobal(32),
                                           ],
                                         ),
@@ -362,53 +185,50 @@ class CategorieHome extends StatelessWidget {
                           top: 84,
                           left: (size.width - 1024) / 2,
                           right: (size.width - 1024) / 2,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: SizedBox(
-                              height: 75,
-                              width: 1024,
-                              child: Row(
-                                children: [
+                          child: SizedBox(
+                            height: 75,
+                            width: 1024,
+                            child: Row(
+                              children: [
 
-                                  Expanded(
-                                      child: Container(
-                                        height: 120,
-                                        color: blanc,
-                                        child: Row(
-                                          children: [
-                                            emissionUserBloc.emissions.length == 0
-                                                ? SizedBox()
-                                                : EmissionTopBarWidget(
-                                              emissionModel: emissionUserBloc
-                                                  .suivreEmission!,
-                                            ),
-                                            Container(
-                                              width: 2,
-                                              color: rouge,
-                                            ),
-                                            paddingHorizontalGlobal(8),
-                                            homeUtilisateurBloc.topArticle == null
-                                                ? SizedBox()
-                                                : ArticleTopBarWidget(
-                                                articlesModel: homeUtilisateurBloc
-                                                    .topArticle!),
-                                            Container(
-                                              width: 2,
-                                              color: rouge,
-                                            ),
-                                            paddingHorizontalGlobal(8),
-                                            emissionUserBloc.emissions.length == 0
-                                                ? SizedBox()
-                                                : EmissionTopBarWidget(
-                                              emissionModel: emissionUserBloc
-                                                  .inviteEmission!,
-                                            ),
-                                          ],
-                                        ),
-                                      )),
+                                Expanded(
+                                    child: Container(
+                                      height: 120,
+                                      color: blanc,
+                                      child: Row(
+                                        children: [
+                                          emissionUserBloc.emissions.length == 0
+                                              ? SizedBox()
+                                              : EmissionTopBarWidget(
+                                            emissionModel: emissionUserBloc
+                                                .suivreEmission!,
+                                          ),
+                                          Container(
+                                            width: 2,
+                                            color: rouge,
+                                          ),
+                                          paddingHorizontalGlobal(8),
+                                          homeUtilisateurBloc.topArticle == null
+                                              ? SizedBox()
+                                              : ArticleTopBarWidget(
+                                              articlesModel: homeUtilisateurBloc
+                                                  .topArticle!),
+                                          Container(
+                                            width: 2,
+                                            color: rouge,
+                                          ),
+                                          paddingHorizontalGlobal(8),
+                                          emissionUserBloc.emissions.length == 0
+                                              ? SizedBox()
+                                              : EmissionTopBarWidget(
+                                            emissionModel: emissionUserBloc
+                                                .inviteEmission!,
+                                          ),
+                                        ],
+                                      ),
+                                    )),
 
-                                ],
-                              ),
+                              ],
                             ),
                           )),
                       Positioned(

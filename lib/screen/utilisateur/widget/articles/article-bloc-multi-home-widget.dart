@@ -63,7 +63,7 @@ class ArticleBlocMultiHomeWidget extends StatelessWidget {
                                 '_self'
                               ]);
                             },
-                            child: Text(article!.tags!.titre!,
+                            child: Text(article!.tags!.titre!.toUpperCase(),
                                 style: fontFammilyDii(
                                     context,
                                     13,

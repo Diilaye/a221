@@ -129,8 +129,15 @@ class CategorieBloc with ChangeNotifier {
   }
 
   setCategorie(CategorieModel? cat) {
-    categorie = cat;
-    titre.text = categorie!.titre!;
+    if(cat == null) {
+      categorie = null;
+      titre.text="";
+    }else{
+      categorie = cat;
+      titre.text = categorie!.titre!;
+    }
+
+
     notifyListeners();
   }
 

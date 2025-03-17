@@ -29,6 +29,39 @@ class AddArticleBloc with ChangeNotifier {
     notifyListeners();
   }
 
+  int page= 1;
+
+  setPage(int index) {
+
+    if(page <1){
+      page=1;
+    }else{
+      page=index;
+    }
+    if(categorie!=null) {
+      allCatPagination(page);
+    }else {
+      allArticles(page);
+    }
+
+    notifyListeners();
+  }
+
+  ArticlePagination? articlePagination;
+
+  allCatPagination(int p ) async{
+
+    if(categorie==null) {
+      articlePagination = await articleService.all(p,);
+
+    }else {
+      articlePagination = await articleService.allCategorie(p, categorie!.id!);
+    }
+    articles = [];
+    articles= articlePagination!.articles!;
+    notifyListeners();
+  }
+
   int showUpdate = 0;
 
   int updateDesc = 0;
@@ -48,6 +81,8 @@ class AddArticleBloc with ChangeNotifier {
   List<CategorieModel> categories = [];
   CategorieModel? categorie;
 
+
+
   setShowUpdate(int i) {
     showUpdate = i;
     notifyListeners();
@@ -61,8 +96,6 @@ class AddArticleBloc with ChangeNotifier {
   }
 
   giveTextController() {
-    print("giveTextController");
-    print(body);
     controllerProduct.setText(body);
   }
 
@@ -195,7 +228,7 @@ class AddArticleBloc with ChangeNotifier {
       imageAticle = [null, null];
       categorie = null;
       tag = null;
-      allArticles();
+      allArticles(1);
       notifyListeners();
     } else {
       Fluttertoast.showToast(
@@ -227,7 +260,7 @@ class AddArticleBloc with ChangeNotifier {
           fontSize: 12.0);
       showUpdate = 0;
       updateDesc = 0;
-      allArticles();
+      allArticles(1);
       notifyListeners();
     } else {
       Fluttertoast.showToast(
@@ -272,7 +305,7 @@ class AddArticleBloc with ChangeNotifier {
           fontSize: 12.0);
       showUpdate = 0;
       updateDesc = 0;
-      allArticles();
+      allArticles(1);
       notifyListeners();
     } else {
       Fluttertoast.showToast(
@@ -317,9 +350,15 @@ class AddArticleBloc with ChangeNotifier {
     notifyListeners();
   }
 
-  allArticles() async {
-    articles = await articleService.all();
-    articles = articles.reversed.toList();
+  allArticles(int page) async {
+    articlePagination = await articleService.all(page);
+    articles= articlePagination!.articles!;
+    notifyListeners();
+  }
+
+  allArticlesByCategorie(int page) async {
+    articlePagination = await articleService.all(page);
+    articles= articlePagination!.articles!;
     notifyListeners();
   }
 
@@ -338,7 +377,7 @@ class AddArticleBloc with ChangeNotifier {
   }
 
   AddArticleBloc() {
-    allArticles();
+    allArticles(1);
     allCategorie();
     allTags();
     allFileModel();

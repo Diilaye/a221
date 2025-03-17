@@ -1,4 +1,5 @@
 import 'package:actu/bloc/utilisateur/home-bloc.dart';
+import 'package:actu/models/administrateur/article-model.dart';
 import 'package:actu/models/utilisateur/categorie-menu-model.dart';
 import 'package:actu/utils/color-by-dii.dart';
 import 'package:actu/utils/requette-by-dii.dart';
@@ -34,8 +35,7 @@ class ArticleBlocMultiWidget extends StatelessWidget {
                   flex: 2,
                   child: GestureDetector(
                     onTap: () {
-                      homeUtilisateurBloc.setAticle(homeUtilisateurBloc.articles
-                          .lastWhere((e) => e.id! == article!.id!));
+                      homeUtilisateurBloc.setAticle(ArticlesModel.fromJson(article!.toJson()));
                       js.context.callMethod('open', [
                         'https://a221.net/article/${article!.slug!}',
                         '_self'
@@ -45,7 +45,7 @@ class ArticleBlocMultiWidget extends StatelessWidget {
                       BASE_URL_ASSET + article!.imageArticle!.url!,
                       height: 200,
                       width: 500,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
@@ -58,9 +58,7 @@ class ArticleBlocMultiWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 0.0),
                           child: GestureDetector(
                             onTap: () {
-                              homeUtilisateurBloc.setAticle(homeUtilisateurBloc
-                                  .articles
-                                  .lastWhere((e) => e.id! == article!.id!));
+                              homeUtilisateurBloc.setAticle(ArticlesModel.fromJson(article!.toJson()));
                               js.context.callMethod('open', [
                                 'https://a221.net/article/${article!.slug!}',
                                 '_self'
@@ -68,8 +66,8 @@ class ArticleBlocMultiWidget extends StatelessWidget {
                             },
                             child: Text(article!.titre!,
                                 overflow: TextOverflow.fade,
-                                style: fontFammilyDii(context, 12, noir,
-                                    FontWeight.w300, FontStyle.normal)),
+                                style: fontFammilyDii(context, 15, noir,
+                                    FontWeight.w500, FontStyle.normal)),
                           ),
                         ),
                       ),
@@ -81,7 +79,7 @@ class ArticleBlocMultiWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 161,
+            top: 180,
             left: 4,
             child: Row(
               children: [
@@ -97,8 +95,8 @@ class ArticleBlocMultiWidget extends StatelessWidget {
                       children: [
                         paddingHorizontalGlobal(6),
                         Text(article!.tags!.titre!,
-                            style: fontFammilyDii(context, 14, blanc,
-                                FontWeight.bold, FontStyle.normal)),
+                            style: fontFammilyDii(context, 15, blanc,
+                                FontWeight.w700, FontStyle.normal)),
                         paddingHorizontalGlobal(6),
                       ],
                     ),

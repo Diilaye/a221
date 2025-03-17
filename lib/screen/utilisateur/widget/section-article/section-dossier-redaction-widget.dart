@@ -103,25 +103,44 @@ class SectionDossierRedactionWidget extends StatelessWidget {
                         },
                         child: Column(
                           children: [
-                            Text(articles!.titre!,
-                                overflow: TextOverflow.clip,
-                                textAlign: TextAlign.justify,
-                                style: fontFammilyDii(
-                                    context,
-                                    size.width >= 1440
-                                        ? 22
-                                        : size.width >= 1024 &&
-                                                size.width < 1440
-                                            ? 14
-                                            : 10,
-                                    noir,
-                                    FontWeight.bold,
-                                    FontStyle.normal)),
+                            HtmlWidget(
+                              articles!.titre!,
+                              customStylesBuilder: (element) {
+
+                                if (element.classes.contains('ql-align-center')) {
+                                  return {
+                                    'text-align': 'center',
+                                  };
+                                }
+                                if (element.classes.contains('ql-align-justify')) {
+                                  return {
+                                    'text-align': 'justify',
+                                  };
+                                }
+                                return  { 'fontSize': '16px', 'text-align': 'justify' , 'line-height': '1.5','word-wrap': 'break-word' , 'font-weigth':'bold'};
+                              },
+                              textStyle: TextStyle(fontSize: 16, color: noir  , fontWeight: FontWeight.bold),
+                            ),
+
                             paddingVerticalGlobal(8),
                             HtmlWidget(
                               extractFirstTwoSentences(
                                   articles!.description!, 1),
-                              textStyle: TextStyle(color: noir, fontSize: 20),
+                              customStylesBuilder: (element) {
+
+                                if (element.classes.contains('ql-align-center')) {
+                                  return {
+                                    'text-align': 'center',
+                                  };
+                                }
+                                if (element.classes.contains('ql-align-justify')) {
+                                  return {
+                                    'text-align': 'justify',
+                                  };
+                                }
+                                return  { 'fontSize': '13px', 'text-align': 'justify' , 'line-height': '1.5','word-wrap': 'break-word'};
+                              },
+                              textStyle: TextStyle(fontSize: 13, color: noir),
                             ),
                             paddingVerticalGlobal(8),
                             // Center(

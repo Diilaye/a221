@@ -27,6 +27,8 @@ class ArticlesModel {
       this.id});
 
   ArticlesModel.fromJson(Map<String, dynamic> json) {
+
+
     description = json['description'];
     typeUne = json['typeUne'];
     keyWorod = json['keyWorod'].cast<String>();
@@ -169,4 +171,28 @@ class Author {
     data['id'] = this.id;
     return data;
   }
+}
+
+
+class ArticlePagination {
+  int? totalPages;
+  int? page;
+  int? pageSize;
+  List<ArticlesModel>? articles;
+  ArticlePagination({
+    this.totalPages,
+    this.page,
+    this.pageSize,
+    this.articles,
+  });
+
+  ArticlePagination.fromJson(Map<String, dynamic> json) {
+    totalPages = json['totalPages'];
+    page = json['page'];
+    pageSize = json['pageSize'];
+    articles = json['data'] != null
+        ?  ArticlesModel.fromList(data:json['data'])
+        : null;
+  }
+
 }
