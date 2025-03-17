@@ -35,12 +35,13 @@ class ArtilceInvestiogationMobile extends StatelessWidget {
             height: 320,
             width: size.width * .9,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(4),
                 image: DecorationImage(
                     image: NetworkImage(
                         BASE_URL_ASSET + article.imageArticle!.url!),
-                    fit: BoxFit.cover)),
-            child: Column(
+                    fit: BoxFit.contain)),
+           /*
+           child: Column(
               children: [
                 const Spacer(),
                 Container(
@@ -86,6 +87,8 @@ class ArtilceInvestiogationMobile extends StatelessWidget {
                 ),
               ],
             ),
+
+            */
           ),
         ),
       ),

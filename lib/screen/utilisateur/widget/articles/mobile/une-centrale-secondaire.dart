@@ -34,11 +34,11 @@ class UneCentraleSecondaire extends StatelessWidget {
           children: [
             Image.network(
               BASE_URL_ASSET + article.imageArticle!.url!,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               height: 200,
               width: 200,
             ),
-            Positioned(
+            /* Positioned(
               bottom: 0,
               child: Container(
                 color: noir.withOpacity(.5),
@@ -93,6 +93,8 @@ class UneCentraleSecondaire extends StatelessWidget {
                 ),
               ),
             ),
+
+             */
           ],
         ),
       ),

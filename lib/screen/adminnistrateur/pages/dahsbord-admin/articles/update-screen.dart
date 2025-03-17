@@ -1,9 +1,11 @@
 import 'package:actu/bloc/administrateur/article-bloc.dart';
+import 'package:actu/bloc/administrateur/tags-bloc.dart';
 import 'package:actu/utils/color-by-dii.dart';
 import 'package:actu/utils/requette-by-dii.dart';
 import 'package:actu/utils/widgets/font-fammily-dii.dart';
 import 'package:actu/utils/widgets/padding-global.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +48,7 @@ class _UpdateArticleScreenState extends State<UpdateArticleScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final addArticleBloc = Provider.of<AddArticleBloc>(context);
-
+    final tagsBloc = Provider.of<TagsBloc>(context);
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -324,18 +326,34 @@ class _UpdateArticleScreenState extends State<UpdateArticleScreen> {
                   children: [
                     paddingHorizontalGlobal(8),
                     Expanded(
-                        child: DropdownButton(
-                            value: addArticleBloc.tag,
-                            iconSize: .0,
-                            icon: const SizedBox(),
-                            items: addArticleBloc.tags
-                                .map((e) => DropdownMenuItem(
-                                    value: e, child: Text(e.titre!)))
-                                .toList(),
-                            onChanged: (t) {
-                              addArticleBloc.setTags(t);
-                              // sousCategorieBloc.setCategorie(cat);
-                            })),
+                        child: DropdownSearch<String>(
+                          popupProps: PopupProps.menu(
+                            showSearchBox: true,
+                            searchFieldProps: TextFieldProps(
+                                decoration: InputDecoration(
+                                    labelText: 'Recherche',
+                                    enabledBorder: OutlineInputBorder(),
+                                    disabledBorder: OutlineInputBorder(),
+                                    border: OutlineInputBorder())),
+                            showSelectedItems: true,
+                          ),
+                          items: tagsBloc.tags.map((e) => e.titre!).toList(),
+                          dropdownDecoratorProps: DropDownDecoratorProps(
+                            dropdownSearchDecoration: InputDecoration(
+                              labelText: 'Selectionnez un tag'.toUpperCase(),
+                            ),
+                          ),
+                          onChanged: (v) {
+                            addArticleBloc.setTags(tagsBloc.tags.firstWhere(
+                                    (e) =>
+                                e.titre!.toLowerCase() ==
+                                    v!.toLowerCase()));
+                          },
+                          selectedItem: addArticleBloc.tag == null
+                              ? ""
+                              : addArticleBloc.tag!.titre,
+                        )),
+                    paddingHorizontalGlobal(16),
                   ],
                 ),
                 paddingVerticalGlobal(),

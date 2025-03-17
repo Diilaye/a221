@@ -13,6 +13,8 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../bloc/administrateur/post-digiteaux-bloc.dart';
+
 class ArticlMobileScreen extends StatelessWidget {
   const ArticlMobileScreen({super.key});
 
@@ -20,7 +22,7 @@ class ArticlMobileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
     Size size = MediaQuery.of(context).size;
-
+    final postsDigiteauxBloc = Provider.of<PostsDigiteauxBloc>(context);
     return Scaffold(
       backgroundColor: gris,
       appBar: AppBar(
@@ -182,14 +184,11 @@ class ArticlMobileScreen extends StatelessWidget {
                   ),
                 ),
                 paddingVerticalGlobal(),
-                Center(
-                  child: Container(
+                if(postsDigiteauxBloc.posts.isNotEmpty)  Center(
+                  child: SizedBox(
                     height: 200,
-                    color: jaune,
                     width: size.width,
-                    child: Center(
-                      child: Text('Espace Pub'),
-                    ),
+                    child:Image.network(BASE_URL_ASSET+postsDigiteauxBloc.posts.where((e) => e.statusOnline =="on" && e.type =="article-top").first.image!.url! ,fit: BoxFit.fill,),
                   ),
                 ),
                 paddingVerticalGlobal(),
@@ -215,7 +214,7 @@ class ArticlMobileScreen extends StatelessWidget {
                           height: 300,
                           child: ListView(
                               scrollDirection: Axis.horizontal,
-                              children: homeUtilisateurBloc.articles.reversed
+                              children: homeUtilisateurBloc.articles
                                   .where((el) =>
                                       (el.tags!.id! ==
                                           homeUtilisateurBloc

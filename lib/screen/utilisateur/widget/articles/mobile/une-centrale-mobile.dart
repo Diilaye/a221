@@ -45,13 +45,13 @@ class UneCentraleMobile extends StatelessWidget {
                   ),
                   paddingHorizontalGlobal(2),
                   Text(
-                    homeUtilisateurBloc.uneArticleMobile!.tags!.titre!,
+                    homeUtilisateurBloc.uneArticleMobile!.tags!.titre!.toUpperCase(),
                     style: fontFammilyDii(
                         context, 18, rouge, FontWeight.bold, FontStyle.normal),
                   )
                 ],
               ),
-              paddingVerticalGlobal(4),
+             /* paddingVerticalGlobal(4),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Text(
@@ -60,16 +60,18 @@ class UneCentraleMobile extends StatelessWidget {
                       context, 20, noir, FontWeight.bold, FontStyle.normal),
                 ),
               ),
+
+              */
               paddingVerticalGlobal(4),
               Image.network(
                 BASE_URL_ASSET +
                     homeUtilisateurBloc.uneArticleMobile!.imageArticle!.url!,
                 height: 300,
-                width: size.width * .95,
-                fit: BoxFit.cover,
+                width: size.width * .9,
+                fit: BoxFit.fill,
               ),
               paddingVerticalGlobal(4),
-              Row(
+          /*   Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
@@ -77,9 +79,14 @@ class UneCentraleMobile extends StatelessWidget {
                     style: fontFammilyDii(
                         context, 10, noir, FontWeight.w200, FontStyle.normal),
                   ),
+
+
+
                   paddingHorizontalGlobal(8)
                 ],
               ),
+
+           */
             ],
           ),
         ),

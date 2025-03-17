@@ -21,6 +21,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:actu/bloc/administrateur/menu-admin.dart';
 
+import '../../../bloc/utilisateur/home-bloc.dart';
+import '../../../utils/responsive-ui.dart';
+import '../../adminnistrateur/pages/dahsbord-admin/articles/add-screen-mobile.dart';
+import '../../adminnistrateur/pages/dahsbord-admin/articles/journal-screen-mobile.dart';
+import '../../adminnistrateur/pages/dahsbord-admin/flash-news/flash-new-mobile.dart';
+import '../../adminnistrateur/pages/dahsbord-admin/params/params-dashbord-other.dart';
+import '../../adminnistrateur/pages/dahsbord-admin/posts-digiteaux/add-post-digiteaux-mobile.dart';
+import '../../adminnistrateur/pages/dahsbord-admin/posts-digiteaux/posts-digiteaux-mobile.dart';
+import '../../adminnistrateur/pages/dahsbord-admin/presse-ecrite/add-presse-ecrite-MOBILE.dart';
+import '../../adminnistrateur/pages/dahsbord-admin/presse-ecrite/presse-ecrite-mobile.dart';
+import '../../adminnistrateur/pages/dahsbord-admin/tv/add-emission-mobile.dart';
+import '../../adminnistrateur/pages/dahsbord-admin/tv/tv-screen-mobile.dart';
+import '../../adminnistrateur/pages/mobile-dashbord-admin/mobile-overview-admin.dart';
+import '../../utilisateur/widget/menu/menu-mobile-administrateur.dart';
+import '../../utilisateur/widget/menu/menu-mobile-journaliste.dart';
+import '../../utilisateur/widget/menu/top-bar-menu.dart';
+
 class JournalisteScreen extends StatelessWidget {
   const JournalisteScreen({super.key});
 
@@ -28,7 +45,7 @@ class JournalisteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final menuAdminBloc = Provider.of<MenuAdminBloc>(context);
-
+    final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: .0,
@@ -37,7 +54,8 @@ class JournalisteScreen extends StatelessWidget {
         body: SizedBox(
           height: size.height,
           width: size.width,
-          child: Row(
+          child: deviceName(size) == ScreenType.Desktop
+              ? Row(
             children: [
               Expanded(
                   child: Container(
@@ -229,7 +247,64 @@ class JournalisteScreen extends StatelessWidget {
                                                                                       ? const ParamsDashbordJournaliste()
                                                                                       : Container()),
             ],
-          ),
+          ) :Stack(
+            children: [
+              Positioned(
+                  top: 60,
+                  child: SizedBox(
+                      height: size.height - 60,
+                      width: size.width,
+                      child: menuAdminBloc.menu == 0
+                          ? const MobileOverViewAdmin()
+                          : menuAdminBloc.menu == 1
+                          ? const JournalScreenMobile()
+                          : menuAdminBloc.menu == 10
+                          ? const JournalScreenMobile()
+                          : menuAdminBloc.menu == 11
+                          ? const AddArticleScreenMobile()
+                          : menuAdminBloc.menu == 2
+                          ? const TvScreenMobile()
+                          : menuAdminBloc.menu == 20
+                          ? const TvScreenMobile()
+                          : menuAdminBloc.menu == 21
+                          ? const AddEmissionScreenMobile()
+                          : menuAdminBloc.menu ==
+                          3
+                          ? const PresseEcriteScreenMobile()
+                          : menuAdminBloc
+                          .menu ==
+                          30
+                          ? const PresseEcriteScreenMobile()
+                          : menuAdminBloc
+                          .menu ==
+                          31
+                          ? const AddPresseEcriteScreenMobile()
+                          : menuAdminBloc.menu ==
+                          4
+                          ? const FlashNewsScreenMobile()
+                          : menuAdminBloc.menu ==
+                          40
+                          ? const FlashNewsScreenMobile()
+                          : menuAdminBloc.menu == 41
+                          ? const AddFlashNewsScreen()
+                          : menuAdminBloc.menu == 5
+                          ? const PostDigiteauxScreenMobile()
+                          : menuAdminBloc.menu == 50
+                          ? const PostDigiteauxScreenMobile()
+                          : menuAdminBloc.menu == 51
+                          ? const AddPostDigiteauxScreenMobile()
+                          : menuAdminBloc.menu == 7
+                          ? const ParamsDashbord()
+                          : Container())),
+              if (homeUtilisateurBloc.showMenuMobile == 1)
+                const Positioned(
+                    top: 60, child: MenuMobileJournaliste()),
+              const Positioned(
+                  top: 0,
+                  child: TopBarMenu())
+
+            ],
+          ) ,
         ));
   }
 }

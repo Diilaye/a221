@@ -634,7 +634,7 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> {
                     paddingHorizontalGlobal()
                   ],
                 ),
-                paddingVerticalGlobal(),
+                paddingVerticalGlobal(50),
               ],
             )
           : Column(

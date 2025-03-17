@@ -34,7 +34,6 @@ class SectionUneCentraleMobile extends StatelessWidget {
         ),
         paddingVerticalGlobal(4),
         const UneCentraleMobile(),
-        paddingVerticalGlobal(),
         Row(
           children: [
             const Spacer(),
@@ -50,13 +49,12 @@ class SectionUneCentraleMobile extends StatelessWidget {
           color: blanc,
           child: Row(
             children: [
-              paddingHorizontalGlobal(8),
               Expanded(
                   child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: homeUtilisateurBloc.articleUnes.length  ,
                 itemBuilder: (context , i) => homeUtilisateurBloc.articleUnes[i].id !=homeUtilisateurBloc.uneArticleMobile!.id! ?  Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
+                  padding: const EdgeInsets.only(right: 8.0 ,left: 8.0),
                   child: UneCentraleSecondaire(
                     article: homeUtilisateurBloc.articleUnes[i],
                     index: i,

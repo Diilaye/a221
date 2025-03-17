@@ -65,7 +65,7 @@ class HomeService {
   }
 
   Future<List<ArticlesModel>> allAricles() async {
-    return await getResponse(url: '/articles').then((value) async {
+    return await getResponse(url: '/articles?page=1&pageSize=500').then((value) async {
       if (value['status'] == 200) {
         return ArticlesModel.fromList(data: value['body']['data']);
       } else {

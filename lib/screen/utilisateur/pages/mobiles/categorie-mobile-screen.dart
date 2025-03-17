@@ -77,47 +77,7 @@ class CategorieMobileScreen extends StatelessWidget {
                         ],
                       ),
                       paddingVerticalGlobal(),
-                      // SizedBox(
-                      //   height: 40,
-                      //   width: size.width * .6,
-                      //   child: ListView(
-                      //     scrollDirection: Axis.horizontal,
-                      //     children: [
-                      //       paddingHorizontalGlobal(8),
-                      //       ...homeUtilisateurBloc
-                      //           .categorieMenuModel!.sousRubrique!
-                      //           .map((e) => Row(
-                      //                 children: [
-                      //                   paddingHorizontalGlobal(8),
-                      //                   Container(
-                      //                     height: 30,
-                      //                     decoration: BoxDecoration(
-                      //                         border: Border.all(width: .5),
-                      //                         borderRadius:
-                      //                             BorderRadius.circular(2)),
-                      //                     child: Row(
-                      //                       children: [
-                      //                         paddingHorizontalGlobal(6),
-                      //                         Text(
-                      //                           e.titre!,
-                      //                           style: fontFammilyDii(
-                      //                               context,
-                      //                               13,
-                      //                               noir,
-                      //                               FontWeight.w300,
-                      //                               FontStyle.normal),
-                      //                         ),
-                      //                         paddingHorizontalGlobal(6),
-                      //                       ],
-                      //                     ),
-                      //                   ),
-                      //                   paddingHorizontalGlobal(8),
-                      //                 ],
-                      //               ))
-                      //     ],
-                      //   ),
-                      // ),
-                      // paddingVerticalGlobal(),
+
                       Container(
                         height: 1,
                         color: noir,
@@ -125,50 +85,42 @@ class CategorieMobileScreen extends StatelessWidget {
                       paddingVerticalGlobal(),
                       Column(
                         children: [
-                          SizedBox(
+                          Container(
                             height: 200,
+                            color: blanc,
+                            width: size.width,
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: ArticleCategorieMobile(
-                                    article: homeUtilisateurBloc
-                                        .categorieMenuModel!.articles![0],
-                                  ),
+                                const Spacer(),
+                                ArticleCategorieMobile(
+                                  article: homeUtilisateurBloc
+                                      .categorieMenuModel!.articles![0],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: ArticleCategorieMobile(
-                                    article: homeUtilisateurBloc
-                                        .categorieMenuModel!.articles![1],
-                                  ),
+                                paddingHorizontalGlobal(0),
+                                ArticleCategorieMobile(
+                                  article: homeUtilisateurBloc
+                                      .categorieMenuModel!.articles![1],
                                 ),
+                                const Spacer(),
                               ],
                             ),
                           ),
                           paddingVerticalGlobal(),
                           SizedBox(
                             height: 200,
+                            width: size.width,
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: ArticleCategorieMobile(
-                                    article: homeUtilisateurBloc
-                                        .categorieMenuModel!.articles![2],
-                                  ),
+                                const Spacer(),
+                                ArticleCategorieMobile(
+                                  article: homeUtilisateurBloc
+                                      .categorieMenuModel!.articles![2],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: ArticleCategorieMobile(
-                                    article: homeUtilisateurBloc
-                                        .categorieMenuModel!.articles![3],
-                                  ),
+                                ArticleCategorieMobile(
+                                  article: homeUtilisateurBloc
+                                      .categorieMenuModel!.articles![3],
                                 ),
+                                const Spacer(),
                               ],
                             ),
                           ),
@@ -179,53 +131,45 @@ class CategorieMobileScreen extends StatelessWidget {
                         children: [
                           SizedBox(
                             height: 200,
+                            width: size.width,
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: ArticleCategorieMobile(
-                                    article: homeUtilisateurBloc
-                                        .categorieMenuModel!.articles![4],
-                                  ),
+                                const Spacer(),
+                                ArticleCategorieMobile(
+                                  article: homeUtilisateurBloc
+                                      .categorieMenuModel!.articles![4],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: ArticleCategorieMobile(
-                                    article: homeUtilisateurBloc
-                                        .categorieMenuModel!.articles![5],
-                                  ),
+                                ArticleCategorieMobile(
+                                  article: homeUtilisateurBloc
+                                      .categorieMenuModel!.articles![5],
                                 ),
+                                const Spacer(),
                               ],
                             ),
                           ),
                           paddingVerticalGlobal(8),
                           SizedBox(
                             height: 200,
+                            width: size.width,
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: ArticleCategorieMobile(
-                                    article: homeUtilisateurBloc
-                                        .categorieMenuModel!.articles![6],
-                                  ),
+                                const Spacer(),
+                                ArticleCategorieMobile(
+                                  article: homeUtilisateurBloc
+                                      .categorieMenuModel!.articles![6],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: ArticleCategorieMobile(
-                                    article: homeUtilisateurBloc
-                                        .categorieMenuModel!.articles![7],
-                                  ),
+                                ArticleCategorieMobile(
+                                  article: homeUtilisateurBloc
+                                      .categorieMenuModel!.articles![7],
                                 ),
+                                const Spacer(),
                               ],
                             ),
                           ),
                         ],
                       ),
+
+
                       paddingVerticalGlobal(),
                       Container(
                         height: 1,

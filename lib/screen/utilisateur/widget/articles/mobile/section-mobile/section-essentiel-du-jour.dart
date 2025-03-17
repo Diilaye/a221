@@ -12,7 +12,8 @@ class SectionEssentielDuJour extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 400,
+      height: 450,
+      width: MediaQuery.of(context).size.width,
       color: bleuMarine,
       child: Column(
         children: [
@@ -21,7 +22,7 @@ class SectionEssentielDuJour extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "En ce moment …".toUpperCase(),
+                "L'essentiel".toUpperCase(),
                 style: fontFammilyDii(
                     context, 24, blanc, FontWeight.bold, FontStyle.normal),
               )
@@ -30,6 +31,7 @@ class SectionEssentielDuJour extends StatelessWidget {
           paddingVerticalGlobal(),
           SizedBox(
               height: 350,
+              width: MediaQuery.of(context).size.width,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: posts.map((e) => Row(children: [
@@ -37,7 +39,8 @@ class SectionEssentielDuJour extends StatelessWidget {
                   Image.network(
                     BASE_URL_ASSET + e.image!.url!,
                     fit: BoxFit.contain,
-
+                    height: 350,
+                    width: MediaQuery.of(context).size.width *.9 ,
                   ),
                 ],)).toList(),
               )),

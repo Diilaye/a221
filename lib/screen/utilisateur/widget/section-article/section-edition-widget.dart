@@ -23,7 +23,7 @@ class SectionEditionWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'édition du jour'.toUpperCase(),
+                    'Partenariat'.toUpperCase(),
                     style: fontFammilyDii(
                         context,
                         deviceName(size) == ScreenType.Desktop

@@ -373,7 +373,9 @@ class AdministrateurAscreen extends StatelessWidget {
                     if (homeUtilisateurBloc.showMenuMobile == 1)
                       const Positioned(
                           top: 60, child: MenuMobileAdministratreur()),
-                    const Positioned(child: TopBarMenu())
+                    const Positioned(
+                        top: 0,
+                        child: TopBarMenu())
                   ],
                 ),
         ));

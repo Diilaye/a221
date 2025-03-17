@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/articles/mobile/section-mobile/section-actualite-mobile.dart';
+import '../../widget/articles/mobile/section-mobile/section-video-mobile.dart';
 
 class HomeMobileScreen extends StatelessWidget {
   const HomeMobileScreen({super.key});
@@ -85,122 +86,27 @@ class HomeMobileScreen extends StatelessWidget {
                               ),
                         const SectionUneCentraleMobile(),
                         const SectionActualiteMobile(),
-                        const SectionPolitiqueMobile(),
                         const SectionEditionDuJour(),
-                        const SectionEconomiqueMobile(),
-                        const SectionInvestigationMobile(),
+                        const SectionPolitiqueMobile(),
+                        const SectionContributionMobile(),
                         postsDigiteauxUserBloc.listePosts.isEmpty
+                            ? const SizedBox()
+                            : SectionPostCommercialDuJour(
+                          post: postsDigiteauxUserBloc.listePosts
+                              .lastWhere((e) => e.type == "commercial" && e.statusOnline=="on"),
+                        ),
+                        const SectionInvestigationMobile(),
+                        const SectionEconomiqueMobile(),
+                          postsDigiteauxUserBloc.listePosts.isEmpty
                             ? const SizedBox()
                             : SectionEssentielDuJour(
                                 posts: postsDigiteauxUserBloc.listePosts
                                     .where((e) => e.type == "essentiel" && e.statusOnline =="on")
-                                    .toList()
-                                    .reversed
                                     .toList()),
-
                         const SectionChoixDeLaRedactionMobile(),
-
-                       const SectionContributionMobile(),
-                       postsDigiteauxUserBloc.listePosts.isEmpty
-                            ? const SizedBox()
-                            : SectionPostCommercialDuJour(
-                                post: postsDigiteauxUserBloc.listePosts
-                                    .lastWhere((e) => e.type == "commercial" && e.statusOnline=="on"),
-                              ),
-
-                        if(homeUtilisateurBloc.videos.isNotEmpty) Container(
-                          height: 350,
-                          width: size.width,
-                          color: bleuMarine,
-                          child: Column(
-                            children: [
-                              paddingVerticalGlobal(),
-                              Row(
-                                children: [
-                                 const Spacer(),
-                                  Text('Vidéo',style: fontFammilyDii(
-                                      context,
-                                      24,
-                                      blanc,
-                                      FontWeight.bold,
-                                      FontStyle.normal), ),
-                                  const Spacer(),
-                                ],
-                              ),
-                              Container(
-                                height: 300,
-                                width: size.width,
-                                child: ListView(
-                                  scrollDirection: Axis.horizontal,
-                                  children: homeUtilisateurBloc.videos.where((e) => e.statusOnline == "on" && e.isLive =="off" ).map((el) => Row(
-                                    children: [
-                                      paddingHorizontalGlobal(8),
-                                      GestureDetector(
-                                        onTap: () => showDialog(
-                                            context: context,
-                                            builder: (c) {
-                                              return AlertDialog(
-                                                backgroundColor: noir,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.all(Radius.circular(0.0))),
-                                                contentPadding: EdgeInsets.only(top: 0.0),
-                                                title: Text(el.titre!, style: fontFammilyDii(context, 24, blanc, FontWeight.w400, FontStyle.normal),),
-                                                content:YoutubeHtmlWidget(urlY: el.url!,),
-                                              );
-                                            }
-                                        ),
-                                        child: Container(
-                                          width: 325,
-                                          height: 294,
-                                          child: Stack(
-                                            children: [
-                                              Image.network(BASE_URL_ASSET+el.imageFile!.url! , height: 190,width: 325, fit: BoxFit.fill,),
-                                              Positioned(
-                                                  top: 85,
-                                                  left: 140,
-                                                  child: Icon(Icons.play_circle_fill_outlined , color: blanc, size: 45,)),
-                                              Positioned(
-                                                  top: 190,
-                                                  child: SizedBox(
-                                                    width: 325,
-                                                    height: 89,
-                                                    child: Column(
-                                                      children: [
-                                                        paddingVerticalGlobal(8),
-                                                        Row(
-                                                          children: [
-                                                            SizedBox(
-                                                                width: 325,
-                                                                child: Text(el.emission!  , style: fontFammilyDii(context, 16, rouge, FontWeight.w600, FontStyle.normal),)),
-                                                          ],
-                                                        ),
-                                                        paddingVerticalGlobal(4),
-                                                        Row(
-                                                          children: [
-                                                            SizedBox(
-                                                                width: 325,
-                                                                child: Text(el.titre!, style: fontFammilyDii(context, 14, blanc, FontWeight.w400, FontStyle.normal),)),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ))
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )).toList(),
-                                ),
-                              ),
-                              paddingVerticalGlobal(4),
-
-                            ],
-                          ),
-                        ),
-
+                        const SectionVideoMobile(),
                         const SectionSportMobile(),
-                         const SectionCultureArtMobile(),
+                        const SectionCultureArtMobile(),
                         const SectionAfriqueMobile(),
                         const SectionInternationalMobile(),
                         const FooterMobile(),

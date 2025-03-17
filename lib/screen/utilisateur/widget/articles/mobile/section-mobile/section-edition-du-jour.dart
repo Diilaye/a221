@@ -12,23 +12,19 @@ class SectionEditionDuJour extends StatelessWidget {
   Widget build(BuildContext context) {
     final papierJournalUserBloc = Provider.of<PapierJournalUserBloc>(context);
 
-    return Column(
-      children: [
-        papierJournalUserBloc.papierJournals.isEmpty
-            ? const SizedBox()
-            : Container(
-                height: 450,
-                color: noir,
-                child: Column(
-                  children: [
-                    SectionEditionWidget(
-                      journalModel: papierJournalUserBloc.papierJournals.last,
-                    ),
-                    paddingVerticalGlobal(32),
-                  ],
-                ),
-              ),
-      ],
+    return papierJournalUserBloc.papierJournals.isEmpty
+        ? const SizedBox()
+        : Container(
+      height: 450,
+      color: noir,
+      child: Column(
+        children: [
+          SectionEditionWidget(
+            journalModel: papierJournalUserBloc.papierJournals.last,
+          ),
+          paddingVerticalGlobal(32),
+        ],
+      ),
     );
   }
 }
