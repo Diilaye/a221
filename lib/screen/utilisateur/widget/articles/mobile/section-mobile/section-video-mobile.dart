@@ -64,7 +64,9 @@ class SectionVideoMobile extends StatelessWidget {
                       height: 294,
                       child: Stack(
                         children: [
-                          Image.network(BASE_URL_ASSET+el.imageFile!.url! , height: 190,width: 325, fit: BoxFit.fill,),
+                          (el.imageFile?.url != null && el.imageFile!.url!.isNotEmpty)
+                            ? Image.network(BASE_URL_ASSET+el.imageFile!.url! , height: 190,width: 325, fit: BoxFit.fill,)
+                            : Image.network('https://cdn.vectorstock.com/i/500p/81/79/no-photo-icon-default-placeholder-vector-41468179.jpg', height: 190, width: 325, fit: BoxFit.fill,),
                           Positioned(
                               top: 85,
                               left: 140,

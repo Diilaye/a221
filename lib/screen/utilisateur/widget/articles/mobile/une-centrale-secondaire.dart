@@ -32,12 +32,19 @@ class UneCentraleSecondaire extends StatelessWidget {
         },
         child: Stack(
           children: [
-            Image.network(
-              BASE_URL_ASSET + article.imageArticle!.url!,
-              fit: BoxFit.contain,
-              height: 200,
-              width: 200,
-            ),
+            (article.imageArticle?.url != null && article.imageArticle!.url!.isNotEmpty)
+              ? Image.network(
+                  BASE_URL_ASSET + article.imageArticle!.url!,
+                  fit: BoxFit.contain,
+                  height: 200,
+                  width: 200,
+                )
+              : Image.network(
+                  'https://cdn.vectorstock.com/i/500p/81/79/no-photo-icon-default-placeholder-vector-41468179.jpg',
+                  fit: BoxFit.contain,
+                  height: 200,
+                  width: 200,
+                ),
             /* Positioned(
               bottom: 0,
               child: Container(

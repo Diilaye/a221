@@ -337,9 +337,11 @@ class _UpdateArticleScreenState extends State<UpdateArticleScreen> {
                                     border: OutlineInputBorder())),
                             showSelectedItems: true,
                           ),
-                          items: tagsBloc.tags.map((e) => e.titre!).toList(),
-                          dropdownDecoratorProps: DropDownDecoratorProps(
-                            dropdownSearchDecoration: InputDecoration(
+                          items: (String? filter,LoadProps? props) async {
+                            return tagsBloc.tags.map((e) => e.titre!).toList();
+                          },
+                          decoratorProps: DropDownDecoratorProps(
+                            decoration: InputDecoration(
                               labelText: 'Selectionnez un tag'.toUpperCase(),
                             ),
                           ),

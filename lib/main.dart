@@ -141,6 +141,7 @@ final _router = GoRouter(
         } else {
           return '/login';
         }
+        return null;
       },
       builder: (context, state) => const ConnectionScreen(),
     ),

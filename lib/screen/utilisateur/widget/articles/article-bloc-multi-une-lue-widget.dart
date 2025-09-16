@@ -48,12 +48,19 @@ class ArticleBlocMultiUneLueWidget extends StatelessWidget {
                           '_self'
                         ]);
                       },
-                      child: Image.network(
-                        BASE_URL_ASSET + article!.imageArticle!.url!,
-                        fit: BoxFit.fill,
-                        height: 300,
-                        width: 300,
-                      ),
+                      child: (article?.imageArticle?.url != null && article?.imageArticle?.url != '')
+                        ? Image.network(
+                            BASE_URL_ASSET + article!.imageArticle!.url!,
+                            fit: BoxFit.fill,
+                            height: 300,
+                            width: 300,
+                          )
+                        : Image.network(
+                            'https://cdn.vectorstock.com/i/500p/81/79/no-photo-icon-default-placeholder-vector-41468179.jpg',
+                            fit: BoxFit.fill,
+                            height: 300,
+                            width: 300,
+                          ),
                     )),
                 Expanded(
                   child: Column(

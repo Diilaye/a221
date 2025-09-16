@@ -30,12 +30,19 @@ class ArticleCategorieMobile extends StatelessWidget {
           },
           child: Column(
             children: [
-              Image.network(
-                BASE_URL_ASSET + article.imageArticle!.url!,
-                height: 150,
-                width: 180,
-                fit: BoxFit.fill,
-              ),
+              (article.imageArticle?.url != null && article.imageArticle!.url!.isNotEmpty)
+                ? Image.network(
+                    BASE_URL_ASSET + article.imageArticle!.url!,
+                    height: 150,
+                    width: 180,
+                    fit: BoxFit.fill,
+                  )
+                : Image.network(
+                    'https://cdn.vectorstock.com/i/500p/81/79/no-photo-icon-default-placeholder-vector-41468179.jpg',
+                    height: 150,
+                    width: 180,
+                    fit: BoxFit.fill,
+                  ),
               SizedBox(
                 width: 180,
                 height: 50,

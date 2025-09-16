@@ -34,14 +34,23 @@ class ArticleScreenMultiWidget extends StatelessWidget {
           },
           child: Stack(
             children: [
-              Image.network(
-                BASE_URL_ASSET + article!.imageArticle!.url!,
-                height: 250,
-                width: deviceName(size) == ScreenType.Mobile
-                    ? size.width * .8
-                    : size.width * .25,
-                fit: BoxFit.cover,
-              ),
+              (article?.imageArticle?.url != null && article?.imageArticle?.url != '')
+                ? Image.network(
+                    BASE_URL_ASSET + article!.imageArticle!.url!,
+                    height: 250,
+                    width: deviceName(size) == ScreenType.Mobile
+                        ? size.width * .8
+                        : size.width * .25,
+                    fit: BoxFit.cover,
+                  )
+                : Image.network(
+                    'https://cdn.vectorstock.com/i/500p/81/79/no-photo-icon-default-placeholder-vector-41468179.jpg',
+                    height: 250,
+                    width: deviceName(size) == ScreenType.Mobile
+                        ? size.width * .8
+                        : size.width * .25,
+                    fit: BoxFit.cover,
+                  ),
               Positioned(
                 top: 150,
                 child: Row(

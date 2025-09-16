@@ -44,7 +44,9 @@ class HomeUtilisateurBloc with ChangeNotifier {
 
   setCatMenu(CategorieModel? c) {
     catMenu = c;
-    print(catMenu!.toJson());
+    if (catMenu != null) {
+      print(catMenu!.toJson());
+    }
     showMenuMobile = 0;
     notifyListeners();
   }
@@ -55,8 +57,12 @@ class HomeUtilisateurBloc with ChangeNotifier {
   TagModelMenu? tagMenuModel;
 
   setCategorieMenu() async {
-    categorieMenuModel = await homeService.categorieMenu(catMenu!.id!);
-    print(categorieMenuModel!.articles!.length);
+    if (catMenu?.id != null) {
+      categorieMenuModel = await homeService.categorieMenu(catMenu!.id!);
+      if (categorieMenuModel?.articles != null) {
+        print(categorieMenuModel!.articles!.length);
+      }
+    }
     showMenuMobile = 0;
     notifyListeners();
   }
@@ -64,7 +70,9 @@ class HomeUtilisateurBloc with ChangeNotifier {
   setCategorieMenuIndex(String id) async {
     print(id);
     categorieMenuModel = await homeService.categorieMenuName(id);
-    print(categorieMenuModel!.articles!.length);
+    if (categorieMenuModel?.articles != null) {
+      print(categorieMenuModel!.articles!.length);
+    }
     notifyListeners();
   }
 

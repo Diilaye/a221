@@ -35,12 +35,9 @@ class ArticleLesPlusLueUneWidget extends StatelessWidget {
                       ['https://a221.net/article/${article!.slug!}', '_self']);
                 },
                 child: SizedBox(
-                  child: Image.network(
-                    BASE_URL_ASSET + article!.imageArticle!.url!,
-                    height: 300,
-                    width: 500,
-                    fit: BoxFit.cover,
-                  ),
+                  child: (article?.imageArticle?.url != null && article?.imageArticle?.url != '' )
+                    ? Image.network(BASE_URL_ASSET + article!.imageArticle!.url!, height: 300, width: 500, fit: BoxFit.cover)
+                    : Image.network('https://cdn.vectorstock.com/i/500p/81/79/no-photo-icon-default-placeholder-vector-41468179.jpg', height: 300, width: 500, fit: BoxFit.cover),
                 ),
               )),
               paddingHorizontalGlobal(8),

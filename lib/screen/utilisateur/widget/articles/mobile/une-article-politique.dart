@@ -43,12 +43,19 @@ class UneArticlePolitique extends StatelessWidget {
                   children: [
                     Positioned(
                       top: 0,
-                      child: Image.network(
-                        height: 300,
-                        width: size.width * .95,
-                        BASE_URL_ASSET + article.imageArticle!.url!,
-                        fit: BoxFit.contain,
-                      ),
+                      child: (article.imageArticle?.url != null && article.imageArticle!.url!.isNotEmpty)
+                        ? Image.network(
+                            height: 300,
+                            width: size.width * .95,
+                            BASE_URL_ASSET + article.imageArticle!.url!,
+                            fit: BoxFit.contain,
+                          )
+                        : Image.network(
+                            height: 300,
+                            width: size.width * .95,
+                            'https://cdn.vectorstock.com/i/500p/81/79/no-photo-icon-default-placeholder-vector-41468179.jpg',
+                            fit: BoxFit.contain,
+                          ),
                     ),
                     Positioned(
                         top: 250,

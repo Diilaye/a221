@@ -40,12 +40,19 @@ class ArticleBlocMultiHomeWidget extends StatelessWidget {
                       '_self'
                     ]);
                   },
-                  child: Image.network(
-                    BASE_URL_ASSET + article!.imageArticle!.url!,
-                    height: 250,
-                    width: 500,
-                    fit: BoxFit.fill,
-                  ),
+                  child: (article?.imageArticle?.url != null && article?.imageArticle?.url != '')
+                    ? Image.network(
+                        BASE_URL_ASSET + article!.imageArticle!.url!,
+                        height: 250,
+                        width: 500,
+                        fit: BoxFit.fill,
+                      )
+                    : Image.network(
+                        'https://cdn.vectorstock.com/i/500p/81/79/no-photo-icon-default-placeholder-vector-41468179.jpg',
+                        height: 250,
+                        width: 500,
+                        fit: BoxFit.fill,
+                      ),
                 ),
               ),
               Expanded(

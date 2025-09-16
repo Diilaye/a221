@@ -39,12 +39,19 @@ class ArticleTagBlocMultiWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: Image.network(
-                      BASE_URL_ASSET + article!.image!.url!,
-                      height: 200,
-                      width: 500,
-                      fit: BoxFit.fill,
-                    ),
+                    child: (article?.image?.url != null && article?.image?.url != '')
+                      ? Image.network(
+                          BASE_URL_ASSET + article!.image!.url!,
+                          height: 200,
+                          width: 500,
+                          fit: BoxFit.fill,
+                        )
+                      : Image.network(
+                          'https://cdn.vectorstock.com/i/500p/81/79/no-photo-icon-default-placeholder-vector-41468179.jpg',
+                          height: 200,
+                          width: 500,
+                          fit: BoxFit.fill,
+                        ),
                   ),
                   paddingVerticalGlobal(2),
                   Container(

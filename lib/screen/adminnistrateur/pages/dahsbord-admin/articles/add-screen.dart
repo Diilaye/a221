@@ -377,11 +377,13 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                                       border: OutlineInputBorder())),
                               showSelectedItems: true,
                             ),
-                            items: categorieBloc.categories
-                                .map((e) => e.titre!)
-                                .toList(),
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
+                            items: (String? filter, LoadProps? props) async {
+                              return categorieBloc.categories
+                                  .map((e) => e.titre!)
+                                  .toList();
+                            },
+                            decoratorProps: DropDownDecoratorProps(
+                              decoration: InputDecoration(
                                 labelText:
                                     'Selectionnez une catégories'.toUpperCase(),
                               ),
@@ -421,9 +423,11 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                                       border: OutlineInputBorder())),
                               showSelectedItems: true,
                             ),
-                            items: tagsBloc.tags.map((e) => e.titre!).toList(),
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
+                            items: (String? filter, LoadProps? props) async {
+                              return tagsBloc.tags.map((e) => e.titre!).toList();
+                            },
+                            decoratorProps: DropDownDecoratorProps(
+                              decoration: InputDecoration(
                                 labelText: 'Selectionnez un tag'.toUpperCase(),
                               ),
                             ),
