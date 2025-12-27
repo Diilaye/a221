@@ -88,7 +88,7 @@ class _SectionCategoryCardState extends State<SectionCategoryCard> {
                     widget.title.toUpperCase(),
                     style: fontFammilyDii(
                       context,
-                      20,
+                      16,
                       noir,
                       FontWeight.w900,
                       FontStyle.normal,

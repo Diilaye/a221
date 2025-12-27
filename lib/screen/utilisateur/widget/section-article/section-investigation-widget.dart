@@ -155,7 +155,7 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
 
   Widget _buildContent(BuildContext context, HomeUtilisateurBloc bloc) {
     return SizedBox(
-      height: 500,
+      height: 550,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

@@ -15,6 +15,9 @@ class SectionChoixDeLaRedactionMobile extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
 
+    final articles = homeUtilisateurBloc.articleChoixRedac ?? [];
+    final total = articles.length;
+
     return Container(
       width: size.width,
       decoration: BoxDecoration(
@@ -99,86 +102,104 @@ class SectionChoixDeLaRedactionMobile extends StatelessWidget {
             ),
           ),
 
-          // Article principal
-          UneArticleAvenir(
-            article: homeUtilisateurBloc.articleChoixRedac[0],
-          ),
+          // Article principal (gardes pour liste vide)
+          if (total > 0) ...[
+            UneArticleAvenir(
+              article: articles[0],
+            ),
 
-          // Séparateur avec texte
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 2,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.transparent,
-                          Color(0xff06b6d4).withOpacity(0.5),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Row(
-                    children: [
-                      Text(
-                        'PROCHAINEMENT',
-                        style: fontFammilyDii(
-                          context,
-                          12,
-                          Color(0xff06b6d4),
-                          FontWeight.w800,
-                          FontStyle.normal,
+            // Séparateur avec texte
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 2,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.transparent,
+                            Color(0xff06b6d4).withOpacity(0.5),
+                          ],
                         ),
                       ),
-                      SizedBox(width: 6),
-                      Icon(
-                        CupertinoIcons.arrow_right,
-                        color: Color(0xff06b6d4),
-                        size: 16,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: 2,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Color(0xff06b6d4).withOpacity(0.5),
-                          Colors.transparent,
-                        ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
+                      children: [
+                        Text(
+                          'PROCHAINEMENT',
+                          style: fontFammilyDii(
+                            context,
+                            12,
+                            Color(0xff06b6d4),
+                            FontWeight.w800,
+                            FontStyle.normal,
+                          ),
+                        ),
+                        SizedBox(width: 6),
+                        Icon(
+                          CupertinoIcons.arrow_right,
+                          color: Color(0xff06b6d4),
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: 2,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xff06b6d4).withOpacity(0.5),
+                            Colors.transparent,
+                          ],
+                        ),
                       ),
                     ),
                   ),
+                ],
+              ),
+            ),
+          ] else ...[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              child: Text(
+                'Aucun article à venir pour le moment',
+                style: fontFammilyDii(
+                  context,
+                  14,
+                  blanc,
+                  FontWeight.w700,
+                  FontStyle.normal,
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
 
-          // Articles secondaires en scroll horizontal
-          SizedBox(
-            height: 280,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              itemCount: homeUtilisateurBloc.articleChoixRedac.length - 1,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(left: 8, right: 8),
-                  child: ArticleAvenirSecondaire(
-                    article: homeUtilisateurBloc.articleChoixRedac[index + 1],
-                  ),
-                );
-              },
+          // Articles secondaires en scroll horizontal (si disponibles)
+          if (total > 1) ...[
+            SizedBox(
+              height: 280,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                itemCount: total - 1,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(left: 8, right: 8),
+                    child: ArticleAvenirSecondaire(
+                      article: articles[index + 1],
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
+          ],
 
           SizedBox(height: 20),
         ],
