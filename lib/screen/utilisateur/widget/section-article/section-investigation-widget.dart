@@ -218,11 +218,8 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Hero(
-                tag: 'investigation-main-${bloc.uneInvestigations?.id ?? ""}',
-                child: ArticleLesPlusLueUneWidget(
-                  article: bloc.uneInvestigations,
-                ),
+              child: ArticleLesPlusLueUneWidget(
+                article: bloc.uneInvestigations,
               ),
             ),
             

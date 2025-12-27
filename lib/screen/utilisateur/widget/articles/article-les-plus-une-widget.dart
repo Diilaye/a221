@@ -82,8 +82,8 @@ class _ArticleLesPlusLueUneWidgetState extends State<ArticleLesPlusLueUneWidget>
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
     final size = MediaQuery.of(context).size;
 
-    return Expanded(
-      flex: 2,
+    return Container(
+      // Ne pas utiliser `Expanded` ici, le parent n'est pas toujours un Flex.
       child: MouseRegion(
         onEnter: (_) => _handleHover(true),
         onExit: (_) => _handleHover(false),
