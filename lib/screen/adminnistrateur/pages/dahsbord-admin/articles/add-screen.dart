@@ -1,3 +1,4 @@
+// FICHIER NETTOYÉ - VERSION MODERNE
 import 'package:actu/bloc/administrateur/article-bloc.dart';
 import 'package:actu/bloc/administrateur/categorie-bloc.dart';
 import 'package:actu/bloc/administrateur/menu-admin.dart';
@@ -26,7 +27,7 @@ class AddArticleScreen extends StatefulWidget {
   State<AddArticleScreen> createState() => _AddArticleScreenState();
 }
 
-class _AddArticleScreenState extends State<AddArticleScreen> {
+class _AddArticleScreenState extends State<AddArticleScreen> with AutomaticKeepAliveClientMixin {
   ///[customToolBarList] pass the custom toolbarList to show only selected styles in the editor
 
   final customToolBarList = [
@@ -58,26 +59,34 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
   late StateSetter _setState;
   late StateSetter _setStateTags;
   String rechercheTags = "";
-  String recherchePhoto = "";
 
   int showTags = 0;
-
-  FileModel? fileModelPhoto = null;
 
   TagsModel? tagsRecherche = null;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context); // Important pour AutomaticKeepAliveClientMixin
     Size size = MediaQuery.of(context).size;
     final addArticleBloc = Provider.of<AddArticleBloc>(context);
     final menuAdminBloc = Provider.of<MenuAdminBloc>(context);
     final categorieBloc = Provider.of<CategorieBloc>(context);
     final tagsBloc = Provider.of<TagsBloc>(context);
 
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.grey[50]!,
+            Colors.white,
+            Colors.grey[50]!,
+          ],
+        ),
       ),
       child: Stack(
         children: [
@@ -89,950 +98,1226 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
               width: size.width * .8,
               child: Column(
                 children: [
-                  paddingVerticalGlobal(),
-                  Row(
-                    children: [
-                      paddingHorizontalGlobal(8),
-                      Text(
-                        'Ajouter Article'.toUpperCase(),
-                        style: fontFammilyDii(context, 18, rouge,
-                            FontWeight.bold, FontStyle.normal),
-                      )
-                    ],
-                  ),
-                  paddingVerticalGlobal(),
-                  Row(
-                    children: [
-                      paddingHorizontalGlobal(8),
-                      Text(
-                        'titre article'.toUpperCase(),
-                        style: fontFammilyDii(context, 14, noir.withOpacity(.5),
-                            FontWeight.w300, FontStyle.normal),
-                      )
-                    ],
-                  ),
-                  paddingVerticalGlobal(8),
-                  Row(
-                    children: [
-                      paddingHorizontalGlobal(8),
-                      Expanded(
-                        child: TextField(
-                          controller: addArticleBloc.titre,
-                          decoration: InputDecoration(
-                            hintText: "Ajouter titre  ARTICLE".toUpperCase(),
-                            border: const OutlineInputBorder(),
-                            enabledBorder: const OutlineInputBorder(),
-                          ),
-                        ),
+                  // Header moderne avec gradient
+                  Container(
+                    margin: const EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF06b6d4),
+                          Color(0xFF0891b2),
+                          Color(0xFF0e7490),
+                        ],
                       ),
-                      paddingHorizontalGlobal(8),
-                    ],
-                  ),
-                  paddingVerticalGlobal(),
-                  Row(
-                    children: [
-                      paddingHorizontalGlobal(8),
-                      Text(
-                        'Description article'.toUpperCase(),
-                        style: fontFammilyDii(context, 14, noir.withOpacity(.5),
-                            FontWeight.w300, FontStyle.normal),
-                      )
-                    ],
-                  ),
-                  paddingVerticalGlobal(8),
-                  Row(
-                    children: [
-                      paddingHorizontalGlobal(8),
-                      Expanded(
-                        child: ToolBar(
-                          toolBarColor: _toolbarColor,
-                          padding: const EdgeInsets.all(8),
-                          iconSize: 25,
-                          iconColor: noir,
-                          activeIconColor: rouge,
-                          controller: addArticleBloc.controllerProduct,
-                          crossAxisAlignment: WrapCrossAlignment.start,
-                          direction: Axis.horizontal,
-                          customButtons: [
-                            Container(
-                              width: 25,
-                              height: 25,
-                              decoration: BoxDecoration(
-                                  color: _hasFocus ? rouge : Colors.grey,
-                                  borderRadius: BorderRadius.circular(15)),
-                            ),
-                            InkWell(
-                                // onTap: () => unFocusEditor(),
-                                child: const Icon(
-                              Icons.favorite,
-                              color: Colors.black,
-                            )),
-                            InkWell(
-                                onTap: () async {
-                                  var selectedText = await addArticleBloc
-                                      .controllerProduct
-                                      .getSelectedText();
-                                  debugPrint('selectedText $selectedText');
-                                  var selectedHtmlText = await addArticleBloc
-                                      .controllerProduct
-                                      .getSelectedHtmlText();
-                                  debugPrint(
-                                      'selectedHtmlText $selectedHtmlText');
-                                },
-                                child: const Icon(
-                                  Icons.add_circle,
-                                  color: Colors.black,
-                                )),
-                          ],
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF06b6d4).withOpacity(0.3),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
                         ),
-                      ),
-                      paddingHorizontalGlobal(8),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 250,
-                    // width: size.width * .75,
+                      ],
+                    ),
                     child: Row(
                       children: [
-                        paddingHorizontalGlobal(8),
-                        Expanded(
-                          child: Container(
-                            height: 250,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: noir, width: .5)),
-                            child: QuillHtmlEditor(
-                              controller: addArticleBloc.controllerProduct,
-                              isEnabled: true,
-                              minHeight: 250,
-                              textStyle: _editorTextStyle,
-                              hintTextStyle: _hintTextStyle,
-                              hintTextAlign: TextAlign.start,
-                              padding: const EdgeInsets.only(left: 5, top: 5),
-                              hintTextPadding: EdgeInsets.zero,
-                              loadingBuilder: (context) => const SizedBox(),
-                              backgroundColor: blanc,
-                              onTextChanged: (text) {
-                                if (addArticleBloc.updateDesc == 0) {
-                                  addArticleBloc.controllerProduct
-                                      .setText(addArticleBloc.body);
-                                  addArticleBloc.setUpdateDesc(1);
-                                } else {
-                                  addArticleBloc.setBody(text);
-                                }
-                              },
-                            ),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            CupertinoIcons.doc_text_fill,
+                            color: Colors.white,
+                            size: 32,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'NOUVEL ARTICLE',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'Créez et publiez un nouvel article',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  paddingVerticalGlobal(),
-                  Expanded(
-                      child: ListView(
-                    children: [
-                      Row(
-                        children: [
-                          paddingHorizontalGlobal(8),
-                          IconButton(
-                            onPressed: () => addArticleBloc.setTypeArticle(0),
-                            icon: Icon(
-                              addArticleBloc.typeArticle == 0
-                                  ? CupertinoIcons.square_fill
-                                  : CupertinoIcons.square,
-                              color: bleuMarine,
-                              size: 16,
-                            ),
-                          ),
-                          paddingHorizontalGlobal(8),
-                          Text(
-                            'Ne Rien afficher'.toUpperCase(),
-                            style: fontFammilyDii(
-                                context,
-                                14,
-                                noir.withOpacity(.5),
-                                FontWeight.w600,
-                                FontStyle.normal),
-                          )
-                        ],
-                      ),
-                      paddingVerticalGlobal(8),
-                      Row(
-                        children: [
-                          paddingHorizontalGlobal(8),
-                          IconButton(
-                            onPressed: () => addArticleBloc.setTypeArticle(1),
-                            icon: Icon(
-                              addArticleBloc.typeArticle == 1
-                                  ? CupertinoIcons.square_fill
-                                  : CupertinoIcons.square,
-                              color: bleuMarine,
-                              size: 16,
-                            ),
-                          ),
-                          paddingHorizontalGlobal(8),
-                          Text(
-                            'Afficher sur  Top article'.toUpperCase(),
-                            style: fontFammilyDii(
-                                context,
-                                14,
-                                noir.withOpacity(.5),
-                                FontWeight.w600,
-                                FontStyle.normal),
-                          )
-                        ],
-                      ),
-                      paddingVerticalGlobal(8),
-                      Row(
-                        children: [
-                          paddingHorizontalGlobal(8),
-                          IconButton(
-                            onPressed: () => addArticleBloc.setTypeArticle(2),
-                            icon: Icon(
-                              addArticleBloc.typeArticle == 2
-                                  ? CupertinoIcons.square_fill
-                                  : CupertinoIcons.square,
-                              color: bleuMarine,
-                              size: 16,
-                            ),
-                          ),
-                          paddingHorizontalGlobal(8),
-                          Text(
-                            'Afficher à la une'.toUpperCase(),
-                            style: fontFammilyDii(
-                                context,
-                                14,
-                                noir.withOpacity(.5),
-                                FontWeight.w600,
-                                FontStyle.normal),
-                          )
-                        ],
-                      ),
-                      paddingVerticalGlobal(8),
-                      Row(
-                        children: [
-                          paddingHorizontalGlobal(8),
-                          IconButton(
-                            onPressed: () => addArticleBloc.setTypeArticle(3),
-                            icon: Icon(
-                              addArticleBloc.typeArticle == 3
-                                  ? CupertinoIcons.square_fill
-                                  : CupertinoIcons.square,
-                              color: bleuMarine,
-                              size: 16,
-                            ),
-                          ),
-                          paddingHorizontalGlobal(8),
-                          Text(
-                            'Afficher sur  la une de son rubrique'
-                                .toUpperCase(),
-                            style: fontFammilyDii(
-                                context,
-                                14,
-                                noir.withOpacity(.5),
-                                FontWeight.w600,
-                                FontStyle.normal),
-                          )
-                        ],
-                      ),
-                      paddingVerticalGlobal(8),
-                      Row(
-                        children: [
-                          paddingHorizontalGlobal(8),
-                          IconButton(
-                            onPressed: () => addArticleBloc.setTypeArticle(4),
-                            icon: Icon(
-                              addArticleBloc.typeArticle == 4
-                                  ? CupertinoIcons.square_fill
-                                  : CupertinoIcons.square,
-                              color: bleuMarine,
-                              size: 16,
-                            ),
-                          ),
-                          paddingHorizontalGlobal(8),
-                          Text(
-                            'Afficher comme choix de la rédaction'
-                                .toUpperCase(),
-                            style: fontFammilyDii(
-                                context,
-                                14,
-                                noir.withOpacity(.5),
-                                FontWeight.w600,
-                                FontStyle.normal),
-                          )
-                        ],
-                      ),
-                      paddingVerticalGlobal(),
-                      Row(
-                        children: [
-                          paddingHorizontalGlobal(8),
-                          Expanded(
-                              child: DropdownSearch<String>(
-                            popupProps: PopupProps.menu(
-                              showSearchBox: true,
-                              searchFieldProps: TextFieldProps(
-                                  decoration: InputDecoration(
-                                      labelText: 'Recherche',
-                                      enabledBorder: OutlineInputBorder(),
-                                      disabledBorder: OutlineInputBorder(),
-                                      border: OutlineInputBorder())),
-                              showSelectedItems: true,
-                            ),
-                            items: (String? filter, LoadProps? props) async {
-                              return categorieBloc.categories
-                                  .map((e) => e.titre!)
-                                  .toList();
-                            },
-                            decoratorProps: DropDownDecoratorProps(
-                              decoration: InputDecoration(
-                                labelText:
-                                    'Selectionnez une catégories'.toUpperCase(),
-                              ),
-                            ),
-                            onChanged: (v) {
-                              print(v);
 
-                              categorieBloc.setCategorie(
-                                  categorieBloc.categories.firstWhere((e) =>
-                                      e.titre!.toLowerCase() ==
-                                      v!.toLowerCase()));
-                              addArticleBloc.setCategorie(
-                                  categorieBloc.categories.firstWhere((e) =>
-                                      e.titre!.toLowerCase() ==
-                                      v!.toLowerCase()));
-                            },
-                            selectedItem: categorieBloc.categorie == null
-                                ? ""
-                                : categorieBloc.categorie!.titre!,
-                          )),
-                          paddingHorizontalGlobal(16),
-                        ],
-                      ),
-                      paddingVerticalGlobal(),
-                      Row(
+                  // Contenu du formulaire
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
                         children: [
-                          paddingHorizontalGlobal(8),
-                          Expanded(
-                              child: DropdownSearch<String>(
-                            popupProps: PopupProps.menu(
-                              showSearchBox: true,
-                              searchFieldProps: TextFieldProps(
-                                  decoration: InputDecoration(
-                                      labelText: 'Recherche',
-                                      enabledBorder: OutlineInputBorder(),
-                                      disabledBorder: OutlineInputBorder(),
-                                      border: OutlineInputBorder())),
-                              showSelectedItems: true,
-                            ),
-                            items: (String? filter, LoadProps? props) async {
-                              return tagsBloc.tags.map((e) => e.titre!).toList();
-                            },
-                            decoratorProps: DropDownDecoratorProps(
-                              decoration: InputDecoration(
-                                labelText: 'Selectionnez un tag'.toUpperCase(),
+                        // Section Titre
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
                               ),
-                            ),
-                            onChanged: (v) {
-                              addArticleBloc.setTags(tagsBloc.tags.firstWhere(
-                                  (e) =>
-                                      e.titre!.toLowerCase() ==
-                                      v!.toLowerCase()));
-                            },
-                            selectedItem: addArticleBloc.tag == null
-                                ? ""
-                                : addArticleBloc.tag!.titre,
-                          )),
-                          paddingHorizontalGlobal(16),
-                        ],
-                      ),
-                      paddingVerticalGlobal(),
-                      Row(
-                        children: [
-                          paddingHorizontalGlobal(8),
-                          Text(
-                            'mots clés'.toUpperCase(),
-                            style: fontFammilyDii(
-                                context,
-                                14,
-                                noir.withOpacity(.5),
-                                FontWeight.w300,
-                                FontStyle.normal),
-                          )
-                        ],
-                      ),
-                      paddingVerticalGlobal(8),
-                      Row(
-                        children: [
-                          paddingHorizontalGlobal(8),
-                          Expanded(
-                            child: KeyboardListener(
-                                focusNode: addArticleBloc.focusNode,
-                                onKeyEvent: (value) {
-                                  if (value.logicalKey.keyLabel == "Enter" ||
-                                      value.logicalKey.keyLabel == "Tab") {
-                                    addArticleBloc.setContainer();
-                                  }
-                                },
-                                child: TextField(
-                                  controller: addArticleBloc.motCles,
-                                  decoration: InputDecoration(
-                                    hintText:
-                                        "Ajouter un  Mots clés".toUpperCase(),
-                                    border: const OutlineInputBorder(),
-                                    enabledBorder: const OutlineInputBorder(),
-                                  ),
-                                )),
+                            ],
                           ),
-                          paddingHorizontalGlobal(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [Color(0xFF06b6d4), Color(0xFF0891b2)],
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Icon(
+                                      CupertinoIcons.textformat,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Text(
+                                    'TITRE DE L\'ARTICLE',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                      color: Color(0xFF1e293b),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[50],
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: Colors.grey[200]!,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: TextField(
+                                  controller: addArticleBloc.titre,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF1e293b),
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: 'Saisissez le titre de votre article...',
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey[400],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    border: InputBorder.none,
+                                    contentPadding: const EdgeInsets.all(16),
+                                    prefixIcon: Icon(
+                                      CupertinoIcons.pencil,
+                                      color: Colors.grey[400],
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // Section Image
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [Color(0xFFef4444), Color(0xFFdc2626)],
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Icon(
+                                      CupertinoIcons.photo_fill,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Text(
+                                    'IMAGE DE L\'ARTICLE',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                      color: Color(0xFF1e293b),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              if (addArticleBloc.fileModel != null || addArticleBloc.imageAticle[0] != null) ...[
+                                Container(
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.grey[300]!,
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: addArticleBloc.fileModel != null
+                                        ? Image.network(
+                                            BASE_URL_ASSET + addArticleBloc.fileModel!.url!,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                          )
+                                        : addArticleBloc.imageAticle[1].runtimeType == String
+                                            ? Image.network(
+                                                addArticleBloc.imageAticle[1],
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                              )
+                                            : Image.memory(
+                                                addArticleBloc.imageAticle[1],
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                              ),
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                              ],
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton.icon(
+                                      onPressed: () => addArticleBloc.setParcourirFile(1),
+                                      icon: const Icon(CupertinoIcons.folder, size: 20),
+                                      label: Text(
+                                        addArticleBloc.fileModel == null ? 'Parcourir' : 'Changer',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(0xFF06b6d4),
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: ElevatedButton.icon(
+                                      onPressed: () => addArticleBloc.getImageArticle(),
+                                      icon: const Icon(CupertinoIcons.cloud_upload, size: 20),
+                                      label: Text(
+                                        addArticleBloc.imageAticle[0] == null ? 'Uploader' : 'Changé',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: addArticleBloc.imageAticle[0] == null 
+                                            ? const Color(0xFFef4444) 
+                                            : const Color(0xFF10b981),
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // Section Éditeur
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [Color(0xFF06b6d4), Color(0xFF0891b2)],
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Icon(
+                                      CupertinoIcons.doc_richtext,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Text(
+                                    'CONTENU DE L\'ARTICLE',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                      color: Color(0xFF1e293b),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              const SizedBox(height: 16),
+                              // Toolbar moderne
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: Colors.grey[300]!,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: ToolBar(
+                                  toolBarColor: Colors.grey[100]!,
+                                  padding: const EdgeInsets.all(12),
+                                  iconSize: 22,
+                                  iconColor: noir,
+                                  activeIconColor: const Color(0xFF06b6d4),
+                                  controller: addArticleBloc.controllerProduct,
+                                  crossAxisAlignment: WrapCrossAlignment.start,
+                                  direction: Axis.horizontal,
+                                  customButtons: [
+                                    Container(
+                                      width: 22,
+                                      height: 22,
+                                      decoration: BoxDecoration(
+                                        color: _hasFocus ? const Color(0xFF06b6d4) : Colors.grey,
+                                        borderRadius: BorderRadius.circular(11),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        var selectedText = await addArticleBloc
+                                            .controllerProduct
+                                            .getSelectedText();
+                                        debugPrint('selectedText $selectedText');
+                                        var selectedHtmlText = await addArticleBloc
+                                            .controllerProduct
+                                            .getSelectedHtmlText();
+                                        debugPrint('selectedHtmlText $selectedHtmlText');
+                                      },
+                                      child: const Icon(
+                                        Icons.add_circle,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Container(
+                                height: 300,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: Colors.grey[300]!,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: QuillHtmlEditor(
+                                    controller: addArticleBloc.controllerProduct,
+                                    isEnabled: true,
+                                    minHeight: 300,
+                                    textStyle: _editorTextStyle,
+                                    hintText: 'Rédigez le contenu de votre article...',
+                                    hintTextStyle: _hintTextStyle,
+                                    hintTextAlign: TextAlign.start,
+                                    padding: const EdgeInsets.all(16),
+                                    hintTextPadding: EdgeInsets.zero,
+                                    backgroundColor: Colors.white,
+                                    onTextChanged: (text) {
+                                      // Toujours mettre à jour le body sans condition
+                                      addArticleBloc.setBody(text);
+                                    },
+                                    onEditorCreated: () {
+                                      // Restaurer le contenu quand l'éditeur est créé
+                                      if (addArticleBloc.body.isNotEmpty) {
+                                        addArticleBloc.controllerProduct.setText(addArticleBloc.body);
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // Section Options d'affichage
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [Color(0xFF8b5cf6), Color(0xFF7c3aed)],
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Icon(
+                                      CupertinoIcons.eye_fill,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Text(
+                                    'OPTIONS D\'AFFICHAGE',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                      color: Color(0xFF1e293b),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
+                              const SizedBox(height: 20),
+                              // Options modernes avec cards
+                              _buildOptionCard(
+                                icon: CupertinoIcons.xmark_circle,
+                                title: 'Ne rien afficher',
+                                isSelected: addArticleBloc.typeArticle == 0,
+                                onTap: () => addArticleBloc.setTypeArticle(0),
+                              ),
+                              const SizedBox(height: 12),
+                              _buildOptionCard(
+                                icon: CupertinoIcons.star_fill,
+                                title: 'Afficher sur Top article',
+                                isSelected: addArticleBloc.typeArticle == 1,
+                                onTap: () => addArticleBloc.setTypeArticle(1),
+                              ),
+                              const SizedBox(height: 12),
+                              _buildOptionCard(
+                                icon: CupertinoIcons.rocket_fill,
+                                title: 'Afficher à la une',
+                                isSelected: addArticleBloc.typeArticle == 2,
+                                onTap: () => addArticleBloc.setTypeArticle(2),
+                              ),
+                              const SizedBox(height: 12),
+                              _buildOptionCard(
+                                icon: CupertinoIcons.tag_fill,
+                                title: 'Afficher sur la une de sa rubrique',
+                                isSelected: addArticleBloc.typeArticle == 3,
+                                onTap: () => addArticleBloc.setTypeArticle(3),
+                              ),
+                              const SizedBox(height: 12),
+                              _buildOptionCard(
+                                icon: CupertinoIcons.hand_thumbsup_fill,
+                                title: 'Afficher comme choix de la rédaction',
+                                isSelected: addArticleBloc.typeArticle == 4,
+                                onTap: () => addArticleBloc.setTypeArticle(4),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // Section Catégorie et Tags
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [Color(0xFF10b981), Color(0xFF059669)],
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Icon(
+                                      CupertinoIcons.folder_fill,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Text(
+                                    'CATÉGORIE & TAGS',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                      color: Color(0xFF1e293b),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
+                              const SizedBox(height: 20),
+                              // Dropdown Catégorie moderne
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[50],
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: Colors.grey[200]!,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: DropdownSearch<String>(
+                                  popupProps: PopupProps.menu(
+                                    showSearchBox: true,
+                                    searchFieldProps: TextFieldProps(
+                                      decoration: InputDecoration(
+                                        labelText: 'Recherche',
+                                        enabledBorder: const OutlineInputBorder(),
+                                        disabledBorder: const OutlineInputBorder(),
+                                        border: const OutlineInputBorder(),
+                                        filled: true,
+                                        fillColor: Colors.grey[50],
+                                      ),
+                                    ),
+                                    showSelectedItems: true,
+                                  ),
+                                  items: (String? filter, LoadProps? props) async {
+                                    return categorieBloc.categories
+                                        .map((e) => e.titre!)
+                                        .toList();
+                                  },
+                                  decoratorProps: DropDownDecoratorProps(
+                                    decoration: InputDecoration(
+                                      labelText: 'Sélectionnez une catégorie',
+                                      labelStyle: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      border: InputBorder.none,
+                                      contentPadding: const EdgeInsets.all(16),
+                                      prefixIcon: Icon(
+                                        CupertinoIcons.folder,
+                                        color: Colors.grey[400],
+                                      ),
+                                    ),
+                                  ),
+                                  onChanged: (v) {
+                                    print(v);
+                                    categorieBloc.setCategorie(
+                                      categorieBloc.categories.firstWhere(
+                                        (e) => e.titre!.toLowerCase() == v!.toLowerCase(),
+                                      ),
+                                    );
+                                    addArticleBloc.setCategorie(
+                                      categorieBloc.categories.firstWhere(
+                                        (e) => e.titre!.toLowerCase() == v!.toLowerCase(),
+                                      ),
+                                    );
+                                  },
+                                  selectedItem: categorieBloc.categorie == null
+                                      ? ""
+                                      : categorieBloc.categorie!.titre!,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              // Dropdown Tags moderne
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[50],
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: Colors.grey[200]!,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: DropdownSearch<String>(
+                                  popupProps: PopupProps.menu(
+                                    showSearchBox: true,
+                                    searchFieldProps: TextFieldProps(
+                                      decoration: InputDecoration(
+                                        labelText: 'Recherche',
+                                        enabledBorder: const OutlineInputBorder(),
+                                        disabledBorder: const OutlineInputBorder(),
+                                        border: const OutlineInputBorder(),
+                                        filled: true,
+                                        fillColor: Colors.grey[50],
+                                      ),
+                                    ),
+                                    showSelectedItems: true,
+                                  ),
+                                  items: (String? filter, LoadProps? props) async {
+                                    return tagsBloc.tags.map((e) => e.titre!).toList();
+                                  },
+                                  decoratorProps: DropDownDecoratorProps(
+                                    decoration: InputDecoration(
+                                      labelText: 'Sélectionnez un tag',
+                                      labelStyle: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      border: InputBorder.none,
+                                      contentPadding: const EdgeInsets.all(16),
+                                      prefixIcon: Icon(
+                                        CupertinoIcons.tag,
+                                        color: Colors.grey[400],
+                                      ),
+                                    ),
+                                  ),
+                                  onChanged: (v) {
+                                    addArticleBloc.setTags(
+                                      tagsBloc.tags.firstWhere(
+                                        (e) => e.titre!.toLowerCase() == v!.toLowerCase(),
+                                      ),
+                                    );
+                                  },
+                                  selectedItem: addArticleBloc.tag == null
+                                      ? ""
+                                      : addArticleBloc.tag!.titre,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // Section Mots-clés
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [Color(0xFFf59e0b), Color(0xFFd97706)],
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Icon(
+                                      CupertinoIcons.tag_fill,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Text(
+                                    'MOTS-CLÉS',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                      color: Color(0xFF1e293b),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[50],
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: Colors.grey[200]!,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: KeyboardListener(
+                                  focusNode: addArticleBloc.focusNode,
+                                  onKeyEvent: (value) {
+                                    if (value.logicalKey.keyLabel == "Enter" ||
+                                        value.logicalKey.keyLabel == "Tab") {
+                                      addArticleBloc.setContainer();
+                                    }
+                                  },
+                                  child: TextField(
+                                    controller: addArticleBloc.motCles,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF1e293b),
+                                    ),
+                                    decoration: InputDecoration(
+                                      hintText: 'Ajouter un mot-clé (Entrée pour valider)',
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey[400],
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      border: InputBorder.none,
+                                      contentPadding: const EdgeInsets.all(16),
+                                      prefixIcon: Icon(
+                                        CupertinoIcons.plus_circle,
+                                        color: Colors.grey[400],
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (addArticleBloc.keyWorld.isNotEmpty) ...[
+                                const SizedBox(height: 16),
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: addArticleBloc.keyWorld.map((e) {
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                          colors: [Color(0xFFf59e0b), Color(0xFFd97706)],
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            e,
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          GestureDetector(
+                                            onTap: () => addArticleBloc.removeContainer(e),
+                                            child: const Icon(
+                                              CupertinoIcons.xmark_circle_fill,
+                                              color: Colors.white,
+                                              size: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 32),
+
+                        // Bouton de validation
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ElevatedButton.icon(
+                                onPressed: () => addArticleBloc.addArticleWithStatut('brouillon'),
+                                icon: const Icon(Icons.save, size: 22),
+                                label: const Text(
+                                  'Sauvegarder en brouillon',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.orange,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 0,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              ElevatedButton.icon(
+                                onPressed: () => addArticleBloc.addArticle(),
+                                icon: addArticleBloc.chargement
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                        ),
+                                      )
+                                    : const Icon(CupertinoIcons.check_mark_circled, size: 22),
+                                label: Text(
+                                  addArticleBloc.chargement ? 'Publication...' : 'Publier l\'article',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF10b981),
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 80),
+                      ],
+                    ),
+                  ),
+                ),
+                ],
+              ),
+            ),
+          ),
+          // Galerie de fichiers (comme dans update-screen)
+          if (addArticleBloc.parcourirFile == 1)
+            Positioned.fill(
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    // Header
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF06b6d4), Color(0xFF0891b2)],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
                         ],
                       ),
-                      paddingVerticalGlobal(),
-                      Row(
-                        children: addArticleBloc.keyWorld
-                            .map((e) => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            CupertinoIcons.folder_fill,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                          const SizedBox(width: 12),
+                          const Text(
+                            'RECHERCHER MÉDIA',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Barre de recherche
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[50],
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey[200]!,
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      child: TextField(
+                        onChanged: (value) => addArticleBloc.setRechercheFile(value),
+                        decoration: InputDecoration(
+                          hintText: 'Rechercher une image...',
+                          prefixIcon: const Icon(CupertinoIcons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Color(0xFF06b6d4), width: 2),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                    // Grille d'images
+                    Expanded(
+                      child: GridView.count(
+                        padding: const EdgeInsets.all(16),
+                        crossAxisCount: 5,
+                        childAspectRatio: 0.8,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        children: addArticleBloc.filesModel.reversed
+                            .where((e) => e.url!
+                                .split("/")
+                                .last
+                                .toLowerCase()
+                                .contains(addArticleBloc.rechercheFile.toLowerCase()))
+                            .map((e) => GestureDetector(
+                                  onTap: () => addArticleBloc.setFileModel(e),
                                   child: Container(
-                                    height: 45,
-                                    // width: 150,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: rouge),
-                                    child: Row(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: e == addArticleBloc.fileModel
+                                            ? const Color(0xFF06b6d4)
+                                            : Colors.grey[300]!,
+                                        width: e == addArticleBloc.fileModel ? 3 : 1,
+                                      ),
+                                      boxShadow: [
+                                        if (e == addArticleBloc.fileModel)
+                                          BoxShadow(
+                                            color: const Color(0xFF06b6d4).withOpacity(0.3),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                      ],
+                                    ),
+                                    child: Column(
                                       children: [
-                                        paddingHorizontalGlobal(8),
-                                        Text(
-                                          e,
-                                          style: fontFammilyDii(
-                                              context,
-                                              13,
-                                              blanc,
-                                              FontWeight.w400,
-                                              FontStyle.normal),
-                                        ),
-                                        paddingHorizontalGlobal(8),
-                                        IconButton(
-                                          onPressed: () =>
-                                              addArticleBloc.removeContainer(e),
-                                          icon: Icon(
-                                            Icons.delete,
-                                            color: blanc,
+                                        if (e == addArticleBloc.fileModel)
+                                          Container(
+                                            height: 30,
+                                            alignment: Alignment.topRight,
+                                            padding: const EdgeInsets.all(6),
+                                            child: Container(
+                                              height: 24,
+                                              width: 24,
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFF10b981),
+                                                borderRadius: BorderRadius.circular(20),
+                                              ),
+                                              child: const Icon(
+                                                CupertinoIcons.check_mark,
+                                                color: Colors.white,
+                                                size: 16,
+                                              ),
+                                            ),
+                                          ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(8),
+                                              child: CachedNetworkImage(
+                                                imageUrl: BASE_URL_ASSET + e.url!,
+                                                fit: BoxFit.cover,
+                                                placeholder: (context, url) => Center(
+                                                  child: CircularProgressIndicator(
+                                                    color: const Color(0xFF06b6d4),
+                                                  ),
+                                                ),
+                                                errorWidget: (context, url, error) => Icon(
+                                                  CupertinoIcons.photo,
+                                                  color: Colors.grey[400],
+                                                  size: 40,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                        paddingHorizontalGlobal(8),
+                                        Container(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Text(
+                                            e.url!.split("/").last.split(".")[
+                                                e.url!.split("/").last.split(".").length - 2],
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey[700],
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ))
                             .toList(),
                       ),
-                      paddingVerticalGlobal(),
-                      Row(
-                        children: [
-                          paddingHorizontalGlobal(8),
-                          Text(
-                            'Média Article'.toUpperCase(),
-                            style: fontFammilyDii(
-                                context,
-                                14,
-                                noir.withOpacity(.5),
-                                FontWeight.w300,
-                                FontStyle.normal),
-                          )
-                        ],
-                      ),
-                      paddingVerticalGlobal(8),
-                      Row(
-                        children: [
-                          paddingHorizontalGlobal(8),
-                          Expanded(
-                              child: GestureDetector(
-                            onTap: () => showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (context) => AlertDialog(
-                                      actions: [
-                                        Row(
-                                          children: [
-                                            const Spacer(),
-                                            Card(
-                                              elevation: 2,
-                                              color: bleuMarine,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(2),
-                                              ),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  context.pop(context);
-                                                },
-                                                child: SizedBox(
-                                                  height: 40,
-                                                  child: Row(
-                                                    children: [
-                                                      paddingHorizontalGlobal(
-                                                          6),
-                                                      addArticleBloc.chargement
-                                                          ? CircularProgressIndicator(
-                                                              backgroundColor:
-                                                                  blanc,
-                                                              color: bleuMarine,
-                                                            )
-                                                          : Text(
-                                                              "Selectionner le média",
-                                                              style: fontFammilyDii(
-                                                                  context,
-                                                                  14,
-                                                                  blanc,
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  FontStyle
-                                                                      .normal),
-                                                            ),
-                                                      paddingHorizontalGlobal(
-                                                          6),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                // addArticleBloc.setFileModel(null);
-
-                                                context.pop(context);
-                                              },
-                                              child: Card(
-                                                elevation: 2,
-                                                color: blanc,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                ),
-                                                child: SizedBox(
-                                                  height: 40,
-                                                  child: Row(
-                                                    children: [
-                                                      paddingHorizontalGlobal(
-                                                          6),
-                                                      Text(
-                                                        "Annuler",
-                                                        style: fontFammilyDii(
-                                                            context,
-                                                            14,
-                                                            noir,
-                                                            FontWeight.bold,
-                                                            FontStyle.normal),
-                                                      ),
-                                                      paddingHorizontalGlobal(
-                                                          6),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                      content: StatefulBuilder(builder:
-                                          (context, StateSetter setState) {
-                                        _setState = setState;
-                                        return SizedBox(
-                                          height: size.height * .8,
-                                          width: size.width,
-                                          child: Column(
-                                            children: [
-                                              paddingVerticalGlobal(),
-                                              Row(
-                                                children: [
-                                                  paddingHorizontalGlobal(8),
-                                                  Text(
-                                                    'Rechercher média'
-                                                        .toUpperCase(),
-                                                    style: fontFammilyDii(
-                                                        context,
-                                                        18,
-                                                        rouge,
-                                                        FontWeight.bold,
-                                                        FontStyle.normal),
-                                                  )
-                                                ],
-                                              ),
-                                              paddingVerticalGlobal(8),
-                                              Row(
-                                                children: [
-                                                  paddingHorizontalGlobal(8),
-                                                  Expanded(
-                                                    child: TextField(
-                                                      onChanged: (value) {
-                                                        _setState(() {
-                                                          recherchePhoto =
-                                                              value;
-                                                        });
-                                                      },
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        border:
-                                                            const OutlineInputBorder(),
-                                                        enabledBorder:
-                                                            const OutlineInputBorder(),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  paddingHorizontalGlobal(8),
-                                                ],
-                                              ),
-                                              paddingVerticalGlobal(),
-                                              Expanded(
-                                                  child: GridView.count(
-                                                crossAxisCount: 5,
-                                                childAspectRatio: .8,
-                                                crossAxisSpacing: 6,
-                                                children: addArticleBloc
-                                                    .filesModel.reversed
-                                                    .where((e) => e.url!
-                                                        .split("/")
-                                                        .last
-                                                        .toLowerCase()
-                                                        .contains(recherchePhoto
-                                                            .toLowerCase()))
-                                                    .map((e) => MouseRegion(
-                                                          cursor:
-                                                              SystemMouseCursors
-                                                                  .click,
-                                                          child: Container(
-                                                            height: 300,
-                                                            width: 300,
-                                                            color: blanc,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  GestureDetector(
-                                                                onTap: () {
-                                                                  print(
-                                                                      '_setState');
-                                                                  _setState(() {
-                                                                    fileModelPhoto =
-                                                                        e;
-                                                                  });
-                                                                  addArticleBloc
-                                                                      .setFileModel(
-                                                                          e);
-                                                                },
-                                                                child: Column(
-                                                                  children: [
-                                                                    if (e ==
-                                                                        fileModelPhoto)
-                                                                      SizedBox(
-                                                                        height:
-                                                                            20,
-                                                                        child:
-                                                                            Row(
-                                                                          children: [
-                                                                            const Spacer(),
-                                                                            Container(
-                                                                              height: 20,
-                                                                              width: 20,
-                                                                              decoration: BoxDecoration(color: vertSport, borderRadius: BorderRadius.circular(20)),
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    Expanded(
-                                                                      child:
-                                                                          CachedNetworkImage(
-                                                                        imageUrl:
-                                                                            BASE_URL_ASSET +
-                                                                                e.url!,
-                                                                        placeholder:
-                                                                            (context, url) =>
-                                                                                Center(child: const CircularProgressIndicator()),
-                                                                        errorWidget: (context,
-                                                                                url,
-                                                                                error) =>
-                                                                            const Icon(Icons.error),
-                                                                      ),
-                                                                    ),
-                                                                    Container(
-                                                                      height:
-                                                                          20,
-                                                                      child:
-                                                                          Center(
-                                                                        child: Text(e
-                                                                            .url!
-                                                                            .split(
-                                                                                "/")
-                                                                            .last
-                                                                            .split(".")[e.url!
-                                                                                .split("/")
-                                                                                .last
-                                                                                .split(".")
-                                                                                .length -
-                                                                            2]),
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ))
-                                                    .toList(),
-                                              )),
-                                              paddingVerticalGlobal(),
-                                            ],
-                                          ),
-                                        );
-                                      }),
-                                    )),
-                            child: Container(
-                              height: 120,
-                              decoration: BoxDecoration(
-                                  color: bleuMarine.withOpacity(.6),
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: Center(
-                                child: Text(
-                                  "Parcourir les fichiers",
-                                  style: fontFammilyDii(context, 14, blanc,
-                                      FontWeight.w600, FontStyle.normal),
-                                ),
-                              ),
-                            ),
-                          )),
-                          paddingHorizontalGlobal(8),
-                          Expanded(
-                              child: GestureDetector(
-                            onTap: () => addArticleBloc.getImageArticle(),
-                            child: Container(
-                              height: 120,
-                              decoration: BoxDecoration(
-                                  color: addArticleBloc.imageAticle[0] == null
-                                      ? noir.withOpacity(.6)
-                                      : vertSport,
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: Center(
-                                child: addArticleBloc.imageAticle[0] == null
-                                    ? Text(
-                                        "Cliquer pour uploader un média",
-                                        style: fontFammilyDii(
-                                            context,
-                                            14,
-                                            blanc,
-                                            FontWeight.w600,
-                                            FontStyle.normal),
-                                      )
-                                    : Text(
-                                        "Image uploadée avec succes",
-                                        style: fontFammilyDii(
-                                            context,
-                                            14,
-                                            blanc,
-                                            FontWeight.w600,
-                                            FontStyle.normal),
-                                      ),
-                              ),
-                            ),
-                          )),
-                          paddingHorizontalGlobal(8),
-                        ],
-                      ),
-                      paddingVerticalGlobal(8),
-                      SizedBox(
-                        height: 100,
-                        child: Row(
-                          children: [
-                            paddingHorizontalGlobal(8),
-                            Expanded(
-                                child: addArticleBloc.fileModel == null
-                                    ? addArticleBloc.imageAticle[0] == null
-                                        ? Container(
-                                            decoration: BoxDecoration(
-                                                color: noir.withOpacity(.3),
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.image_rounded,
-                                                size: 30,
-                                                color: blanc,
-                                              ),
-                                            ),
-                                          )
-                                        : Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                color: blanc,
-                                                image: DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image: MemoryImage(
-                                                        addArticleBloc
-                                                            .imageAticle[1])),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color:
-                                                          noir.withOpacity(.3),
-                                                      blurRadius: .3)
-                                                ]),
-                                          )
-                                    : Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            color: blanc,
-                                            image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: NetworkImage(
-                                                    BASE_URL_ASSET +
-                                                        addArticleBloc
-                                                            .fileModel!.url!)),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: noir.withOpacity(.3),
-                                                  blurRadius: .3)
-                                            ]),
-                                      )),
-                            paddingHorizontalGlobal(),
-                            Expanded(
-                                child: Container(
-                              decoration: BoxDecoration(
-                                  color: noir.withOpacity(.3),
-                                  borderRadius: BorderRadius.circular(4)),
-                              child: Center(
-                                child: Icon(
-                                  Icons.image_rounded,
-                                  size: 30,
-                                  color: blanc,
-                                ),
-                              ),
-                            )),
-                            paddingHorizontalGlobal(),
-                            Expanded(
-                                child: Container(
-                              decoration: BoxDecoration(
-                                  color: noir.withOpacity(.3),
-                                  borderRadius: BorderRadius.circular(4)),
-                              child: Center(
-                                child: Icon(
-                                  Icons.image_rounded,
-                                  size: 30,
-                                  color: blanc,
-                                ),
-                              ),
-                            )),
-                            paddingHorizontalGlobal(),
-                            Expanded(
-                                child: Container(
-                              decoration: BoxDecoration(
-                                  color: noir.withOpacity(.3),
-                                  borderRadius: BorderRadius.circular(4)),
-                              child: Center(
-                                child: Icon(
-                                  Icons.image_rounded,
-                                  size: 30,
-                                  color: blanc,
-                                ),
-                              ),
-                            )),
-                            paddingHorizontalGlobal(),
-                            Expanded(
-                                child: Container(
-                              decoration: BoxDecoration(
-                                  color: noir.withOpacity(.3),
-                                  borderRadius: BorderRadius.circular(4)),
-                              child: Center(
-                                child: Icon(
-                                  Icons.image_rounded,
-                                  size: 30,
-                                  color: blanc,
-                                ),
-                              ),
-                            )),
-                            paddingHorizontalGlobal(8),
-                          ],
+                    ),
+                    // Boutons d'action
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                          top: BorderSide(
+                            color: Colors.grey[200]!,
+                            width: 1,
+                          ),
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, -2),
+                          ),
+                        ],
                       ),
-                      paddingVerticalGlobal(),
-                      Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Card(
-                            elevation: 2,
-                            color: bleuMarine,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                            child: GestureDetector(
-                              onTap: () async {
-                                await addArticleBloc.addArticle();
-                                if (addArticleBloc.imageAticle[0] == null &&
-                                    addArticleBloc.fileModel == null) {
-                                  menuAdminBloc.setAddArticle(0);
-                                  menuAdminBloc.setMenu(1);
-                                }
-                              },
-                              child: SizedBox(
-                                height: 40,
-                                child: Row(
-                                  children: [
-                                    paddingHorizontalGlobal(6),
-                                    addArticleBloc.chargement
-                                        ? CircularProgressIndicator(
-                                            backgroundColor: blanc,
-                                            color: bleuMarine,
-                                          )
-                                        : Text(
-                                            "Ajouter article",
-                                            style: fontFammilyDii(
-                                                context,
-                                                14,
-                                                blanc,
-                                                FontWeight.bold,
-                                                FontStyle.normal),
-                                          ),
-                                    paddingHorizontalGlobal(6),
-                                  ],
-                                ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              addArticleBloc.setParcourirFile(0);
+                            },
+                            icon: const Icon(CupertinoIcons.xmark, size: 20),
+                            label: const Text(
+                              'Annuler',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
                               ),
                             ),
-                          ),
-                          paddingHorizontalGlobal(),
-                          GestureDetector(
-                            onTap: () => menuAdminBloc.setAddArticle(0),
-                            child: Card(
-                              elevation: 2,
-                              color: blanc,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey[200],
+                              foregroundColor: Colors.grey[800],
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(2),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              child: SizedBox(
-                                height: 40,
-                                child: Row(
-                                  children: [
-                                    paddingHorizontalGlobal(6),
-                                    Text(
-                                      "Annuler ",
-                                      style: fontFammilyDii(context, 14, noir,
-                                          FontWeight.bold, FontStyle.normal),
-                                    ),
-                                    paddingHorizontalGlobal(6),
-                                  ],
-                                ),
-                              ),
+                              elevation: 0,
                             ),
                           ),
-                          paddingHorizontalGlobal()
+                          const SizedBox(width: 12),
+                          ElevatedButton.icon(
+                            onPressed: addArticleBloc.fileModel != null
+                                ? () => addArticleBloc.setParcourirFile(0)
+                                : null,
+                            icon: const Icon(CupertinoIcons.check_mark, size: 20),
+                            label: const Text(
+                              'Sélectionner',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF06b6d4),
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 0,
+                              disabledBackgroundColor: Colors.grey[300],
+                              disabledForegroundColor: Colors.grey[500],
+                            ),
+                          ),
                         ],
                       ),
-                    ],
-                  )),
-                  paddingVerticalGlobal(),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildOptionCard({
+    required IconData icon,
+    required String title,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: isSelected
+              ? const LinearGradient(
+                  colors: [Color(0xFF8b5cf6), Color(0xFF7c3aed)],
+                )
+              : null,
+          color: isSelected ? null : Colors.grey[50],
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? const Color(0xFF8b5cf6) : Colors.grey[300]!,
+            width: 2,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Colors.white.withOpacity(0.2)
+                    : Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: isSelected ? Colors.white : const Color(0xFF64748b),
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: isSelected ? Colors.white : const Color(0xFF1e293b),
+                ),
+              ),
+            ),
+            if (isSelected)
+              const Icon(
+                CupertinoIcons.checkmark_circle_fill,
+                color: Colors.white,
+                size: 24,
+              ),
+          ],
+        ),
       ),
     );
   }

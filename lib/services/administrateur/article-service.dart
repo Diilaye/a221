@@ -39,7 +39,17 @@ class ArticleService {
   }
 
     Future<ArticlePagination?> all(int page) async {
-    return await getResponse(url: '/articles?page=$page').then((value) async {
+    return await getResponse(url: '/articles/admin/all?page=$page').then((value) async {
+      if (value['status'] == 200) {
+        return ArticlePagination.fromJson(value['body']);
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<ArticlePagination?> allByStatut(int page, String statut) async {
+    return await getResponse(url: '/articles/admin/all?page=$page&statut=$statut').then((value) async {
       if (value['status'] == 200) {
         return ArticlePagination.fromJson(value['body']);
       } else {

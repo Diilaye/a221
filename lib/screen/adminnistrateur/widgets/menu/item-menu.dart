@@ -39,59 +39,104 @@ class _ItemMenuState extends State<ItemMenu> {
       child: GestureDetector(
         onTap: () => widget.ontap(),
         child: Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: size.width * .015,
+            vertical: 3,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: size.width * .015,
+            vertical: 10,
+          ),
           decoration: BoxDecoration(
-              color: widget.isActive
-                  ? noir.withOpacity(.3)
-                  : ishover
-                      ? noir.withOpacity(.3)
-                      : blanc,
-              border: Border(
-                  left: BorderSide(
-                      width: widget.isActive
-                          ? 3
-                          : ishover
-                              ? 3
-                              : 0,
-                      color: rouge))),
-          child: Column(
+            gradient: widget.isActive
+                ? LinearGradient(
+                    colors: [
+                      rouge.withOpacity(0.2),
+                      rouge.withOpacity(0.15),
+                    ],
+                  )
+                : ishover
+                    ? LinearGradient(
+                        colors: [
+                          blanc.withOpacity(0.1),
+                          blanc.withOpacity(0.05),
+                        ],
+                      )
+                    : null,
+            borderRadius: BorderRadius.circular(10),
+            border: widget.isActive
+                ? Border.all(
+                    color: rouge.withOpacity(0.3),
+                    width: 1,
+                  )
+                : ishover
+                    ? Border.all(
+                        color: blanc.withOpacity(0.1),
+                        width: 1,
+                      )
+                    : null,
+          ),
+          child: Row(
             children: [
-              const SizedBox(
-                height: 8,
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: widget.haveIcon
-                        ? widget.sizeIcon != 8
-                            ? size.width * .025
-                            : size.width * .035
-                        : size.width * .025,
+              // Icône avec style moderne
+              if (widget.haveIcon)
+                Container(
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: widget.isActive
+                        ? rouge.withOpacity(0.2)
+                        : ishover
+                            ? blanc.withOpacity(0.1)
+                            : Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  if (widget.haveIcon)
-                    Icon(
-                      widget.icons,
-                      color: noir,
-                      size: widget.sizeIcon,
-                    ),
-                  const SizedBox(
-                    width: 4,
+                  child: Icon(
+                    widget.icons,
+                    color: widget.isActive
+                        ? rouge
+                        : ishover
+                            ? blanc
+                            : blanc.withOpacity(0.7),
+                    size: widget.sizeIcon == 8 ? 14 : widget.sizeIcon,
                   ),
-                  Text(
-                    widget.titre,
-                    style: widget.haveIcon
-                        ? ishover
-                            ? fontFammilyDii(context, 14, noir, FontWeight.bold,
-                                FontStyle.normal)
-                            : fontFammilyDii(context, 14, noir, FontWeight.w400,
-                                FontStyle.normal)
-                        : fontFammilyDii(context, 14, noir, FontWeight.bold,
-                            FontStyle.normal),
+                ),
+              SizedBox(width: widget.haveIcon ? 12 : 8),
+              // Texte
+              Expanded(
+                child: Text(
+                  widget.titre,
+                  style: fontFammilyDii(
+                    context,
+                    widget.haveIcon ? 13 : 14,
+                    widget.isActive
+                        ? blanc
+                        : ishover
+                            ? blanc
+                            : blanc.withOpacity(0.8),
+                    widget.isActive || !widget.haveIcon
+                        ? FontWeight.w700
+                        : FontWeight.w500,
+                    FontStyle.normal,
                   ),
-                ],
+                ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              // Indicateur actif
+              if (widget.isActive)
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: rouge,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: rouge.withOpacity(0.5),
+                        blurRadius: 4,
+                        spreadRadius: 1,
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),

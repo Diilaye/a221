@@ -1,27 +1,21 @@
 import 'package:actu/bloc/utilisateur/home-bloc.dart';
 import 'package:actu/bloc/utilisateur/posts-digiteaux.dart';
 import 'package:actu/screen/utilisateur/widget/articles/mobile/footer-mobile.dart';
-import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-afrique-mobile.dart';
 import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-choix-de-la-redeaction-mobile.dart';
 import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-contribution-mobile.dart';
-import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-culture-art-mobile.dart';
 import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-economique-mobile.dart';
 import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-edition-du-jour.dart';
 import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-essentiel-du-jour.dart';
-import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-international-mobile.dart';
 import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-investigations-mobile.dart';
 import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-politique-mobile.dart';
 import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-post-commercial.dart';
-import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-sport-mobile.dart';
+import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-category-mobile.dart';
 import 'package:actu/screen/utilisateur/widget/articles/mobile/section-mobile/section-une-centrale-mobile.dart';
 import 'package:actu/screen/utilisateur/widget/menu/menu-bar.dart';
 import 'package:actu/screen/utilisateur/widget/menu/menu-mobile.dart';
 import 'package:actu/screen/utilisateur/widget/menu/top-bar-menu.dart';
 import 'package:actu/utils/color-by-dii.dart';
-import 'package:actu/utils/requette-by-dii.dart';
-import 'package:actu/utils/widgets/font-fammily-dii.dart';
 import 'package:actu/utils/widgets/padding-global.dart';
-import 'package:actu/utils/yWebUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -105,10 +99,30 @@ class HomeMobileScreen extends StatelessWidget {
                                     .toList()),
                         const SectionChoixDeLaRedactionMobile(),
                         const SectionVideoMobile(),
-                        const SectionSportMobile(),
-                        const SectionCultureArtMobile(),
-                        const SectionAfriqueMobile(),
-                        const SectionInternationalMobile(),
+                        SectionCategoryMobile(
+                          articles: homeUtilisateurBloc.articleSport,
+                          title: 'Sport',
+                          icon: CupertinoIcons.sportscourt,
+                          primaryColor: Color(0xFFE31E24),
+                        ),
+                        SectionCategoryMobile(
+                          articles: homeUtilisateurBloc.articleCultures,
+                          title: 'Culture & Art',
+                          icon: CupertinoIcons.paintbrush,
+                          primaryColor: Color(0xFF9C27B0),
+                        ),
+                        SectionCategoryMobile(
+                          articles: homeUtilisateurBloc.articleAfriques,
+                          title: 'Afrique',
+                          icon: CupertinoIcons.globe,
+                          primaryColor: Color(0xFF00BCD4),
+                        ),
+                        SectionCategoryMobile(
+                          articles: homeUtilisateurBloc.articleInternationals,
+                          title: 'International',
+                          icon: CupertinoIcons.airplane,
+                          primaryColor: Color(0xFF2196F3),
+                        ),
                         const FooterMobile(),
 
 

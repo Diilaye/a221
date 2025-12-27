@@ -34,24 +34,73 @@ class ActivyEmission extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+    return Container(
+      decoration: BoxDecoration(
+        color: blanc,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Color(0xffe2e8f0),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xff1a1a2e).withOpacity(0.08),
+            blurRadius: 20,
+            offset: Offset(0, 8),
+          ),
+        ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Row(
-              children: [
-                Text(
-                  title,
-                  style: fontFammilyDii(
-                      context, 14, noir, FontWeight.bold, FontStyle.normal),
+            // Header modernisé
+            Container(
+              padding: EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xffe2e8f0),
+                    width: 1,
+                  ),
                 ),
-              ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xff3b82f6).withOpacity(0.2),
+                          Color(0xff3b82f6).withOpacity(0.1),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      CupertinoIcons.tv_fill,
+                      color: Color(0xff3b82f6),
+                      size: 18,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: fontFammilyDii(
+                        context,
+                        16,
+                        Color(0xff1a1a2e),
+                        FontWeight.w700,
+                        FontStyle.normal,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
+            SizedBox(height: 16),
             Expanded(
               child: MultiCircleActivity(
                 pourcentage: pourcentages,

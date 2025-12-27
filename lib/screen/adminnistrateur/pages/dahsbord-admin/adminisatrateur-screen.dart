@@ -1,3 +1,5 @@
+import 'package:actu/bloc/administrateur/article-bloc.dart';
+import 'package:actu/bloc/administrateur/dashboard-stats-bloc.dart';
 import 'package:actu/bloc/utilisateur/home-bloc.dart';
 import 'package:actu/bloc/utilisateur/posts-digiteaux.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/articles/add-screen-mobile.dart';
@@ -24,7 +26,6 @@ import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/overview-admin.
 import 'package:actu/screen/adminnistrateur/pages/mobile-dashbord-admin/mobile-overview-admin.dart';
 import 'package:actu/screen/adminnistrateur/widgets/menu/item-menu.dart';
 import 'package:actu/screen/utilisateur/widget/menu/menu-mobile-administrateur.dart';
-import 'package:actu/screen/utilisateur/widget/menu/menu-mobile.dart';
 import 'package:actu/screen/utilisateur/widget/menu/top-bar-menu.dart';
 import 'package:actu/utils/color-by-dii.dart';
 import 'package:actu/utils/diallog-dii.dart';
@@ -45,10 +46,11 @@ class AdministrateurAscreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final menuAdminBloc = Provider.of<MenuAdminBloc>(context);
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
+    final addArticleBloc = Provider.of<AddArticleBloc>(context);
 
-    final postsDigiteauxUserBloc = Provider.of<PostsDigiteauxUserBloc>(context);
-
-    return Scaffold(
+    return ChangeNotifierProvider(
+      create: (_) => DashboardStatsBloc(),
+      child: Scaffold(
         appBar: AppBar(
           toolbarHeight: .0,
           elevation: .0,
@@ -62,42 +64,127 @@ class AdministrateurAscreen extends StatelessWidget {
                   width: size.width,
                   child: Row(
                     children: [
-                      // ignore: unrelated_type_equality_checks
+                      // Menu latéral modernisé
                       Expanded(
                           child: Container(
-                        decoration: BoxDecoration(color: blanc, boxShadow: [
-                          BoxShadow(
-                              offset: const Offset(0, 0),
-                              blurRadius: 10,
-                              color: noir.withOpacity(.2))
-                        ]),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0xff1a1a2e), // Bleu nuit profond
+                              Color(0xff16213e), // Bleu nuit
+                              Color(0xff0f3460), // Bleu foncé
+                            ],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              offset: const Offset(2, 0),
+                              blurRadius: 20,
+                              color: noir.withOpacity(.3),
+                              spreadRadius: 2,
+                            )
+                          ],
+                        ),
                         child: ListView(
                           children: [
                             SizedBox(
-                              height: size.height * .02,
+                              height: size.height * .03,
                             ),
+                            // Logo modernisé
                             MouseRegion(
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
                                 onTap: () => context.go('/'),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: size.width * .025,
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(horizontal: size.width * .02),
+                                  padding: EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        rouge.withOpacity(0.2),
+                                        rouge.withOpacity(0.1),
+                                      ],
                                     ),
-                                    Text(
-                                      'Dashbord',
-                                      style: fontFammilyDii(context, 14, rouge,
-                                          FontWeight.bold, FontStyle.normal),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: rouge.withOpacity(0.3),
+                                      width: 1,
                                     ),
-                                    Text(
-                                      'Actu221',
-                                      style: fontFammilyDii(context, 14, noir,
-                                          FontWeight.bold, FontStyle.normal),
-                                    ),
-                                  ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        CupertinoIcons.square_grid_2x2_fill,
+                                        color: rouge,
+                                        size: 20,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text(
+                                        'Dashboard',
+                                        style: fontFammilyDii(context, 16, blanc,
+                                            FontWeight.w800, FontStyle.normal),
+                                      ),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        'A221',
+                                        style: fontFammilyDii(context, 16, rouge,
+                                            FontWeight.w800, FontStyle.normal),
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: size.height * .03,
+                            ),
+                            // Séparateur avec texte
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: size.width * .02),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      height: 1,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Colors.transparent,
+                                            blanc.withOpacity(0.2),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8),
+                                    child: Text(
+                                      'MENU',
+                                      style: fontFammilyDii(
+                                        context,
+                                        10,
+                                        blanc.withOpacity(0.5),
+                                        FontWeight.w600,
+                                        FontStyle.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      height: 1,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            blanc.withOpacity(0.2),
+                                            Colors.transparent,
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             SizedBox(
@@ -130,7 +217,10 @@ class AdministrateurAscreen extends StatelessWidget {
                               titre: 'Ajouter Article',
                               icons: CupertinoIcons.circle,
                               isActive: menuAdminBloc.menu == 11,
-                              ontap: () => menuAdminBloc.setMenu(11),
+                              ontap: () {
+                                addArticleBloc.resetAddArticleForm();
+                                menuAdminBloc.setMenu(11);
+                              },
                             ),
                             ItemMenu(
                               titre: 'TV',
@@ -211,6 +301,17 @@ class AdministrateurAscreen extends StatelessWidget {
                             SizedBox(
                               height: size.height * .02,
                             ),
+                            // Séparateur avant paramètres
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: size.width * .02),
+                              child: Container(
+                                height: 1,
+                                color: blanc.withOpacity(0.1),
+                              ),
+                            ),
+                            SizedBox(
+                              height: size.height * .02,
+                            ),
                             ItemMenu(
                               titre: 'Help & Support',
                               icons: CupertinoIcons.headphones,
@@ -227,49 +328,70 @@ class AdministrateurAscreen extends StatelessWidget {
                               ontap: () => menuAdminBloc.setMenu(7),
                             ),
                             SizedBox(
-                              height: size.height * .01,
+                              height: size.height * .02,
                             ),
-                            GestureDetector(
-                              onTap: () => dialogRequest(
-                                      context: context,
-                                      title: "Voullez-vous vous déconectez ?")
-                                  .then((value) {
-                                if (value) {
-                                  SharedPreferences.getInstance().then((prefs) {
-                                    prefs.clear();
-                                    context.go("/");
-                                  });
-                                }
-                              }),
-                              child: Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 8,
+                            // Bouton déconnexion modernisé
+                            MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: () => dialogRequest(
+                                        context: context,
+                                        title: "Voullez-vous vous déconectez ?")
+                                    .then((value) {
+                                  if (value) {
+                                    SharedPreferences.getInstance().then((prefs) {
+                                      prefs.clear();
+                                      context.go("/");
+                                    });
+                                  }
+                                }),
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: size.width * .015,
                                   ),
-                                  Row(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: size.width * .015,
+                                    vertical: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        rouge.withOpacity(0.2),
+                                        rouge.withOpacity(0.1),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: rouge.withOpacity(0.3),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      SizedBox(
-                                        width: size.width * .03,
-                                      ),
-                                      const Icon(
+                                      Icon(
                                         Icons.logout_rounded,
-                                        size: 13,
+                                        size: 16,
+                                        color: rouge,
                                       ),
-                                      const SizedBox(
-                                        width: 4,
-                                      ),
+                                      SizedBox(width: 8),
                                       Text(
-                                        'Déconnection',
-                                        style: TextStyle(
-                                            fontSize: 14, color: noir),
+                                        'Déconnexion',
+                                        style: fontFammilyDii(
+                                          context,
+                                          14,
+                                          blanc,
+                                          FontWeight.w700,
+                                          FontStyle.normal,
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                ],
+                                ),
                               ),
+                            ),
+                            SizedBox(
+                              height: size.height * .02,
                             ),
                           ],
                         ),
@@ -378,6 +500,9 @@ class AdministrateurAscreen extends StatelessWidget {
                         child: TopBarMenu())
                   ],
                 ),
-        ));
+        ),
+      ),
+    );
   }
 }
+  

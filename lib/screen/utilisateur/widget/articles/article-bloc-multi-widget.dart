@@ -35,11 +35,17 @@ class ArticleBlocMultiWidget extends StatelessWidget {
                   flex: 2,
                   child: GestureDetector(
                     onTap: () {
-                      homeUtilisateurBloc.setAticle(ArticlesModel.fromJson(article!.toJson()));
-                      js.context.callMethod('open', [
-                        'https://a221.net/article/${article!.slug!}',
-                        '_self'
-                      ]);
+                      if (article != null) {
+                        try {
+                          homeUtilisateurBloc.setAticle(ArticlesModel.fromJson(article!.toJson()));
+                          js.context.callMethod('open', [
+                            'https://a221.net/article/${article!.slug!}',
+                            '_self'
+                          ]);
+                        } catch (e) {
+                          print('Erreur lors de la navigation vers l\'article: $e');
+                        }
+                      }
                     },
                     child: (article?.imageArticle?.url != null && article?.imageArticle?.url != '')
                       ? Image.network(
@@ -65,11 +71,17 @@ class ArticleBlocMultiWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 0.0),
                           child: GestureDetector(
                             onTap: () {
-                              homeUtilisateurBloc.setAticle(ArticlesModel.fromJson(article!.toJson()));
-                              js.context.callMethod('open', [
-                                'https://a221.net/article/${article!.slug!}',
-                                '_self'
-                              ]);
+                              if (article != null) {
+                                try {
+                                  homeUtilisateurBloc.setAticle(ArticlesModel.fromJson(article!.toJson()));
+                                  js.context.callMethod('open', [
+                                    'https://a221.net/article/${article!.slug!}',
+                                    '_self'
+                                  ]);
+                                } catch (e) {
+                                  print('Erreur lors de la navigation vers l\'article: $e');
+                                }
+                              }
                             },
                             child: Text(article!.titre!,
                                 overflow: TextOverflow.fade,

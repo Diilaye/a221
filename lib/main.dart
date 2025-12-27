@@ -15,6 +15,7 @@ import 'package:actu/bloc/utilisateur/flash-news-bloc.dart';
 import 'package:actu/bloc/utilisateur/home-bloc.dart';
 import 'package:actu/bloc/utilisateur/papier-journal-bloc.dart';
 import 'package:actu/bloc/utilisateur/posts-digiteaux.dart';
+import 'package:actu/bloc/live-feed-bloc.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/adminisatrateur-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/connection-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/register-screen.dart';
@@ -29,6 +30,8 @@ import 'package:actu/screen/utilisateur/pages/tag-screen.dart';
 import 'package:actu/utils/color-by-dii.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -120,8 +123,6 @@ final _router = GoRouter(
       redirect: (context, state) async {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
-        print('sharedPreferences.getString("role")');
-        print(sharedPreferences.getString("role"));
 
         if (sharedPreferences.getString("token") != "" &&
             sharedPreferences.containsKey("token")) {
@@ -191,6 +192,21 @@ void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   setUrlStrategy(PathUrlStrategy());
 
+  // Gestion simple des erreurs web sans traitement complexe
+  if (kIsWeb) {
+    FlutterError.onError = (details) {
+      // Ignorer complètement les erreurs web communes
+      final error = details.exception.toString();
+      if (error.contains('Cannot send Null') || 
+          error.contains('LegacyJavaScriptObject') ||
+          error.contains('DebugService')) {
+        return; // Ne rien faire
+      }
+      // Laisser les autres erreurs passer par le système par défaut
+      FlutterError.presentError(details);
+    };
+  }
+
   runApp(
     MultiProvider(
       providers: [
@@ -203,6 +219,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => TagsBloc()),
         ChangeNotifierProvider(create: (_) => MotsClesBloc()),
         ChangeNotifierProvider(create: (_) => FlashNewsBloc()),
+        ChangeNotifierProvider(create: (_) => LiveFeedBloc()),
         ChangeNotifierProvider(create: (_) => FlashNewsUserBloc()),
         ChangeNotifierProvider(create: (_) => PostsDigiteauxBloc()),
         ChangeNotifierProvider(create: (_) => PostsDigiteauxUserBloc()),
@@ -224,9 +241,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        title: "ACTU221 | L’essentiel de l'information",
+        title: "ACTU221 | L'essentiel de l'information",
         debugShowCheckedModeBanner: false,
-        localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
         supportedLocales: const [Locale('en'), Locale('fr')],
         theme: ThemeData(
             colorScheme:

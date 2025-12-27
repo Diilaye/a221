@@ -16,81 +16,95 @@ class SectionContributionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     final postsDigiteauxUserBloc = Provider.of<PostsDigiteauxUserBloc>(context);
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
 
-    return Center(
-      child: homeUtilisateurBloc.articleContributions.isEmpty
-          ? SizedBox()
-          : SizedBox(
-              height: 650,
-              width: 1024,
-              child: Column(
-                children: [
-                  paddingVerticalGlobal(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Row(
-                          children: [
-                            Text(
-                              'Contribution & analyse'.toUpperCase(),
-                              style: fontFammilyDii(
-                                  context,
-                                  24,
-                                  noir,
-                                  FontWeight.bold,
-                                  FontStyle.normal),
-                            ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () async {
-                                await homeUtilisateurBloc.setCatMenu(homeUtilisateurBloc
-                                    .categories
-                                    .firstWhere((e) => e.titre! == "CONTRIBUTION & ANALYSE"));
+    if (homeUtilisateurBloc.articleContributions.isEmpty) {
+      return const SizedBox();
+    }
 
-                                context.go(
-                                  '/categorie/${homeUtilisateurBloc.articleContributions.first.categorie!.slug!.toLowerCase()}',
-                                );
-                                await homeUtilisateurBloc.setCategorieMenu();
-                              } ,
-                              child: Text(
-                                'voir +'.toUpperCase(),
-                                style: fontFammilyDii(
-                                    context,
-                                    14,
-                                    rouge,
-                                    FontWeight.bold,
-                                    FontStyle.normal),
-                              ),
-                            ),
-                          ],
+    // Trouver la pub commerciale active de façon sécurisée
+    final commercialPost = postsDigiteauxUserBloc.listePosts
+        .where((e) => e.type == "commercial" && e.statusOnline == "on")
+        .lastOrNull;
+
+    return Center(
+      child: SizedBox(
+        height: 650,
+        width: 1024,
+        child: Column(
+          children: [
+            paddingVerticalGlobal(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Row(
+                    children: [
+                      Text(
+                        'Contribution & analyse'.toUpperCase(),
+                        style: fontFammilyDii(
+                            context,
+                            24,
+                            noir,
+                            FontWeight.bold,
+                            FontStyle.normal),
+                      ),
+                      const Spacer(),
+                      InkWell( // Remplace GestureDetector pour un meilleur feedback visuel
+                        onTap: () async {
+                          try {
+                            final cat = homeUtilisateurBloc.categories
+                                .firstWhere((e) => e.titre == "CONTRIBUTION & ANALYSE",
+                                    orElse: () => throw "Catégorie non trouvée");
+                            
+                            final article = homeUtilisateurBloc.articleContributions.first;
+                            if (article.categorie?.slug == null) return;
+
+                            await homeUtilisateurBloc.setCatMenu(cat);
+                            context.go('/categorie/${article.categorie!.slug!.toLowerCase()}');
+                            await homeUtilisateurBloc.setCategorieMenu();
+                          } catch (e) {
+                            // Silencieux en prod, mais idéalement loguer l'erreur
+                          }
+                        },
+                        child: Text(
+                          'voir +'.toUpperCase(),
+                          style: fontFammilyDii(
+                              context,
+                              14,
+                              rouge,
+                              FontWeight.bold,
+                              FontStyle.normal),
                         ),
                       ),
-                      Expanded(
-                          flex: 1,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                postsDigiteauxUserBloc.listePosts
-                                    .lastWhere((e) => e.type == "commercial" && e.statusOnline =="on")
-                                    .titre!
-                                    .toUpperCase(),
-                                style: fontFammilyDii(
-                                    context,
-                                   14,
-                                    noir,
-                                    FontWeight.bold,
-                                    FontStyle.normal),
-                              ),
-                            ],
-                          )),
                     ],
                   ),
+                ),
+                if (commercialPost?.titre != null)
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            commercialPost!.titre!.toUpperCase(),
+                            style: fontFammilyDii(
+                                context,
+                                14,
+                                noir,
+                                FontWeight.bold,
+                                FontStyle.normal),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
                   paddingVerticalGlobal(),
                   SizedBox(
                     height: 550,
@@ -181,21 +195,42 @@ class SectionContributionWidget extends StatelessWidget {
                         paddingHorizontalGlobal(),
 
                         Expanded(
-                            flex: 1,
-                            child: Container(
-                              color: blanc,
-                              height: 600,
-                              width: 340,
-                              child: Image.network(
-                                BASE_URL_ASSET +
-                                    postsDigiteauxUserBloc.listePosts
-                                        .lastWhere(
-                                            (e) => e.type == "commercial")
-                                        .image!
-                                        .url!,
-                                fit: BoxFit.fitHeight,
-                              ),
-                            ))
+                          flex: 1,
+                          child: Container(
+                            color: blanc,
+                            height: 600,
+                            width: 340,
+                            child: Builder(
+                              builder: (context) {
+                                final commercial = postsDigiteauxUserBloc.listePosts
+                                    .where((e) => e.type == "commercial" && e.statusOnline == "on")
+                                    .lastOrNull;
+                                    
+                                if (commercial?.image?.url == null) {
+                                  return const SizedBox();
+                                }
+
+                                return Image.network(
+                                  BASE_URL_ASSET + commercial!.image!.url!,
+                                  fit: BoxFit.fitHeight,
+                                  errorBuilder: (context, _, __) => const SizedBox(),
+                                  loadingBuilder: (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: loadingProgress.expectedTotalBytes != null
+                                            ? loadingProgress.cumulativeBytesLoaded / 
+                                              loadingProgress.expectedTotalBytes!
+                                            : null,
+                                        strokeWidth: 2,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),

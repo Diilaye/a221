@@ -1,3 +1,4 @@
+import 'package:actu/bloc/administrateur/article-bloc.dart';
 import 'package:actu/bloc/administrateur/menu-admin.dart';
 import 'package:actu/bloc/utilisateur/emission-user-bloc.dart';
 import 'package:actu/bloc/utilisateur/home-bloc.dart';
@@ -26,6 +27,7 @@ class MenuMobileAdministratreur extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
     final menuAdminBloc = Provider.of<MenuAdminBloc>(context);
+    final addArticleBloc = Provider.of<AddArticleBloc>(context);
 
     return Container(
       height: size.height - 60,
@@ -84,7 +86,10 @@ class MenuMobileAdministratreur extends StatelessWidget {
             titre: 'Ajouter Article',
             icons: CupertinoIcons.circle,
             isActive: menuAdminBloc.menu == 11,
-            ontap: () => menuAdminBloc.setMenu(11),
+            ontap: () {
+              addArticleBloc.resetAddArticleForm();
+              menuAdminBloc.setMenu(11);
+            },
           ),
           ItemMenu(
             titre: 'TV',

@@ -11,6 +11,7 @@ class ArticlesModel {
   String? id;
   String? statusOnline;
   String? slug;
+  String? statut;
 
   ArticlesModel(
       {this.description,
@@ -24,6 +25,7 @@ class ArticlesModel {
       this.author,
       this.statusOnline,
       this.slug,
+      this.statut,
       this.id});
 
   ArticlesModel.fromJson(Map<String, dynamic> json) {
@@ -45,6 +47,7 @@ class ArticlesModel {
     id = json['id'];
     statusOnline = json['statusOnline'];
     slug = json['slug'];
+    statut = json['statut'];
   }
 
   Map<String, dynamic> toJson() {
@@ -69,6 +72,7 @@ class ArticlesModel {
     data['id'] = this.id;
     data['statusOnline'] = this.statusOnline;
     data['slug'] = this.slug;
+    data['statut'] = this.statut;
     return data;
   }
 

@@ -45,7 +45,11 @@ class HomeUtilisateurBloc with ChangeNotifier {
   setCatMenu(CategorieModel? c) {
     catMenu = c;
     if (catMenu != null) {
-      print(catMenu!.toJson());
+      try {
+        print(catMenu!.toJson());
+      } catch (e) {
+        print('Erreur lors de la conversion catMenu en JSON: $e');
+      }
     }
     showMenuMobile = 0;
     notifyListeners();
@@ -58,9 +62,13 @@ class HomeUtilisateurBloc with ChangeNotifier {
 
   setCategorieMenu() async {
     if (catMenu?.id != null) {
-      categorieMenuModel = await homeService.categorieMenu(catMenu!.id!);
-      if (categorieMenuModel?.articles != null) {
-        print(categorieMenuModel!.articles!.length);
+      try {
+        categorieMenuModel = await homeService.categorieMenu(catMenu!.id!);
+        if (categorieMenuModel?.articles != null) {
+          print('Articles trouvés: ${categorieMenuModel!.articles!.length}');
+        }
+      } catch (e) {
+        print('Erreur lors de la récupération du menu catégorie: $e');
       }
     }
     showMenuMobile = 0;
@@ -68,10 +76,14 @@ class HomeUtilisateurBloc with ChangeNotifier {
   }
 
   setCategorieMenuIndex(String id) async {
-    print(id);
-    categorieMenuModel = await homeService.categorieMenuName(id);
-    if (categorieMenuModel?.articles != null) {
-      print(categorieMenuModel!.articles!.length);
+    print('ID catégorie: $id');
+    try {
+      categorieMenuModel = await homeService.categorieMenuName(id);
+      if (categorieMenuModel?.articles != null) {
+        print('Articles trouvés pour la catégorie: ${categorieMenuModel!.articles!.length}');
+      }
+    } catch (e) {
+      print('Erreur lors de la récupération de la catégorie par index: $e');
     }
     notifyListeners();
   }

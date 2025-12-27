@@ -1,10 +1,7 @@
-import 'package:actu/models/administrateur/emission-model.dart';
 import 'package:actu/models/administrateur/file-model.dart';
-import 'package:actu/services/administrateur/emission-service.dart';
-import 'package:actu/services/administrateur/video-service.dart';
+import 'package:actu/models/administrateur/video-youtube-model.dart';
 import 'package:actu/utils/color-by-dii.dart';
 import 'package:actu/utils/file-picker-dii.dart';
-import 'package:actu/utils/requette-by-dii.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -27,6 +24,10 @@ class VideoBloc with ChangeNotifier {
   FileModel? fileModel;
 
   List<FileModel> filesModel = [];
+  
+  List<VideoYoutubeModel> videos = [];
+  
+  VideoYoutubeModel? selectedVideo;
 
   String recherche = "";
 
@@ -46,12 +47,16 @@ class VideoBloc with ChangeNotifier {
   }
 
   setFileModel(FileModel? f) {
-    if (fileModel == f) {
-      fileModel = null;
-    } else {
-      fileModel = f;
+    try {
+      if (fileModel == f) {
+        fileModel = null;
+      } else {
+        fileModel = f;
+      }
+      notifyListeners();
+    } catch (e) {
+      print('Erreur lors de la définition du modèle de fichier: $e');
     }
-    notifyListeners();
   }
 
   getImagePost() async {
@@ -60,8 +65,13 @@ class VideoBloc with ChangeNotifier {
   }
 
   getImagePostUpdate() async {
-   // imagePost = await getImageUpdate(0, emission!.photoCouverture!);
-    notifyListeners();
+    try {
+      // Implémentation pour la mise à jour d'image si nécessaire
+      // imagePost = await getImageUpdate(0, selectedVideo?.imageFile?.id);
+      notifyListeners();
+    } catch (e) {
+      print('Erreur lors de la mise à jour de l\'image: $e');
+    }
   }
 
   TextEditingController titre = TextEditingController();
@@ -80,155 +90,180 @@ class VideoBloc with ChangeNotifier {
     chargement = true;
     notifyListeners();
 
-    String? result = await videosService.add({
-      "isLive": type== 0 ? 'off' : 'on',
-      "titre": titre.text,
-      "emission": emission.text,
-      "url": url.text,
-      "image": fileModel == null ? imagePost[0] : fileModel!.id!,
-    });
+    try {
+      Map<String, dynamic> videoData = {
+        "isLive": type == 0 ? 'off' : 'on',
+        "titre": titre.text.trim(),
+        "emission": emission.text.trim(),
+        "url": url.text.trim(),
+        "image": fileModel?.id ?? imagePost[0],
+      };
 
-    if (result != null) {
-      Fluttertoast.showToast(
-          msg: "Video ajoutée avec success.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: vert,
-          textColor: Colors.white,
-          fontSize: 12.0);
-      titre.text = "";
-      emission.text = "";
-      url.text = "";
-      titre.text = "";
-      fileModel = null;
-      await allVideo();
-      notifyListeners();
-    } else {
-      Fluttertoast.showToast(
-          msg: "Une erreur à été decélé.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: rouge,
-          textColor: Colors.white,
-          fontSize: 12.0);
+      String? result = await videosService.add(videoData);
+
+      if (result != null) {
+        Fluttertoast.showToast(
+            msg: "Vidéo ajoutée avec succès.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: vert,
+            textColor: Colors.white,
+            fontSize: 12.0);
+        _clearForm();
+        await allVideo();
+      } else {
+        _showErrorToast("Erreur lors de l'ajout de la vidéo.");
+      }
+    } catch (e) {
+      print('Erreur lors de l\'ajout de la vidéo: $e');
+      _showErrorToast("Une erreur inattendue s'est produite.");
     }
+    
     chargement = false;
     notifyListeners();
   }
 
-  updateEmission() async {
+  updateVideo() async {
+    if (selectedVideo == null) return;
+    
     chargement = true;
     notifyListeners();
-/*
-    String? result = await emissionService.update({
-      "type": typeEmission == 0 ? 'invite' : 'suivre',
-      "titre": titre.text,
-      "heure": heure.text,
-      "urlMedia": url.text,
-      "description": desc.text,
-      "photoCouverture": fileModel == null ? imagePost[0] : fileModel!.id!,
-    }, emission!.id!);
 
-    if (result != null) {
-      Fluttertoast.showToast(
-          msg: "Emission modifier avec success.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: vert,
-          textColor: Colors.white,
-          fontSize: 12.0);
-      titre.text = "";
-      heure.text = "";
-      url.text = "";
-      titre.text = "";
-      desc.text = "";
-      await allEmissions();
+    try {
+      Map<String, dynamic> videoData = {
+        "isLive": type == 0 ? 'off' : 'on',
+        "titre": titre.text.trim(),
+        "emission": emission.text.trim(),
+        "url": url.text.trim(),
+        "image": fileModel?.id ?? imagePost[0],
+      };
+
+      String? result = await videosService.update(videoData, selectedVideo!.id!);
+
+      if (result != null) {
+        Fluttertoast.showToast(
+            msg: "Vidéo modifiée avec succès.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: vert,
+            textColor: Colors.white,
+            fontSize: 12.0);
+        _clearForm();
+        await allVideo();
+        showUpdate = 0;
+      } else {
+        _showErrorToast("Erreur lors de la modification de la vidéo.");
+      }
+    } catch (e) {
+      print('Erreur lors de la modification de la vidéo: $e');
+      _showErrorToast("Une erreur inattendue s'est produite.");
+    }
+    
+    chargement = false;
+    notifyListeners();
+  }
+
+  toggleVideoStatus() async {
+    if (selectedVideo == null) return;
+    
+    chargement = true;
+    notifyListeners();
+
+    try {
+      String newStatus = selectedVideo!.statusOnline == "on" ? "off" : "on";
+      
+      String? result = await videosService.update(
+          {"statusOnline": newStatus},
+          selectedVideo!.id!);
+
+      if (result != null) {
+        Fluttertoast.showToast(
+            msg: "Statut de la vidéo modifié avec succès.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: vert,
+            textColor: Colors.white,
+            fontSize: 12.0);
+        await allVideo();
+        showUpdate = 0;
+      } else {
+        _showErrorToast("Erreur lors de la modification du statut.");
+      }
+    } catch (e) {
+      print('Erreur lors de la modification du statut de la vidéo: $e');
+      _showErrorToast("Une erreur inattendue s'est produite.");
+    }
+    
+    chargement = false;
+    notifyListeners();
+  }
+
+  setSelectedVideo(VideoYoutubeModel? video) {
+    try {
+      selectedVideo = video;
+      if (video != null) {
+        titre.text = video.titre ?? '';
+        emission.text = video.emission ?? '';
+        url.text = video.url ?? '';
+        type = video.isLive == 'on' ? 1 : 0;
+        if (video.imageFile != null) {
+          imagePost = [
+            video.imageFile!.id,
+            video.imageFile!.url
+          ];
+        }
+      }
       fileModel = null;
-      showUpdate = 0;
       notifyListeners();
-    } else {
-      Fluttertoast.showToast(
-          msg: "Une erreur à été decélé.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: rouge,
-          textColor: Colors.white,
-          fontSize: 12.0);
-    } */
-    chargement = false;
-    notifyListeners();
-  }
-
-  activeEmission() async {
-    chargement = true;
-    notifyListeners();
-
-  /*  String? result = await emissionService.update(
-        {"statusOnline": emission!.statusOnline == "on" ? "off" : "on"},
-        emission!.id!);
-
-    if (result != null) {
-      Fluttertoast.showToast(
-          msg: "Emission modifier avec success.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: vert,
-          textColor: Colors.white,
-          fontSize: 12.0);
-      titre.text = "";
-      heure.text = "";
-      url.text = "";
-      titre.text = "";
-      desc.text = "";
-      await allEmissions();
-      showUpdate = 0;
-      notifyListeners();
-    } else {
-      Fluttertoast.showToast(
-          msg: "Une erreur à été decélé.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: rouge,
-          textColor: Colors.white,
-          fontSize: 12.0);
-    }*/
-    chargement = false;
-    notifyListeners();
-  }
-
- // List<EmissionModel> emissions = [];
-
-  //EmissionModel? emission;
-
-  setEmission(EmissionModel? e) {
-    /*  emission = e!;
-   titre.text = e.titre!;
-    heure.text = e.heure!;
-    url.text = e.urlMedia!;
-    desc.text = e.description!;
-    typeEmission = e.type == 'invite' ? 0 : 1;
-    imagePost = [
-    //  e.photoCouverture!.id!,
-     // "$BASE_URL_ASSET${e.photoCouverture!.url}"
-    //];
-    fileModel = null;
-    notifyListeners();*/
+    } catch (e) {
+      print('Erreur lors de la sélection de la vidéo: $e');
+    }
   }
 
   allVideo() async {
- //   emissions = await videosService.all();
+    try {
+      videos = await videosService.all();
+      notifyListeners();
+    } catch (e) {
+      print('Erreur lors du chargement des vidéos: $e');
+    }
+  }
 
-    notifyListeners();
+  // Méthodes utilitaires privées
+  void _clearForm() {
+    titre.clear();
+    emission.clear();
+    url.clear();
+    type = 0;
+    fileModel = null;
+    selectedVideo = null;
+    imagePost = [null, null];
+  }
+
+  void _showErrorToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: rouge,
+        textColor: Colors.white,
+        fontSize: 12.0);
   }
 
   VideoBloc() {
-    allVideo();
-    allFileModel();
+    _initializeBloc();
+  }
+  
+  void _initializeBloc() async {
+    try {
+      await allVideo();
+      await allFileModel();
+    } catch (e) {
+      print('Erreur lors de l\'initialisation du VideoBloc: $e');
+    }
   }
 }

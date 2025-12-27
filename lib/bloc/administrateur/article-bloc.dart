@@ -68,9 +68,10 @@ class AddArticleBloc with ChangeNotifier {
 
   String statusNews = 'all';
 
-  setStatusNews(String v) {
+  setStatusNews(String v) async {
     statusNews = v;
     notifyListeners();
+    await allArticles(1);
   }
 
   setUpdateDesc(int updat) {
@@ -151,7 +152,15 @@ class AddArticleBloc with ChangeNotifier {
   TagsModel? tag;
 
   setTags(TagsModel? t) {
-    print(t?.toJson());
+    if (t != null) {
+      try {
+        print(t.toJson());
+      } catch (e) {
+        print('Erreur lors de la conversion t en JSON: $e');
+      }
+    } else {
+      print('Tag t est null, impossible de convertir en JSON');
+    }
     tag = t;
     notifyListeners();
   }
@@ -207,11 +216,73 @@ class AddArticleBloc with ChangeNotifier {
       "tags": tag!.id!,
       "keyWorod": keyWorld.map((e) => e.toUpperCase().trim()).toList(),
       "image": fileModel == null ? imageAticle[0] : fileModel!.id!,
+      "statut": "publie",
     });
 
     if (result != null) {
       Fluttertoast.showToast(
           msg: "article ajouté avec success.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: vert,
+          textColor: Colors.white,
+          fontSize: 12.0);
+      titre.text = "";
+      body = "";
+      typeArticle = 0;
+      showUpdate = 0;
+      updateDesc = 0;
+      keyWorld = [];
+      fileModel = null;
+      imageAticle = [null, null];
+      categorie = null;
+      tag = null;
+      allArticles(1);
+      notifyListeners();
+    } else {
+      Fluttertoast.showToast(
+          msg: "Une erreur à été decélé.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: rouge,
+          textColor: Colors.white,
+          fontSize: 12.0);
+    }
+    chargement = false;
+    notifyListeners();
+  }
+
+  addArticleWithStatut(String statut) async {
+    chargement = true;
+    notifyListeners();
+
+    String? result = await articleService.add({
+      "titre": titre.text,
+      "description": body,
+      "typeUne": typeArticle == 0
+          ? 'none'
+          : typeArticle == 1
+              ? 'top'
+              : typeArticle == 2
+                  ? 'une'
+                  : typeArticle == 3
+                      ? 'rubrique'
+                      : 'choix-redac',
+      "categorie": categorie!.id!,
+      "tags": tag!.id!,
+      "keyWorod": keyWorld.map((e) => e.toUpperCase().trim()).toList(),
+      "image": fileModel == null ? imageAticle[0] : fileModel!.id!,
+      "statut": statut,
+    });
+
+    if (result != null) {
+      String message = statut == 'brouillon' 
+          ? "Article sauvegardé en brouillon." 
+          : "Article créé avec succès.";
+      Fluttertoast.showToast(
+          msg: message,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -292,6 +363,7 @@ class AddArticleBloc with ChangeNotifier {
       "tags": tag!.id!,
       "keyWorod": keyWorld.map((e) => e.toUpperCase().trim()).toList(),
       "image": fileModel == null ? imageAticle[0] : fileModel!.id!,
+      "statut": "publie",
     }, article!.id!);
 
     if (result != null) {
@@ -321,11 +393,62 @@ class AddArticleBloc with ChangeNotifier {
     notifyListeners();
   }
 
+  updateArticleStatut(String statut) async {
+    chargement = true;
+    notifyListeners();
+
+    String? result = await articleService.update({
+      "titre": titre.text,
+      "description": body,
+      "typeUne": typeArticle == 0
+          ? 'none'
+          : typeArticle == 1
+              ? 'top'
+              : typeArticle == 2
+                  ? 'une'
+                  : 'rubrique',
+      "categorie": categorie!.id!,
+      "tags": tag!.id!,
+      "keyWorod": keyWorld.map((e) => e.toUpperCase().trim()).toList(),
+      "image": fileModel == null ? imageAticle[0] : fileModel!.id!,
+      "statut": statut,
+    }, article!.id!);
+
+    if (result != null) {
+      String message = statut == 'brouillon' 
+          ? "Article mis en brouillon avec succès." 
+          : "Article archivé avec succès.";
+      Fluttertoast.showToast(
+          msg: message,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: vert,
+          textColor: Colors.white,
+          fontSize: 12.0);
+      showUpdate = 0;
+      updateDesc = 0;
+      allArticles(1);
+      notifyListeners();
+    } else {
+      Fluttertoast.showToast(
+          msg: "Une erreur à été decélé.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: rouge,
+          textColor: Colors.white,
+          fontSize: 12.0);
+    }
+    chargement = false;
+    notifyListeners();
+  }
+
   List<ArticlesModel> articles = [];
 
   ArticlesModel? article;
 
-  setArticle(ArticlesModel? art, int i) async {
+  setArticle(ArticlesModel? art, int i, {dynamic categorieBloc, dynamic tagsBloc}) async {
     article = art;
     titre.text = article!.titre!;
     body = article!.description!;
@@ -337,8 +460,25 @@ class AddArticleBloc with ChangeNotifier {
                 ? 2
                 : 3;
     categorie = categories.lastWhere((e) => e.id! == article!.categorie!.id!);
-    print(categorie!.toJson());
+    if (categorie != null) {
+      try {
+        print(categorie!.toJson());
+        // Mettre à jour aussi le categorieBloc si fourni
+        if (categorieBloc != null) {
+          categorieBloc.setCategorie(categorie);
+        }
+      } catch (e) {
+        print('Erreur lors de la conversion categorie en JSON: $e');
+      }
+    }
     tag = tags.lastWhere((e) => e.id! == article!.tags!.id!);
+    if (tag != null && tagsBloc != null) {
+      try {
+        tagsBloc.setTags(tag);
+      } catch (e) {
+        print('Erreur lors de la mise à jour du tag: $e');
+      }
+    }
     keyWorld = [];
     setKeyWord(article!.keyWorod!);
     imageAticle = [
@@ -351,7 +491,11 @@ class AddArticleBloc with ChangeNotifier {
   }
 
   allArticles(int page) async {
-    articlePagination = await articleService.all(page);
+    if (statusNews == 'all') {
+      articlePagination = await articleService.all(page);
+    } else {
+      articlePagination = await articleService.allByStatut(page, statusNews);
+    }
     articles= articlePagination!.articles!;
     notifyListeners();
   }
@@ -373,6 +517,23 @@ class AddArticleBloc with ChangeNotifier {
   allTags() async {
     tags = await tagsService.all();
 
+    notifyListeners();
+  }
+
+  // Fonction pour réinitialiser tous les champs du formulaire d'ajout
+  resetAddArticleForm() {
+    titre.clear();
+    motCles.clear();
+    body = "";
+    controllerProduct.clear();
+    fileModel = null;
+    imageAticle = [null, null];
+    categorie = null;
+    tag = null;
+    keyWorld = [];
+    typeArticle = 0;
+    parcourirFile = 0;
+    updateDesc = 0;
     notifyListeners();
   }
 

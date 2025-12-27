@@ -222,12 +222,9 @@ class TagHomeScreen extends StatelessWidget {
                         Positioned(
                           bottom: 0,
                           child: Container(
-                              height: 45,
                               width: size.width,
                               color: noir,
-                              child: flashNewsUserBloc.flashNews.length == 0
-                                  ? CircularProgressIndicator()
-                                  : FlashNewsWidget(
+                              child: FlashNewsWidget(
                                       flashNews: flashNewsUserBloc.flashNews,
                                     )),
                         ),

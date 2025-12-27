@@ -1,6 +1,7 @@
 import 'package:actu/bloc/administrateur/article-bloc.dart';
 import 'package:actu/bloc/administrateur/categorie-bloc.dart';
 import 'package:actu/bloc/administrateur/menu-admin.dart';
+import 'package:actu/bloc/administrateur/tags-bloc.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/articles/add-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/articles/update-screen.dart';
 import 'package:actu/utils/color-by-dii.dart';
@@ -20,98 +21,248 @@ class JournalScreen extends StatelessWidget {
     final menuAdminBloc = Provider.of<MenuAdminBloc>(context);
     final addArticleBloc = Provider.of<AddArticleBloc>(context);
     final categorieBloc = Provider.of<CategorieBloc>(context);
+    final tagsBloc = Provider.of<TagsBloc>(context);
 
     return Stack(
       children: [
         if (addArticleBloc.showUpdate == 0)
-         addArticleBloc.articlePagination== null? const SizedBox() : ListView(
+         addArticleBloc.articlePagination== null? const SizedBox() : Container(
+           decoration: const BoxDecoration(
+             gradient: LinearGradient(
+               begin: Alignment.topLeft,
+               end: Alignment.bottomRight,
+               colors: [
+                 Color(0xfff8fafc),
+                 Color(0xfff1f5f9),
+                 Color(0xffe2e8f0),
+               ],
+             ),
+           ),
+           child: ListView(
             children: [
               paddingVerticalGlobal(size.height * .02),
               Row(
                 children: [
                   paddingHorizontalGlobal(),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFF06b6d4),
+                          Color(0xFF3b82f6),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF06b6d4).withOpacity(0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      CupertinoIcons.news_solid,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                  paddingHorizontalGlobal(),
                   Text(
                     'Journal'.toUpperCase(),
                     style: fontFammilyDii(
-                        context, 20, noir, FontWeight.bold, FontStyle.normal),
-                  )
+                        context, 28, noir, FontWeight.w900, FontStyle.normal),
+                  ),
+                  paddingHorizontalGlobal(8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF10b981), Color(0xFF059669)],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          CupertinoIcons.doc_text_fill,
+                          color: Colors.white,
+                          size: 14,
+                        ),
+                        paddingHorizontalGlobal(6),
+                        Text(
+                          '${addArticleBloc.articlePagination!.articles!.length} Articles',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
               paddingVerticalGlobal(size.height * .02),
-              Row(
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: size.width * .02),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.white,
+                      Color(0xfff8fafc),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: const Color(0xFF06b6d4).withOpacity(0.2),
+                    width: 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 20,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Navigation',
+                      style: fontFammilyDii(context, 12, noir.withOpacity(.5),
+                          FontWeight.w600, FontStyle.normal),
+                    ),
+                    paddingVerticalGlobal(8),
+                    Row(
+                    ),
+                    Row(
                 children: [
                   paddingHorizontalGlobal(),
                   Icon(
                     CupertinoIcons.home,
-                    color: noir.withOpacity(.6),
-                    size: 14,
+                    color: const Color(0xFF06b6d4),
+                    size: 16,
                   ),
                   paddingHorizontalGlobal(6),
                   Icon(
                     CupertinoIcons.chevron_forward,
-                    color: noir.withOpacity(.6),
+                    color: noir.withOpacity(.4),
                     size: 12,
                   ),
                   paddingHorizontalGlobal(6),
                   Text(
                     'Journal',
-                    style: fontFammilyDii(context, 14, noir.withOpacity(.6),
-                        FontWeight.w300, FontStyle.normal),
+                    style: fontFammilyDii(context, 14, const Color(0xFF06b6d4),
+                        FontWeight.w600, FontStyle.normal),
                   ),
                   paddingHorizontalGlobal(6),
                   Icon(
                     CupertinoIcons.chevron_forward,
-                    color: noir.withOpacity(.6),
+                    color: noir.withOpacity(.4),
                     size: 12,
                   ),
                   paddingHorizontalGlobal(6),
                   Text(
-                    'Dashbord',
+                    'Dashboard',
                     style: fontFammilyDii(
-                        context, 12, noir, FontWeight.w300, FontStyle.normal),
+                        context, 12, noir.withOpacity(.6), FontWeight.w500, FontStyle.normal),
                   ),
                   const Spacer(),
-                  CircleAvatar(
-                      backgroundColor: noir.withOpacity(.5),
-                      child: Center(child: Icon(CupertinoIcons.printer))),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF06b6d4).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: const Color(0xFF06b6d4).withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: Icon(
+                      CupertinoIcons.printer,
+                      color: const Color(0xFF06b6d4),
+                      size: 18,
+                    ),
+                  ),
                   paddingHorizontalGlobal(8),
-                  CircleAvatar(
-                      backgroundColor: noir.withOpacity(.5),
-                      child: Center(child: Icon(CupertinoIcons.folder_circle))),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF8b5cf6).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: const Color(0xFF8b5cf6).withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: Icon(
+                      CupertinoIcons.folder_circle,
+                      color: const Color(0xFF8b5cf6),
+                      size: 18,
+                    ),
+                  ),
                   paddingHorizontalGlobal(),
                 ],
               ),
+                  ],
+                ),
+              ),
               paddingVerticalGlobal(),
-              Column(
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: size.width * .02),
+                child: Column(
                 children: [
                   Row(
                     children: [
-                      paddingHorizontalGlobal(),
                       categorieBloc.categories.isEmpty
                           ? const SizedBox()
-                          : Card(
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
+                          : Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [Colors.white, Color(0xfff8fafc)],
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: const Color(0xFF06b6d4).withOpacity(0.3),
+                                  width: 1.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF06b6d4).withOpacity(0.1),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
                               ),
-                              child: SizedBox(
-                                height: 30,
-                                child: Row(
-                                  children: [
-                                    paddingHorizontalGlobal(8),
-                                    DropdownButton(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.square_grid_2x2,
+                                    color: const Color(0xFF06b6d4),
+                                    size: 18,
+                                  ),
+                                  paddingHorizontalGlobal(8),
+                                  DropdownButton<String?>(
                                         items: [
-                                          DropdownMenuItem(
+                                          DropdownMenuItem<String?>(
                                               value: null,
                                               child: Text('Tous les Categories'
                                                   .toUpperCase())),
                                           ...categorieBloc.categories
-                                              .map((e) => DropdownMenuItem(
-                                                  value: e,
+                                              .map((e) => DropdownMenuItem<String?>(
+                                                  value: e.id,
                                                   child: Text(e.titre!)))
                                               .toList()
                                         ],
-                                        value: categorieBloc.categorie,
+                                        value: categorieBloc.categorie?.id,
                                         iconSize: 0.0,
                                         elevation: 1,
                                         focusColor: Colors.transparent,
@@ -123,42 +274,61 @@ class JournalScreen extends StatelessWidget {
                                             addArticleBloc.setCategorie(null);
                                             addArticleBloc.allCatPagination(addArticleBloc.page);
                                           }else {
-                                            categorieBloc.setCategorie(v);
-                                            addArticleBloc.setCategorie(v);
+                                            final selectedCat = categorieBloc.categories.firstWhere((cat) => cat.id == v);
+                                            categorieBloc.setCategorie(selectedCat);
+                                            addArticleBloc.setCategorie(selectedCat);
                                             addArticleBloc.allCatPagination(addArticleBloc.page);
                                           }
 
 
                                         }),
-                                    paddingHorizontalGlobal(8),
-                                  ],
-                                ),
+                                ],
                               ),
                             ),
                       paddingHorizontalGlobal(),
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Colors.white, Color(0xfff8fafc)],
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFF8b5cf6).withOpacity(0.3),
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF8b5cf6).withOpacity(0.1),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                        child: SizedBox(
-                          height: 30,
-                          child: Row(
-                            children: [
-                              paddingHorizontalGlobal(8),
-                              DropdownButton(
+                        child: Row(
+                          children: [
+                            Icon(
+                              CupertinoIcons.circle_fill,
+                              color: const Color(0xFF8b5cf6),
+                              size: 12,
+                            ),
+                            paddingHorizontalGlobal(8),
+                            DropdownButton(
                                   items: [
                                     'all',
-                                    'on',
-                                    'off',
+                                    'publie',
+                                    'brouillon',
+                                    'archive',
                                   ]
                                       .map((e) => DropdownMenuItem(
                                           value: e,
-                                          child: e == "on"
-                                              ? Text("En ligne")
-                                              : e == "off"
-                                                  ? Text("Broullons")
-                                                  : Text("Tous les status")))
+                                          child: e == "publie"
+                                              ? Text("Publiés")
+                                              : e == "brouillon"
+                                                  ? Text("Brouillons")
+                                                  : e == "archive"
+                                                      ? Text("Archivés")
+                                                      : Text("Tous")))
                                       .toList(),
                                   value: addArticleBloc.statusNews,
                                   iconSize: 0.0,
@@ -169,26 +339,60 @@ class JournalScreen extends StatelessWidget {
                                   onChanged: (v) {
                                     addArticleBloc.setStatusNews(v!);
                                   }),
-                              paddingHorizontalGlobal(8),
-                            ],
-                          ),
+                          ],
                         ),
                       ),
                       const Spacer(),
                       Center(
-                        child: SizedBox(
-                          height: 45,
+                        child: Container(
+                          height: 48,
                           width: size.width * .3,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: const Color(0xFF06b6d4).withOpacity(0.3),
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF06b6d4).withOpacity(0.1),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
                           child: Row(
                             children: [
+                              paddingHorizontalGlobal(12),
+                              Icon(
+                                CupertinoIcons.search,
+                                color: const Color(0xFF06b6d4),
+                                size: 20,
+                              ),
                               paddingHorizontalGlobal(8),
                               Expanded(
                                 child: TextField(
                                   controller: addArticleBloc.recherche,
-                                  decoration: const InputDecoration(
-                                    hintText: "RECHERCHER UN ARTICLE",
-                                    border: OutlineInputBorder(),
-                                    enabledBorder: OutlineInputBorder(),
+                                  style: fontFammilyDii(
+                                    context,
+                                    14,
+                                    noir,
+                                    FontWeight.w500,
+                                    FontStyle.normal,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: "Rechercher un article...",
+                                    hintStyle: fontFammilyDii(
+                                      context,
+                                      14,
+                                      noir.withOpacity(0.4),
+                                      FontWeight.w400,
+                                      FontStyle.normal,
+                                    ),
+                                    border: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
                                   ),
                                   onChanged: (value) =>
                                       addArticleBloc.setRecherche(value),
@@ -200,61 +404,128 @@ class JournalScreen extends StatelessWidget {
                         ),
                       ),
                       paddingHorizontalGlobal(),
-                      GestureDetector(
-                        onTap: () => menuAdminBloc.setAddArticle(1),
-                        child: CircleAvatar(
-                            backgroundColor: bleuMarine,
-                            child: Icon(
-                              CupertinoIcons.add,
-                              color: blanc,
-                            )),
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                        onTap: () {
+                          addArticleBloc.resetAddArticleForm();
+                          menuAdminBloc.setAddArticle(1);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFF10b981),
+                                Color(0xFF059669),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF10b981).withOpacity(0.4),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                CupertinoIcons.add,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                              paddingHorizontalGlobal(8),
+                              Text(
+                                'NOUVEL ARTICLE',
+                                style: fontFammilyDii(
+                                  context,
+                                  13,
+                                  Colors.white,
+                                  FontWeight.bold,
+                                  FontStyle.normal,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       ),
                       paddingHorizontalGlobal(),
                     ],
                   ),
                   paddingVerticalGlobal(),
-                 SizedBox(
+                 Container(
                     height: 700,
                     width: size.width,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.white,
+                          Color(0xfff8fafc),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: const Color(0xFF06b6d4).withOpacity(0.2),
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 20,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
                     child: Card(
-                      elevation: 2,
+                      elevation: 0,
+                      color: Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
                         children: [
-                          paddingVerticalGlobal(8),
-                          Row(
+                          paddingVerticalGlobal(12),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  const Color(0xFF06b6d4).withOpacity(0.1),
+                                  const Color(0xFF3b82f6).withOpacity(0.1),
+                                ],
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                topRight: Radius.circular(12),
+                              ),
+                            ),
+                            child: Row(
                             children: [
                               paddingHorizontalGlobal(8),
                               Expanded(
                                   child: Row(children: [
                                 Text(
                                   'ID',
-                                  style: fontFammilyDii(context, 14, noir,
-                                      FontWeight.w500, FontStyle.normal),
+                                  style: fontFammilyDii(context, 13, const Color(0xFF06b6d4),
+                                      FontWeight.w700, FontStyle.normal),
                                 )
                               ])),
                               Expanded(
                                   child: Row(
                                 children: [
                                   Text(
-                                    'Author',
-                                    style: fontFammilyDii(context, 14, noir,
-                                        FontWeight.w500, FontStyle.normal),
+                                    'Auteur',
+                                    style: fontFammilyDii(context, 13, const Color(0xFF06b6d4),
+                                        FontWeight.w700, FontStyle.normal),
                                   ),
                                 ],
                               )),
-                              // Expanded(
-                              //     child: Row(
-                              //   children: [
-                              //     Text(
-                              //       'Date',
-                              //       style: fontFammilyDii(context, 14, noir,
-                              //           FontWeight.w500, FontStyle.normal),
-                              //     ),
-                              //   ],
-                              // )),
                               Expanded(
                                   child: Row(
                                 children: [
@@ -263,8 +534,8 @@ class JournalScreen extends StatelessWidget {
                                       Center(
                                           child: Text(
                                         'Catégorie',
-                                        style: fontFammilyDii(context, 14, noir,
-                                            FontWeight.w500, FontStyle.normal),
+                                        style: fontFammilyDii(context, 13, const Color(0xFF06b6d4),
+                                            FontWeight.w700, FontStyle.normal),
                                       )),
                                     ],
                                   ),
@@ -276,8 +547,8 @@ class JournalScreen extends StatelessWidget {
                                     children: [
                                       Text(
                                         'Titre',
-                                        style: fontFammilyDii(context, 14, noir,
-                                            FontWeight.w500, FontStyle.normal),
+                                        style: fontFammilyDii(context, 13, const Color(0xFF06b6d4),
+                                            FontWeight.w700, FontStyle.normal),
                                       ),
                                     ],
                                   )),
@@ -286,8 +557,8 @@ class JournalScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     'Status',
-                                    style: fontFammilyDii(context, 14, noir,
-                                        FontWeight.w500, FontStyle.normal),
+                                    style: fontFammilyDii(context, 13, const Color(0xFF06b6d4),
+                                        FontWeight.w700, FontStyle.normal),
                                   ),
                                 ],
                               )),
@@ -295,16 +566,17 @@ class JournalScreen extends StatelessWidget {
                                   child: Row(
                                 children: [
                                   Text(
-                                    '...',
-                                    style: fontFammilyDii(context, 14, noir,
-                                        FontWeight.w500, FontStyle.normal),
+                                    'Actions',
+                                    style: fontFammilyDii(context, 13, const Color(0xFF06b6d4),
+                                        FontWeight.w700, FontStyle.normal),
                                   ),
                                 ],
                               )),
                               paddingHorizontalGlobal(8),
                             ],
                           ),
-                          paddingVerticalGlobal(8),
+                          ),
+                          paddingVerticalGlobal(4),
                          Expanded(
                               child: Row(
                             children: [
@@ -369,54 +641,106 @@ class JournalScreen extends StatelessWidget {
                                       })
 
 
-                                      .map((e) => e==null ? SizedBox(): Container(
-                                            height: 50,
-                                            color: blanc,
+                                      .map((e) => Container(
+                                            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Colors.white,
+                                                  Colors.grey.shade50,
+                                                ],
+                                              ),
+                                              borderRadius: BorderRadius.circular(12),
+                                              border: Border.all(
+                                                color: Colors.grey.shade200,
+                                                width: 1,
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black.withOpacity(0.02),
+                                                  blurRadius: 8,
+                                                  offset: const Offset(0, 2),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                borderRadius: BorderRadius.circular(12),
+                                                onTap: () {},
+                                                child: Container(
+                                                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
                                           child: Row(
                                             children: [
                                               paddingHorizontalGlobal(8),
                                               Expanded(
                                                   child: Row(children: [
-                                                    e.id ==null ? Text("") : Text(
+                                                    Container(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                                      decoration: BoxDecoration(
+                                                        gradient: const LinearGradient(
+                                                          colors: [
+                                                            Color(0xFF06b6d4),
+                                                            Color(0xFF3b82f6),
+                                                          ],
+                                                        ),
+                                                        borderRadius: BorderRadius.circular(8),
+                                                      ),
+                                                      child: e.id ==null ? Text("") : Text(
                                                       "#${e.id!.substring(0, 7)}",
-                                                      style: fontFammilyDii(
-                                                          context,
-                                                          12,
-                                                          noir,
-                                                          FontWeight.w500,
-                                                          FontStyle.normal),
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 11,
+                                                        fontWeight: FontWeight.bold,
+                                                        letterSpacing: 0.5,
+                                                      ),
+                                                    ),
                                                     )
                                                   ])),
 
                                             Expanded(
                                                   child: e.author==null ? Text("") : Row(
                                                     children: [
-                                                      CircleAvatar(
+                                                      Container(
+                                                        padding: const EdgeInsets.all(2),
+                                                        decoration: BoxDecoration(
+                                                          gradient: const LinearGradient(
+                                                            colors: [
+                                                              Color(0xFF8b5cf6),
+                                                              Color(0xFFa78bfa),
+                                                            ],
+                                                          ),
+                                                          shape: BoxShape.circle,
+                                                        ),
+                                                        child: CircleAvatar(
                                                         backgroundColor:
-                                                        bleuMarine,
+                                                        const Color(0xFF8b5cf6),
                                                         radius: 16,
                                                         child: Center(
                                                           child: e.author!.nom == null ? Text("") :  Text(
                                                             "${e.author!.prenom!.substring(0,1)}${e.author!.nom!.substring(0,1)}",
-                                                            style: fontFammilyDii(
-                                                                context,
-                                                                10,
-                                                                blanc,
-                                                                FontWeight.w500,
-                                                                FontStyle.normal),
+                                                            style: const TextStyle(
+                                                              color: Colors.white,
+                                                              fontSize: 11,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
+                                                      ),
 
-                                                      paddingHorizontalGlobal(4),
-                                                      e.author!.nom==null ? Text(""): Text(
+                                                      paddingHorizontalGlobal(8),
+                                                      Expanded(
+                                                        child: e.author!.nom==null ? Text(""): Text(
                                                         '${e.author!.prenom!} ${e.author!.nom!}',
+                                                        overflow: TextOverflow.ellipsis,
                                                         style: fontFammilyDii(
                                                             context,
                                                             12,
                                                             noir,
-                                                            FontWeight.w500,
+                                                            FontWeight.w600,
                                                             FontStyle.normal),
+                                                      ),
                                                       ),
 
 
@@ -428,19 +752,35 @@ class JournalScreen extends StatelessWidget {
                                               Expanded(
                                                   child: Row(
                                                     children: [
-                                                      Row(
+                                                      Container(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                                        decoration: BoxDecoration(
+                                                          color: const Color(0xFFef4444).withOpacity(0.1),
+                                                          borderRadius: BorderRadius.circular(8),
+                                                          border: Border.all(
+                                                            color: const Color(0xFFef4444).withOpacity(0.3),
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                        child: Row(
                                                         children: [
-                                                          Center(
-                                                              child: e.categorie==null? Text("") : Text(
+                                                          Icon(
+                                                            CupertinoIcons.tag_fill,
+                                                            size: 12,
+                                                            color: const Color(0xFFef4444),
+                                                          ),
+                                                          paddingHorizontalGlobal(6),
+                                                          e.categorie==null? Text("") : Text(
                                                                 e.categorie!.titre!,
                                                                 style: fontFammilyDii(
                                                                     context,
-                                                                    12,
-                                                                    noir,
-                                                                    FontWeight.w500,
+                                                                    11,
+                                                                    const Color(0xFFef4444),
+                                                                    FontWeight.w700,
                                                                     FontStyle.normal),
-                                                              )),
+                                                              ),
                                                         ],
+                                                      ),
                                                       ),
                                                     ],
                                                   )),
@@ -455,13 +795,14 @@ class JournalScreen extends StatelessWidget {
                                                           overflow:
                                                           TextOverflow
                                                               .ellipsis,
+                                                          maxLines: 2,
                                                           style:
                                                           fontFammilyDii(
                                                               context,
-                                                              14,
+                                                              13,
                                                               noir,
                                                               FontWeight
-                                                                  .w500,
+                                                                  .w600,
                                                               FontStyle
                                                                   .normal),
                                                         ),
@@ -472,51 +813,89 @@ class JournalScreen extends StatelessWidget {
                                               Expanded(
                                                   child: Row(
                                                     children: [
-                                                      paddingHorizontalGlobal(),
+                                                      Container(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                                        decoration: BoxDecoration(
+                                                          gradient: LinearGradient(
+                                                            colors: e.statusOnline! == "on"
+                                                              ? [const Color(0xFF10b981), const Color(0xFF059669)]
+                                                              : [const Color(0xFFef4444), const Color(0xFFdc2626)],
+                                                          ),
+                                                          borderRadius: BorderRadius.circular(20),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: (e.statusOnline! == "on"
+                                                                ? const Color(0xFF10b981)
+                                                                : const Color(0xFFef4444)).withOpacity(0.3),
+                                                              blurRadius: 8,
+                                                              offset: const Offset(0, 2),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: [
                                                       Icon(
                                                         CupertinoIcons
                                                             .circle_fill,
-                                                        size: 10,
-                                                        color: e.statusOnline! ==
-                                                            "on"
-                                                            ? vertSport
-                                                            : rouge,
+                                                        size: 8,
+                                                        color: Colors.white,
                                                       ),
-                                                      paddingHorizontalGlobal(4),
+                                                      paddingHorizontalGlobal(6),
                                                       Text(
                                                         e.statusOnline! == "on"
                                                             ? 'En ligne'
-                                                            : 'Broullions',
-                                                        style: fontFammilyDii(
-                                                            context,
-                                                            14,
-                                                            noir,
-                                                            FontWeight.w500,
-                                                            FontStyle.normal),
+                                                            : 'Brouillon',
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 11,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ],
                                                   )),
 
                                               Expanded(
                                                   child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
                                                     children: [
-                                                      paddingHorizontalGlobal(6),
-                                                      IconButton(
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          color: const Color(0xFF06b6d4).withOpacity(0.1),
+                                                          borderRadius: BorderRadius.circular(8),
+                                                        ),
+                                                        child: IconButton(
                                                           onPressed: () =>
                                                               addArticleBloc
                                                                   .setArticle(
-                                                                  e, 1),
+                                                                  e, 1,
+                                                                  categorieBloc: categorieBloc,
+                                                                  tagsBloc: tagsBloc),
                                                           tooltip:
                                                           "Modifier l'article",
-                                                          icon: Icon(
-                                                              CupertinoIcons
-                                                                  .pen)),
-                                                      paddingHorizontalGlobal(6),
-                                                      IconButton(
+                                                          icon: const Icon(
+                                                            CupertinoIcons.pen,
+                                                            color: Color(0xFF06b6d4),
+                                                            size: 18,
+                                                          ),
+                                                          padding: const EdgeInsets.all(8),
+                                                          constraints: const BoxConstraints(),
+                                                        ),
+                                                      ),
+                                                      paddingHorizontalGlobal(8),
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          color: const Color(0xFFef4444).withOpacity(0.1),
+                                                          borderRadius: BorderRadius.circular(8),
+                                                        ),
+                                                        child: IconButton(
                                                           onPressed: () async =>
                                                               dialogRequest(
                                                                   title:
-                                                                  'Vous êtes sur de vouloir suprimer cette article',
+                                                                  'Vous êtes sûr de vouloir supprimer cet article ?',
                                                                   context:
                                                                   context)
                                                                   .then(
@@ -524,27 +903,36 @@ class JournalScreen extends StatelessWidget {
                                                                     if (value) {
                                                                       addArticleBloc
                                                                           .setArticle(
-                                                                          e, 0);
+                                                                          e, 0,
+                                                                          categorieBloc: categorieBloc,
+                                                                          tagsBloc: tagsBloc);
                                                                       addArticleBloc
                                                                           .activeArticle();
                                                                     }
                                                                   }),
                                                           tooltip: e.statusOnline! ==
                                                               "on"
-                                                              ? "Suprimer l'article"
+                                                              ? "Supprimer l'article"
                                                               : "Remettre en ligne",
-                                                          icon: e.statusOnline! ==
-                                                              "on"
-                                                              ? Icon(
-                                                              CupertinoIcons
-                                                                  .delete)
-                                                              : Icon(Icons
-                                                              .accessibility)),
+                                                          icon: Icon(
+                                                            e.statusOnline! == "on"
+                                                              ? CupertinoIcons.delete
+                                                              : CupertinoIcons.arrow_up_circle,
+                                                            color: const Color(0xFFef4444),
+                                                            size: 18,
+                                                          ),
+                                                          padding: const EdgeInsets.all(8),
+                                                          constraints: const BoxConstraints(),
+                                                        ),
+                                                      ),
                                                     ],
                                                   )),
                                               paddingHorizontalGlobal(8),
                                             ],
-                                          ) ,
+                                          ),
+                                                ),
+                                              ),
+                                            ),
                                           ))
                                       .toList(),
                                 ),
@@ -562,65 +950,164 @@ class JournalScreen extends StatelessWidget {
 
 
                   paddingVerticalGlobal(),
-                  addArticleBloc.articlePagination!.page ==null ? Text("") :  Row(
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Colors.white, Color(0xfff8fafc)],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: const Color(0xFF06b6d4).withOpacity(0.2),
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: addArticleBloc.articlePagination!.page ==null ? Text("") :  Row(
                     children: [
-                      paddingHorizontalGlobal(8),
-                      Text(
-                        "Affichage page N° ${addArticleBloc.articlePagination!.page!}".toUpperCase(),
-                        style: fontFammilyDii(context, 14, noir.withOpacity(.7),
-                            FontWeight.w700, FontStyle.normal),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF06b6d4),
+                              Color(0xFF3b82f6),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              CupertinoIcons.doc_text,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            paddingHorizontalGlobal(8),
+                            Text(
+                        "Page N° ${addArticleBloc.articlePagination!.page!}",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                          ],
+                        ),
                       ),
                       const Spacer(),
-                      GestureDetector(
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
                         onTap: () => addArticleBloc.setPage(addArticleBloc.articlePagination!.page!-1),
-                        child: Card(
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.white,
+                                Colors.grey.shade100,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: const Color(0xFF06b6d4).withOpacity(0.3),
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF06b6d4).withOpacity(0.1),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: SizedBox(
-                                height: 30,
-                                width: 50,
-                                child: Center(
-                                    child: Icon(
-                                  CupertinoIcons.chevron_left,
-                                  size: 14,
-                                  color: noir,
-                                ))),
+                          child: Row(
+                            children: [
+                              const Icon(
+                          CupertinoIcons.chevron_left,
+                          size: 16,
+                          color: Color(0xFF06b6d4),
+                        ),
+                              paddingHorizontalGlobal(6),
+                              Text(
+                                'Précédent',
+                                style: fontFammilyDii(
+                                  context,
+                                  13,
+                                  const Color(0xFF06b6d4),
+                                  FontWeight.w600,
+                                  FontStyle.normal,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      paddingHorizontalGlobal(8),
-                      GestureDetector(
+                      ),
+                      paddingHorizontalGlobal(12),
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
                         onTap: () => addArticleBloc.setPage(addArticleBloc.articlePagination!.page!+1),
-                        child: Card(
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFF06b6d4),
+                                Color(0xFF3b82f6),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF06b6d4).withOpacity(0.3),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: SizedBox(
-                                height: 30,
-                                width: 50,
-                                child: Center(
-                                    child: Icon(
-                                  CupertinoIcons.chevron_right,
-                                  size: 14,
-                                  color: noir,
-                                ))),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Suivant',
+                                style: fontFammilyDii(
+                                  context,
+                                  13,
+                                  Colors.white,
+                                  FontWeight.w600,
+                                  FontStyle.normal,
+                                ),
+                              ),
+                              paddingHorizontalGlobal(6),
+                              const Icon(
+                          CupertinoIcons.chevron_right,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                            ],
                           ),
                         ),
                       ),
-                      paddingHorizontalGlobal(),
+                      ),
                     ],
-                  )
+                  ),
+                  ),
                 ],
-              )
+              ),
+              ),
+              const SizedBox(height: 24),
             ],
           ),
+        ),
         if (addArticleBloc.showUpdate == 1)
           Positioned(
               child: SizedBox(

@@ -1,6 +1,7 @@
 import 'package:actu/bloc/administrateur/article-bloc.dart';
 import 'package:actu/bloc/administrateur/categorie-bloc.dart';
 import 'package:actu/bloc/administrateur/menu-admin.dart';
+import 'package:actu/bloc/administrateur/tags-bloc.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/articles/add-screen-mobile.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/articles/add-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/articles/update-screen-mobile.dart';
@@ -22,6 +23,7 @@ class JournalScreenMobile extends StatelessWidget {
     final menuAdminBloc = Provider.of<MenuAdminBloc>(context);
     final addArticleBloc = Provider.of<AddArticleBloc>(context);
     final categorieBloc = Provider.of<CategorieBloc>(context);
+    final tagsBloc = Provider.of<TagsBloc>(context);
 
     return Stack(
       children: [
@@ -141,31 +143,39 @@ class JournalScreenMobile extends StatelessWidget {
                               DropdownButton(
                                   items: [
                                     'all',
-                                    'on',
-                                    'off',
+                                    'publie',
+                                    'brouillon',
+                                    'archive',
                                   ]
                                       .map((e) => DropdownMenuItem(
                                           value: e,
-                                          child: e == "on"
+                                          child: e == "publie"
                                               ? Text(
-                                                  "En ligne",
+                                                  "Publiés",
                                                   style: TextStyle(
                                                       fontSize: 12,
                                                       color: noir),
                                                 )
-                                              : e == "off"
+                                              : e == "brouillon"
                                                   ? Text(
-                                                      "Broullons",
+                                                      "Brouillons",
                                                       style: TextStyle(
                                                           fontSize: 12,
                                                           color: noir),
                                                     )
-                                                  : Text(
-                                                      "Tous les status",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: noir),
-                                                    )))
+                                                  : e == "archive"
+                                                      ? Text(
+                                                          "Archivés",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: noir),
+                                                        )
+                                                      : Text(
+                                                          "Tous",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: noir),
+                                                        )))
                                       .toList(),
                                   value: addArticleBloc.statusNews,
                                   iconSize: 0.0,
@@ -183,7 +193,10 @@ class JournalScreenMobile extends StatelessWidget {
                       ),
                       const Spacer(),
                       GestureDetector(
-                        onTap: () => menuAdminBloc.setAddArticle(1),
+                        onTap: () {
+                          addArticleBloc.resetAddArticleForm();
+                          menuAdminBloc.setAddArticle(1);
+                        },
                         child: CircleAvatar(
                             backgroundColor: bleuMarine,
                             child: Icon(
@@ -442,7 +455,9 @@ class JournalScreenMobile extends StatelessWidget {
                                                         onTap: () =>
                                                             addArticleBloc
                                                                 .setArticle(
-                                                                    e, 1),
+                                                                    e, 1,
+                                                                    categorieBloc: categorieBloc,
+                                                                    tagsBloc: tagsBloc),
                                                         child: Icon(
                                                           CupertinoIcons.pen,
                                                           size: 14,
@@ -460,7 +475,9 @@ class JournalScreenMobile extends StatelessWidget {
                                                               if (value) {
                                                                 addArticleBloc
                                                                     .setArticle(
-                                                                        e, 0);
+                                                                        e, 0,
+                                                                        categorieBloc: categorieBloc,
+                                                                        tagsBloc: tagsBloc);
                                                                 addArticleBloc
                                                                     .activeArticle();
                                                               }

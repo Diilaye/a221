@@ -1,753 +1,548 @@
-import 'package:actu/screen/adminnistrateur/widgets/dashbord/activity-emission.dart';
-import 'package:actu/screen/adminnistrateur/widgets/dashbord/statistoque-card.dart';
-import 'package:actu/utils/color-by-dii.dart';
-import 'package:actu/utils/widgets/font-fammily-dii.dart';
-import 'package:actu/utils/widgets/padding-global.dart';
+import 'dart:async';
+import 'package:actu/bloc/administrateur/dashboard-stats-bloc.dart';
+import 'package:actu/screen/administrateur/animated-chart.dart';
+import 'package:actu/screen/administrateur/real-time-activity-feed.dart';
+import 'package:actu/screen/administrateur/real-time-stat-card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class OverViewAdmin extends StatelessWidget {
+class OverViewAdmin extends StatefulWidget {
   const OverViewAdmin({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+  State<OverViewAdmin> createState() => _OverViewAdminState();
+}
 
-    return ListView(
-      children: [
-        paddingVerticalGlobal(8),
-        SizedBox(
-          height: 150,
-          child: Row(
-            children: [
-              paddingHorizontalGlobal(8),
-              Expanded(
-                child: StatCard(
-                  title: "Visites",
-                  total: 4000,
-                  percentage: 50,
-                  desc: "Nombre de visites journaliere",
-                  label: "Nouvelles Visites",
-                  increase: 7,
-                  color: bleuMarine,
-                ),
-              ),
-              paddingHorizontalGlobal(8),
-              Expanded(
-                child: StatCard(
-                  title: "Journal Papier",
-                  total: 30,
-                  percentage: 75,
-                  desc: "Nombre de lecture journaliere",
-                  label: "Lecteur en moins",
-                  increase: -17,
-                  color: rouge,
-                ),
-              ),
-              paddingHorizontalGlobal(8),
-              Expanded(
-                child: StatCard(
-                  title: "Posts digitaux",
-                  total: 300,
-                  percentage: 90,
-                  desc: "Nombre de réaction journaliere sur les pots",
-                  label: "Nouvelles internautes",
-                  increase: 20,
-                  color: vertSport,
-                ),
-              ),
-              paddingHorizontalGlobal(8),
-            ],
-          ),
+class _OverViewAdminState extends State<OverViewAdmin> {
+  Timer? _refreshTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Charger les stats au démarrage
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<DashboardStatsBloc>().loadDashboardStats();
+    });
+
+    // Auto-refresh toutes les 30 secondes
+    _refreshTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      if (mounted) {
+        context.read<DashboardStatsBloc>().refresh();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xff0f172a), // Bleu nuit foncé
+            Color(0xff1e293b), // Bleu nuit moyen
+            Color(0xff334155), // Bleu gris
+          ],
         ),
-        paddingVerticalGlobal(),
-        SizedBox(
-          height: 500,
-          child: Row(
-            children: [
-              SizedBox(
-                width: size.width * .01,
-              ),
-              Expanded(
-                  flex: 2,
-                  child: Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              'Activité de lecture journal papier',
-                              style: fontFammilyDii(context, 14, noir,
-                                  FontWeight.bold, FontStyle.normal),
-                            ),
-                            const Spacer(),
-                            Text(
-                              '12 derniers mois',
-                              style: fontFammilyDii(context, 10, noir,
-                                  FontWeight.w300, FontStyle.normal),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Expanded(
-                            child: Row(
-                          children: [
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            const Expanded(
-                                child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Expanded(child: Text('+ M ')),
-                                Expanded(child: Text('8 M ')),
-                                Expanded(child: Text('6 M ')),
-                                Expanded(child: Text('4 M ')),
-                                Expanded(child: Text('2 M ')),
-                                Expanded(child: Text('0 M ')),
-                              ],
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Column(
-                              children: [
-                                Expanded(
-                                    flex: 5,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(200),
-                                          color: noir.withOpacity(.5)),
-                                    )),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                const Text('Jan'),
-                                const SizedBox(
-                                  height: 4,
-                                )
-                              ],
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: noir.withOpacity(.5)),
-                                      )),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text('Fev'),
-                                  const SizedBox(
-                                    height: 4,
-                                  )
-                                ],
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: noir.withOpacity(.5)),
-                                      )),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text('Mar'),
-                                  const SizedBox(
-                                    height: 4,
-                                  )
-                                ],
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: noir.withOpacity(.5)),
-                                      )),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text('Avr'),
-                                  const SizedBox(
-                                    height: 4,
-                                  )
-                                ],
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: noir.withOpacity(.5)),
-                                      )),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text('Mai'),
-                                  const SizedBox(
-                                    height: 4,
-                                  )
-                                ],
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: noir.withOpacity(.5)),
-                                      )),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text('Jui'),
-                                  const SizedBox(
-                                    height: 4,
-                                  )
-                                ],
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: noir.withOpacity(.5)),
-                                      )),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text('Jul'),
-                                  const SizedBox(
-                                    height: 4,
-                                  )
-                                ],
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: noir.withOpacity(.5)),
-                                      )),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text('Aou'),
-                                  const SizedBox(
-                                    height: 4,
-                                  )
-                                ],
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: noir.withOpacity(.5)),
-                                      )),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text('Sep'),
-                                  const SizedBox(
-                                    height: 4,
-                                  )
-                                ],
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: noir.withOpacity(.5)),
-                                      )),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text('Oct'),
-                                  const SizedBox(
-                                    height: 4,
-                                  )
-                                ],
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: noir.withOpacity(.5)),
-                                      )),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text('Nov'),
-                                  const SizedBox(
-                                    height: 4,
-                                  )
-                                ],
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                                child: Container(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: noir.withOpacity(.5)),
-                                      )),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text('Dec'),
-                                  const SizedBox(
-                                    height: 4,
-                                  )
-                                ],
-                              ),
-                            )),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                          ],
-                        )),
-                        SizedBox(
-                          height: 8,
-                        ),
-                      ],
-                    ),
-                  )),
-              SizedBox(
-                width: size.width * .01,
-              ),
-              Expanded(
-                  child: Column(
+      ),
+      child: Consumer<DashboardStatsBloc>(
+        builder: (context, statsBloc, child) {
+          if (statsBloc.isLoading && statsBloc.stats == null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                      flex: 2,
-                      child: ActivyEmission(
-                        title: "${"é".toUpperCase()}mission suivis",
-                        pourcentages: [55, 60, 80],
-                        labels: const ["Complete", "In progess", "Taches"],
-                        colors: [rouge, vertSport, bleuMarine],
-                        // legendes: const ["Complete", "In progess", "Taches"],
-                      )),
-                ],
-              )),
-              SizedBox(
-                width: size.width * .01,
-              ),
-            ],
-          ),
-        ),
-        paddingVerticalGlobal(8),
-        SizedBox(
-          height: 500,
-          width: size.width,
-          child: Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              children: [
-                paddingVerticalGlobal(8),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Text(
-                      "Journal d'Article",
-                      style: fontFammilyDii(
-                          context, 14, noir, FontWeight.bold, FontStyle.normal),
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      const Color(0xFF06b6d4),
                     ),
-                  ],
-                ),
-                paddingVerticalGlobal(8),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Expanded(
-                        child: Row(children: [
-                      Text(
-                        'ID',
-                        style: fontFammilyDii(context, 14, noir,
-                            FontWeight.w500, FontStyle.normal),
-                      )
-                    ])),
-                    Expanded(
-                        child: Row(
-                      children: [
-                        Text(
-                          'Author',
-                          style: fontFammilyDii(context, 14, noir,
-                              FontWeight.w500, FontStyle.normal),
-                        ),
-                      ],
-                    )),
-                    Expanded(
-                        child: Row(
-                      children: [
-                        Text(
-                          'Date',
-                          style: fontFammilyDii(context, 14, noir,
-                              FontWeight.w500, FontStyle.normal),
-                        ),
-                      ],
-                    )),
-                    Expanded(
-                        child: Row(
-                      children: [
-                        Row(
-                          children: [
-                            Center(
-                                child: Text(
-                              'Catégorie',
-                              style: fontFammilyDii(context, 14, noir,
-                                  FontWeight.w500, FontStyle.normal),
-                            )),
-                          ],
-                        ),
-                      ],
-                    )),
-                    Expanded(
-                        child: Row(
-                      children: [
-                        Text(
-                          'Titre',
-                          style: fontFammilyDii(context, 14, noir,
-                              FontWeight.w500, FontStyle.normal),
-                        ),
-                      ],
-                    )),
-                    Expanded(
-                        child: Row(
-                      children: [
-                        Text(
-                          'Status',
-                          style: fontFammilyDii(context, 14, noir,
-                              FontWeight.w500, FontStyle.normal),
-                        ),
-                      ],
-                    )),
-                    Expanded(
-                        child: Row(
-                      children: [
-                        Text(
-                          '...',
-                          style: fontFammilyDii(context, 14, noir,
-                              FontWeight.w500, FontStyle.normal),
-                        ),
-                      ],
-                    )),
-                    paddingHorizontalGlobal(8),
-                  ],
-                ),
-                paddingVerticalGlobal(8),
-                Expanded(
-                    child: Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Expanded(
-                      child: ListView(
-                        children: List.generate(
-                            20,
-                            (int index) => Container(
-                                  height: 50,
-                                  color: (index % 2) == 0 ? blanc : gris,
-                                  child: Row(
-                                    children: [
-                                      paddingHorizontalGlobal(8),
-                                      Expanded(
-                                          child: Row(children: [
-                                        Text(
-                                          "#790841",
-                                          style: fontFammilyDii(
-                                              context,
-                                              14,
-                                              noir,
-                                              FontWeight.w500,
-                                              FontStyle.normal),
-                                        )
-                                      ])),
-                                      Expanded(
-                                          child: Row(
-                                        children: [
-                                          CircleAvatar(
-                                            backgroundColor: bleuMarine,
-                                            radius: 16,
-                                            child: Center(
-                                              child: Text(
-                                                'SA',
-                                                style: fontFammilyDii(
-                                                    context,
-                                                    10,
-                                                    blanc,
-                                                    FontWeight.w500,
-                                                    FontStyle.normal),
-                                              ),
-                                            ),
-                                          ),
-                                          paddingHorizontalGlobal(4),
-                                          Text(
-                                            'Issa Kane',
-                                            style: fontFammilyDii(
-                                                context,
-                                                14,
-                                                noir,
-                                                FontWeight.w500,
-                                                FontStyle.normal),
-                                          ),
-                                        ],
-                                      )),
-                                      Expanded(
-                                          child: Row(
-                                        children: [
-                                          Text(
-                                            '	12.07.2018',
-                                            style: fontFammilyDii(
-                                                context,
-                                                14,
-                                                noir,
-                                                FontWeight.w500,
-                                                FontStyle.normal),
-                                          ),
-                                        ],
-                                      )),
-                                      Expanded(
-                                          child: Row(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Center(
-                                                  child: Text(
-                                                (index % 2) == 0
-                                                    ? 'Politique'
-                                                    : 'Economique',
-                                                style: fontFammilyDii(
-                                                    context,
-                                                    14,
-                                                    noir,
-                                                    FontWeight.w500,
-                                                    FontStyle.normal),
-                                              )),
-                                            ],
-                                          ),
-                                        ],
-                                      )),
-                                      Expanded(
-                                          child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              (index % 2) == 0
-                                                  ? 'Winding Way West, RI 3261, US'
-                                                  : 'Jarvis Street Portville, NY 2596, US',
-                                              overflow: TextOverflow.clip,
-                                              style: fontFammilyDii(
-                                                  context,
-                                                  14,
-                                                  noir,
-                                                  FontWeight.w500,
-                                                  FontStyle.normal),
-                                            ),
-                                          ),
-                                        ],
-                                      )),
-                                      Expanded(
-                                          child: Row(
-                                        children: [
-                                          Icon(
-                                            CupertinoIcons.circle,
-                                            size: 8,
-                                            color: (index % 2) == 0
-                                                ? vertSport
-                                                : bleuMarine,
-                                          ),
-                                          paddingHorizontalGlobal(4),
-                                          Text(
-                                            (index % 2) == 0
-                                                ? 'En ligne'
-                                                : 'Pending',
-                                            style: fontFammilyDii(
-                                                context,
-                                                14,
-                                                noir,
-                                                FontWeight.w500,
-                                                FontStyle.normal),
-                                          ),
-                                        ],
-                                      )),
-                                      Expanded(
-                                          child: Row(
-                                        children: [
-                                          paddingHorizontalGlobal(6),
-                                          Text(
-                                            '...',
-                                            style: fontFammilyDii(
-                                                context,
-                                                14,
-                                                noir,
-                                                FontWeight.w500,
-                                                FontStyle.normal),
-                                          ),
-                                        ],
-                                      )),
-                                      paddingHorizontalGlobal(8),
-                                    ],
-                                  ),
-                                )),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Chargement des statistiques...',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          final stats = statsBloc.stats;
+          if (stats == null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    CupertinoIcons.exclamationmark_triangle,
+                    color: const Color(0xFFef4444),
+                    size: 64,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Erreur de chargement',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    statsBloc.error ?? 'Erreur inconnue',
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: () => statsBloc.refresh(),
+                    icon: const Icon(CupertinoIcons.refresh),
+                    label: const Text('Réessayer'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF06b6d4),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
                       ),
                     ),
-                    paddingHorizontalGlobal(8)
-                  ],
-                )),
-                paddingVerticalGlobal(8)
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return RefreshIndicator(
+            onRefresh: () => statsBloc.refresh(),
+            color: const Color(0xFF06b6d4),
+            backgroundColor: const Color(0xFF1a1a2e),
+            child: ListView(
+              children: [
+                const SizedBox(height: 24),
+                // Header futuriste
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              const Color(0xFF06b6d4).withOpacity(0.3),
+                              const Color(0xFFef4444).withOpacity(0.3),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: const Color(0xFF06b6d4).withOpacity(0.5),
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF06b6d4).withOpacity(0.3),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          CupertinoIcons.chart_bar_alt_fill,
+                          color: Color(0xFF06b6d4),
+                          size: 28,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Dashboard A221',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFF10b981),
+                                    Color(0xFF059669),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.dot_radiowaves_left_right,
+                                    color: Colors.white,
+                                    size: 12,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'EN DIRECT',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Bouton rafraîchir
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.2),
+                            width: 1,
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: () => statsBloc.refresh(),
+                          icon: Icon(
+                            CupertinoIcons.refresh,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                          tooltip: 'Actualiser',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 32),
+                
+                // Statistiques principales avec RealTimeStatCard
+                SizedBox(
+                  height: 220,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    children: [
+                      SizedBox(
+                        width: 320,
+                        child: RealTimeStatCard(
+                          title: 'Visites Totales',
+                          value: stats.totalVisites,
+                          growth: stats.visiteGrowth,
+                          icon: CupertinoIcons.eye_fill,
+                          primaryColor: const Color(0xFF06b6d4),
+                          accentColor: const Color(0xFF3b82f6),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      SizedBox(
+                        width: 320,
+                        child: RealTimeStatCard(
+                          title: 'Articles Publiés',
+                          value: stats.totalArticles,
+                          growth: stats.articleGrowth,
+                          icon: CupertinoIcons.doc_text_fill,
+                          primaryColor: const Color(0xFFef4444),
+                          accentColor: const Color(0xFFf59e0b),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      SizedBox(
+                        width: 320,
+                        child: RealTimeStatCard(
+                          title: 'Journal Papier',
+                          value: stats.totalJournalPapier,
+                          growth: stats.journalGrowth,
+                          icon: CupertinoIcons.news_solid,
+                          primaryColor: const Color(0xFF8b5cf6),
+                          accentColor: const Color(0xFFa78bfa),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      SizedBox(
+                        width: 320,
+                        child: RealTimeStatCard(
+                          title: 'Posts Digitaux',
+                          value: stats.totalPostsDigitaux,
+                          growth: stats.postGrowth,
+                          icon: CupertinoIcons.chart_bar_square_fill,
+                          primaryColor: const Color(0xFF10b981),
+                          accentColor: const Color(0xFF34d399),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 32),
+                
+                // Graphique d'activité mensuelle
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color(0xFFef4444),
+                                  Color(0xFFf59e0b),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              CupertinoIcons.chart_bar_fill,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Publications Mensuelles',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Évolution sur 12 mois',
+                                style: TextStyle(
+                                  color: Colors.white60,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      AnimatedChart(
+                        data: stats.monthlyArticles
+                            .map((e) => e.count.toDouble())
+                            .toList(),
+                        labels: stats.monthlyArticles
+                            .map((e) => e.month)
+                            .toList(),
+                        primaryColor: const Color(0xFF06b6d4),
+                        accentColor: const Color(0xFFef4444),
+                        height: 280,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 32),
+                
+                // Activité en temps réel
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: RealTimeActivityFeed(
+                    activities: stats.recentActivity,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                
+                // Catégories principales
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF1a1a2e),
+                          Color(0xFF16213e),
+                          Color(0xFF0f3460),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFF8b5cf6).withOpacity(0.3),
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF8b5cf6).withOpacity(0.2),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFF8b5cf6),
+                                    Color(0xFFa78bfa),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(
+                                CupertinoIcons.square_grid_2x2_fill,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Top Catégories',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Répartition par contenu',
+                                  style: TextStyle(
+                                    color: Colors.white60,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        ...stats.topCategories.map((category) {
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      category.name,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${category.count}',
+                                          style: const TextStyle(
+                                            color: Color(0xFF8b5cf6),
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          '${category.percentage.toStringAsFixed(1)}%',
+                                          style: const TextStyle(
+                                            color: Colors.white60,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        height: 8,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.1),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      FractionallySizedBox(
+                                        widthFactor: category.percentage / 100,
+                                        child: Container(
+                                          height: 8,
+                                          decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              colors: [
+                                                Color(0xFF8b5cf6),
+                                                Color(0xFFa78bfa),
+                                              ],
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: const Color(0xFF8b5cf6)
+                                                    .withOpacity(0.5),
+                                                blurRadius: 8,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
               ],
             ),
-          ),
-        ),
-        paddingVerticalGlobal(8),
-        SizedBox(
-          height: 500,
-          width: size.width,
-          child: Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            color: blanc,
-          ),
-        ),
-        paddingVerticalGlobal(8),
-        SizedBox(
-          height: 500,
-          width: size.width,
-          child: Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            color: blanc,
-          ),
-        ),
-        paddingVerticalGlobal(),
-      ],
+          );
+        },
+      ),
     );
   }
 }

@@ -1,174 +1,165 @@
 import 'package:actu/bloc/utilisateur/home-bloc.dart';
 import 'package:actu/models/administrateur/article-model.dart';
-import 'package:actu/utils/color-by-dii.dart';
 import 'package:actu/utils/requette-by-dii.dart';
-import 'package:actu/utils/widgets/font-fammily-dii.dart';
-import 'package:actu/utils/widgets/htm-to-string-dii.dart';
-import 'package:actu/utils/widgets/padding-global.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'dart:js' as js;
 
-class SectionDossierRedactionWidget extends StatelessWidget {
+class SectionDossierRedactionWidget extends StatefulWidget {
   final ArticlesModel? articles;
   const SectionDossierRedactionWidget({super.key, this.articles = null});
 
   @override
+  State<SectionDossierRedactionWidget> createState() => _SectionDossierRedactionWidgetState();
+}
+
+class _SectionDossierRedactionWidgetState extends State<SectionDossierRedactionWidget> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
-    Size size = MediaQuery.of(context).size;
+    
     return Expanded(
-        flex: 1,
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
+      flex: 1,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 2),
+          decoration: BoxDecoration(
+            color: Colors.white,
+          //  borderRadius: BorderRadius.circular(12),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.black.withOpacity(_isHovered ? 0.12 : 0.08),
+            //     blurRadius: _isHovered ? 20 : 15,
+            //     offset: Offset(0, _isHovered ? 8 : 5),
+            //   ),
+            // ],
+          ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                  child: Stack(
-                children: [
-                  Container(
+              Hero(
+                tag: widget.articles!.slug!,
+                child: GestureDetector(
+                  onTap: () {
+                    homeUtilisateurBloc.setAticle(widget.articles!);
+                    js.context.callMethod('open', [
+                      'https://a221.net/article/${widget.articles!.slug!}',
+                      '_self'
+                    ]);
+                  },
+                  child: Container(
+                    height: 240,
+                    width: double.infinity,
                     decoration: BoxDecoration(
-                        color: blanc,
-                        border: Border.all(color: noir, width: .5),
-                        boxShadow: [BoxShadow(blurRadius: .5, color: noir)]),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12),
+                      ),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          BASE_URL_ASSET + widget.articles!.imageArticle!.url!,
+                        ),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
-                  Positioned(
-                      top: 1,
-                      right: 1,
-                      left: 1,
-                      child: GestureDetector(
-                        onTap: () {
-                          homeUtilisateurBloc.setAticle(articles!);
-                          js.context.callMethod('open', [
-                            'https://a221.net/article/${articles!.slug!}',
-                            '_self'
-                          ]);
-                        },
-                        child: Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(BASE_URL_ASSET +
-                                      articles!.imageArticle!.url!),
-                                  fit: BoxFit.fill)),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        context.go('/tag/${widget.articles!.tags!.slug!}');
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
                         ),
-                      )),
-                  Positioned(
-                      top: 175,
-                      left: 8,
-                      right: 8,
-                      child: GestureDetector(
-                        onTap: () {
-                          context.go('/tag/${articles!.tags!.slug!}');
-                        },
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(color: blanc, boxShadow: [
-                            BoxShadow(blurRadius: 1, color: noir)
-                          ]),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  articles!.tags!.titre!.toUpperCase(),
-                                  style: fontFammilyDii(
-                                      context,
-                                      size.width >= 1440
-                                          ? 14
-                                          : size.width >= 1024 &&
-                                                  size.width < 1440
-                                              ? 12
-                                              : 10,
-                                      rouge,
-                                      FontWeight.bold,
-                                      FontStyle.normal),
-                                ),
-                              ]),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE53935).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: const Color(0xFFE53935).withOpacity(0.3),
+                            width: 1,
+                          ),
                         ),
-                      )),
-                  Positioned(
-                      top: 230,
-                      left: 8,
-                      right: 8,
-                      child: GestureDetector(
-                        onTap: () {
-                          homeUtilisateurBloc.setAticle(articles!);
-                          js.context.callMethod('open', [
-                            'https://a221.net/article/${articles!.slug!}',
-                            '_self'
-                          ]);
-                        },
-                        child: Column(
-                          children: [
-                            HtmlWidget(
-                              articles!.titre!,
-                              customStylesBuilder: (element) {
-
-                                if (element.classes.contains('ql-align-center')) {
-                                  return {
-                                    'text-align': 'center',
-                                  };
-                                }
-                                if (element.classes.contains('ql-align-justify')) {
-                                  return {
-                                    'text-align': 'justify',
-                                  };
-                                }
-                                return  { 'fontSize': '16px', 'text-align': 'justify' , 'line-height': '1.5','word-wrap': 'break-word' , 'font-weigth':'bold'};
-                              },
-                              textStyle: TextStyle(fontSize: 16, color: noir  , fontWeight: FontWeight.bold),
-                            ),
-
-                            paddingVerticalGlobal(8),
-                            HtmlWidget(
-                              extractFirstTwoSentences(
-                                  articles!.description!, 1),
-                              customStylesBuilder: (element) {
-
-                                if (element.classes.contains('ql-align-center')) {
-                                  return {
-                                    'text-align': 'center',
-                                  };
-                                }
-                                if (element.classes.contains('ql-align-justify')) {
-                                  return {
-                                    'text-align': 'justify',
-                                  };
-                                }
-                                return  { 'fontSize': '13px', 'text-align': 'justify' , 'line-height': '1.5','word-wrap': 'break-word'};
-                              },
-                              textStyle: TextStyle(fontSize: 13, color: noir),
-                            ),
-                            paddingVerticalGlobal(8),
-                            // Center(
-                            //   child: Container(
-                            //     height: 25,
-                            //     width: 150,
-                            //     color: noir,
-                            //     child: Row(
-                            //       mainAxisAlignment: MainAxisAlignment.center,
-                            //       children: [
-                            //         paddingHorizontalGlobal(8),
-                            //         Text(
-                            //           'lire la suite'.toUpperCase(),
-                            //           style: fontFammilyDii(context, 12, blanc,
-                            //               FontWeight.w300, FontStyle.normal),
-                            //         ),
-                            //         paddingHorizontalGlobal(8),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // ),
-                          ],
+                        child: Text(
+                          widget.articles!.tags!.titre!.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 8,
+                            color: Color(0xFFE53935),
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.5,
+                          ),
                         ),
-                      ))
-                ],
-              ))
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: () {
+                        homeUtilisateurBloc.setAticle(widget.articles!);
+                        js.context.callMethod('open', [
+                          'https://a221.net/article/${widget.articles!.slug!}',
+                          '_self'
+                        ]);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.black.withOpacity(0.05),
+                            width: 1,
+                          ),
+                        ),
+                        child: HtmlWidget(
+                          widget.articles!.titre!,
+                          customStylesBuilder: (element) {
+                            if (element.classes.contains('ql-align-center')) {
+                              return {'text-align': 'center'};
+                            }
+                            if (element.classes.contains('ql-align-justify')) {
+                              return {'text-align': 'justify'};
+                            }
+                            return {
+                              'fontSize': '12px',
+                              'text-align': 'left',
+                              'line-height': '1.4',
+                              'word-wrap': 'break-word',
+                              'font-weight': '700',
+                              'letter-spacing': '-0.3px',
+                              'color': '#1A1A1A',
+                            };
+                          },
+                          textStyle: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF1A1A1A),
+                            fontWeight: FontWeight.w700,
+                            height: 1.4,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
