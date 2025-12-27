@@ -28,6 +28,7 @@ import 'package:actu/screen/utilisateur/pages/home-screen.dart';
 import 'package:actu/screen/utilisateur/pages/mobiles/article-recents-screen.dart';
 import 'package:actu/screen/utilisateur/pages/tag-screen.dart';
 import 'package:actu/utils/color-by-dii.dart';
+import 'package:actu/utils/web_error_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -193,18 +194,9 @@ void main() {
   setUrlStrategy(PathUrlStrategy());
 
   // Gestion simple des erreurs web sans traitement complexe
+  // Installer le handler web centralisé
   if (kIsWeb) {
-    FlutterError.onError = (details) {
-      // Ignorer complètement les erreurs web communes
-      final error = details.exception.toString();
-      if (error.contains('Cannot send Null') || 
-          error.contains('LegacyJavaScriptObject') ||
-          error.contains('DebugService')) {
-        return; // Ne rien faire
-      }
-      // Laisser les autres erreurs passer par le système par défaut
-      FlutterError.presentError(details);
-    };
+    WebErrorHandler.setupWebErrorHandling();
   }
 
   runApp(
