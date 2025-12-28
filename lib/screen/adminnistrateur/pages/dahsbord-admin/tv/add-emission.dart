@@ -1,4 +1,3 @@
-// import 'package:actu/bloc/administrateur/article-bloc.dart';
 import 'package:actu/bloc/administrateur/emission-bloc.dart';
 import 'package:actu/bloc/administrateur/menu-admin.dart';
 import 'package:actu/screen/adminnistrateur/pages/image-screen/image-sccren-ui.dart';
@@ -18,497 +17,885 @@ class AddEmissionScreen extends StatefulWidget {
   State<AddEmissionScreen> createState() => _AddEmissionScreenState();
 }
 
-class _AddEmissionScreenState extends State<AddEmissionScreen> {
-  ///[customToolBarList] pass the custom toolbarList to show only selected styles in the editor
+class _AddEmissionScreenState extends State<AddEmissionScreen> 
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
     final emissionBloc = Provider.of<EmissionBloc>(context);
     final menuAdminBloc = Provider.of<MenuAdminBloc>(context);
 
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(-5, 0),
+          ),
+        ],
       ),
       child: emissionBloc.parcourirFile == 0
-          ? ListView(
-              children: [
-                paddingVerticalGlobal(),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Text(
-                      'Ajouter Emission'.toUpperCase(),
-                      style: fontFammilyDii(context, 18, rouge, FontWeight.bold,
-                          FontStyle.normal),
-                    )
-                  ],
-                ),
-                paddingVerticalGlobal(),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Text(
-                      'titre émission'.toUpperCase(),
-                      style: fontFammilyDii(context, 14, noir.withOpacity(.5),
-                          FontWeight.w300, FontStyle.normal),
-                    )
-                  ],
-                ),
-                paddingVerticalGlobal(8),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Expanded(
-                      child: TextField(
-                        controller: emissionBloc.titre,
-                        decoration: InputDecoration(
-                          hintText: "Ajouter titre  émission".toUpperCase(),
-                          border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    paddingHorizontalGlobal(8),
-                  ],
-                ),
-                paddingVerticalGlobal(),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Text(
-                      'Url média'.toUpperCase(),
-                      style: fontFammilyDii(context, 14, noir.withOpacity(.5),
-                          FontWeight.w300, FontStyle.normal),
-                    )
-                  ],
-                ),
-                paddingVerticalGlobal(),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Expanded(
-                      child: TextField(
-                        controller: emissionBloc.url,
-                        decoration: InputDecoration(
-                          hintText: "url média".toUpperCase(),
-                          border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    paddingHorizontalGlobal(8),
-                  ],
-                ),
-                paddingVerticalGlobal(),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Text(
-                      'Description émission'.toUpperCase(),
-                      style: fontFammilyDii(context, 14, noir.withOpacity(.5),
-                          FontWeight.w300, FontStyle.normal),
-                    )
-                  ],
-                ),
-                paddingVerticalGlobal(),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Expanded(
-                      child: TextField(
-                        controller: emissionBloc.desc,
-                        decoration: InputDecoration(
-                          hintText: "Description émission ".toUpperCase(),
-                          border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    paddingHorizontalGlobal(8),
-                  ],
-                ),
-                paddingVerticalGlobal(),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Text(
-                      'heure'.toUpperCase(),
-                      style: fontFammilyDii(context, 14, noir.withOpacity(.5),
-                          FontWeight.w300, FontStyle.normal),
-                    )
-                  ],
-                ),
-                paddingVerticalGlobal(),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Expanded(
-                      child: TextField(
-                        controller: emissionBloc.heure,
-                        decoration: InputDecoration(
-                          hintText: "Heure ".toUpperCase(),
-                          border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    paddingHorizontalGlobal(8),
-                  ],
-                ),
-                paddingVerticalGlobal(),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: () => emissionBloc.setParcourirFile(1),
-                      child: Container(
-                        height: 120,
-                        decoration: BoxDecoration(
-                            color: bleuMarine.withOpacity(.5),
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Center(
-                          child: Text(
-                            emissionBloc.fileModel == null
-                                ? "Parcourir dans les fichier"
-                                : "Image selectionnée avec success",
-                            style: fontFammilyDii(context, 14, blanc,
-                                FontWeight.w600, FontStyle.normal),
-                          ),
-                        ),
-                      ),
-                    )),
-                    paddingHorizontalGlobal(8),
-                    emissionBloc.fileModel == null
-                        ? Expanded(
-                            child: GestureDetector(
-                            onTap: () => emissionBloc.getImagePost(),
-                            child: Container(
-                              height: 120,
-                              decoration: BoxDecoration(
-                                  color: noir.withOpacity(.5),
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: Center(
-                                child: Text(
-                                  emissionBloc.imagePost[0] == null
-                                      ? "Cliquer pour uploader le fichier"
-                                      : "image uploadée avec success",
-                                  style: fontFammilyDii(context, 14, blanc,
-                                      FontWeight.w600, FontStyle.normal),
-                                ),
-                              ),
-                            ),
-                          ))
-                        : const SizedBox(),
-                    paddingHorizontalGlobal(8),
-                  ],
-                ),
-                paddingVerticalGlobal(),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () => emissionBloc.setTypeEmission(0),
-                        child: Card(
-                          elevation: 4,
-                          color: emissionBloc.typeEmission == 0
-                              ? bleuMarine
-                              : blanc,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(2)),
-                          child: Container(
-                            height: 50,
-                            width: 170,
-                            child: Center(
-                              child: Text(
-                                'Invité'.toUpperCase(),
-                                style: fontFammilyDii(
-                                    context,
-                                    12,
-                                    emissionBloc.typeEmission == 0
-                                        ? blanc
-                                        : noir,
-                                    FontWeight.bold,
-                                    FontStyle.normal),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    paddingHorizontalGlobal(),
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () => emissionBloc.setTypeEmission(1),
-                        child: Card(
-                          color: emissionBloc.typeEmission == 1
-                              ? bleuMarine
-                              : blanc,
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(2)),
-                          child: SizedBox(
-                            height: 50,
-                            width: 170,
-                            child: Center(
-                              child: Text(
-                                'à suivre'.toUpperCase(),
-                                style: fontFammilyDii(
-                                    context,
-                                    12,
-                                    emissionBloc.typeEmission == 1
-                                        ? blanc
-                                        : noir,
-                                    FontWeight.bold,
-                                    FontStyle.normal),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                paddingVerticalGlobal(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Card(
-                      elevation: 2,
-                      color: bleuMarine,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                      child: GestureDetector(
-                        onTap: () => emissionBloc.addEmission(),
-                        child: SizedBox(
-                          height: 40,
-                          child: Row(
-                            children: [
-                              paddingHorizontalGlobal(6),
-                              emissionBloc.chargement
-                                  ? CircularProgressIndicator(
-                                      backgroundColor: blanc,
-                                      color: bleuMarine,
-                                    )
-                                  : Text(
-                                      "Ajouter émission",
-                                      style: fontFammilyDii(context, 14, blanc,
-                                          FontWeight.bold, FontStyle.normal),
-                                    ),
-                              paddingHorizontalGlobal(6),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    paddingHorizontalGlobal(),
-                    GestureDetector(
-                      onTap: () => menuAdminBloc.setEmission(0),
-                      child: Card(
-                        elevation: 2,
-                        color: blanc,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        child: SizedBox(
-                          height: 40,
-                          child: Row(
-                            children: [
-                              paddingHorizontalGlobal(6),
-                              Text(
-                                "Annuler ",
-                                style: fontFammilyDii(context, 14, noir,
-                                    FontWeight.bold, FontStyle.normal),
-                              ),
-                              paddingHorizontalGlobal(6),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    paddingHorizontalGlobal()
-                  ],
-                ),
-                paddingVerticalGlobal(),
-              ],
+          ? FadeTransition(
+              opacity: _fadeAnimation,
+              child: ListView(
+                padding: const EdgeInsets.all(32),
+                children: [
+                  _buildHeader(context, menuAdminBloc),
+                  const SizedBox(height: 32),
+                  _buildForm(context, emissionBloc),
+                  const SizedBox(height: 32),
+                  _buildActions(context, emissionBloc, menuAdminBloc),
+                  const SizedBox(height: 32),
+                ],
+              ),
             )
-          : Column(
+          : _buildMediaBrowser(context, emissionBloc),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, MenuAdminBloc menuAdminBloc) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            rouge.withOpacity(0.9),
+            const Color(0xFFE31E24),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: rouge.withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(CupertinoIcons.add_circled_solid, color: blanc, size: 32),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                paddingVerticalGlobal(),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Text(
-                      'Rechercher média'.toUpperCase(),
-                      style: fontFammilyDii(context, 18, rouge, FontWeight.bold,
-                          FontStyle.normal),
-                    )
-                  ],
+                Text(
+                  'NOUVELLE ÉMISSION',
+                  style: TextStyle(
+                    color: blanc,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.5,
+                  ),
                 ),
-                paddingVerticalGlobal(8),
-                Row(
-                  children: [
-                    paddingHorizontalGlobal(8),
-                    Expanded(
-                      child: TextField(
-                        onChanged: (value) {
-                          emissionBloc.setRecherche(value);
-                        },
-                        decoration: const InputDecoration(
-                          border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    paddingHorizontalGlobal(8),
-                  ],
+                const SizedBox(height: 4),
+                Text(
+                  'Créez et configurez une nouvelle émission TV',
+                  style: TextStyle(
+                    color: blanc.withOpacity(0.9),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-                paddingVerticalGlobal(),
-                Expanded(
-                    child: GridView.count(
-                  crossAxisCount: 5,
-                  childAspectRatio: .8,
-                  crossAxisSpacing: 6,
-                  children: emissionBloc.filesModel.reversed
-                      .where((e) => e.url!
-                          .split("/")
-                          .last
-                          .toLowerCase()
-                          .contains(emissionBloc.recherche.toLowerCase()))
-                      .map((e) => GestureDetector(
-                            onTap: () => emissionBloc.setFileModel(e),
-                            child: Container(
-                              color: blanc,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    if (e == emissionBloc.fileModel)
-                                      SizedBox(
-                                        height: 20,
-                                        child: Row(
-                                          children: [
-                                            const Spacer(),
-                                            Container(
-                                              height: 20,
-                                              width: 20,
-                                              decoration: BoxDecoration(
-                                                  color: vertSport,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    Expanded(
-                                      child: CachedNetworkImage(
-                                        imageUrl: BASE_URL_ASSET + e.url!,
-                                        placeholder: (context, url) => Center(
-                                          child: const SizedBox(
-                                              height: 50,
-                                              width: 50,
-                                              child:
-                                                  CircularProgressIndicator()),
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.error),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 20,
-                                      child: Center(
-                                        child: Text(e.url!
-                                            .split("/")
-                                            .last
-                                            .split(".")[e.url!
-                                                .split("/")
-                                                .last
-                                                .split(".")
-                                                .length -
-                                            2]),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                )),
-                paddingVerticalGlobal(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Card(
-                      elevation: 2,
-                      color: bleuMarine,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                      child: GestureDetector(
-                        onTap: emissionBloc.fileModel != null
-                            ? () => emissionBloc.setParcourirFile(0)
-                            : null,
-                        child: SizedBox(
-                          height: 40,
-                          child: Row(
-                            children: [
-                              paddingHorizontalGlobal(6),
-                              emissionBloc.chargement
-                                  ? CircularProgressIndicator(
-                                      backgroundColor: blanc,
-                                      color: bleuMarine,
-                                    )
-                                  : Text(
-                                      "Selectionner le média",
-                                      style: fontFammilyDii(context, 14, blanc,
-                                          FontWeight.bold, FontStyle.normal),
-                                    ),
-                              paddingHorizontalGlobal(6),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    paddingHorizontalGlobal(),
-                    GestureDetector(
-                      onTap: () => emissionBloc.setParcourirFile(0),
-                      child: Card(
-                        elevation: 2,
-                        color: blanc,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        child: SizedBox(
-                          height: 40,
-                          child: Row(
-                            children: [
-                              paddingHorizontalGlobal(6),
-                              Text(
-                                "Annuler",
-                                style: fontFammilyDii(context, 14, noir,
-                                    FontWeight.bold, FontStyle.normal),
-                              ),
-                              paddingHorizontalGlobal(6),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    paddingHorizontalGlobal()
-                  ],
-                ),
-                paddingVerticalGlobal(),
               ],
             ),
+          ),
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () => menuAdminBloc.setEmission(0),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(CupertinoIcons.xmark, color: blanc, size: 24),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Widget _buildForm(BuildContext context, EmissionBloc emissionBloc) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Titre
+        _buildTextField(
+          context,
+          label: 'Titre de l\'émission',
+          hint: 'Entrez le titre de l\'émission',
+          controller: emissionBloc.titre,
+          icon: CupertinoIcons.textformat,
+        ),
+        const SizedBox(height: 24),
+        
+        // URL média
+        _buildTextField(
+          context,
+          label: 'URL du média',
+          hint: 'https://exemple.com/video.mp4',
+          controller: emissionBloc.url,
+          icon: CupertinoIcons.link,
+        ),
+        const SizedBox(height: 24),
+        
+        // Description
+        _buildTextField(
+          context,
+          label: 'Description',
+          hint: 'Décrivez brièvement l\'émission',
+          controller: emissionBloc.desc,
+          icon: CupertinoIcons.doc_text,
+          maxLines: 4,
+        ),
+        const SizedBox(height: 24),
+        
+        // Heure
+        _buildTextField(
+          context,
+          label: 'Heure de diffusion',
+          hint: '20:00',
+          controller: emissionBloc.heure,
+          icon: CupertinoIcons.time,
+        ),
+        const SizedBox(height: 24),
+        
+        // Image Upload Section
+        Text(
+          'PHOTO DE COUVERTURE',
+          style: TextStyle(
+            color: noir,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildImageUploadButton(
+                context,
+                label: emissionBloc.fileModel == null
+                    ? 'Parcourir la bibliothèque'
+                    : 'Image sélectionnée ✓',
+                icon: CupertinoIcons.photo_on_rectangle,
+                onTap: () => emissionBloc.setParcourirFile(1),
+                color: rouge,
+                isSelected: emissionBloc.fileModel != null,
+              ),
+            ),
+            if (emissionBloc.fileModel == null) ...[
+              const SizedBox(width: 16),
+              Expanded(
+                child: _buildImageUploadButton(
+                  context,
+                  label: emissionBloc.imagePost[0] == null
+                      ? 'Uploader un fichier'
+                      : 'Fichier uploadé ✓',
+                  icon: CupertinoIcons.cloud_upload,
+                  onTap: () => emissionBloc.getImagePost(),
+                  color: Colors.blue,
+                  isSelected: emissionBloc.imagePost[0] != null,
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 24),
+        
+        // Type d'émission
+        Text(
+          'TYPE D\'ÉMISSION',
+          style: TextStyle(
+            color: noir,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildTypeButton(
+                context,
+                label: 'Invité',
+                icon: CupertinoIcons.person_2_fill,
+                isSelected: emissionBloc.typeEmission == 0,
+                onTap: () => emissionBloc.setTypeEmission(0),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildTypeButton(
+                context,
+                label: 'À suivre',
+                icon: CupertinoIcons.play_circle_fill,
+                isSelected: emissionBloc.typeEmission == 1,
+                onTap: () => emissionBloc.setTypeEmission(1),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextField(
+    BuildContext context, {
+    required String label,
+    required String hint,
+    required TextEditingController controller,
+    required IconData icon,
+    int maxLines = 1,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: TextStyle(
+            color: noir,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade200),
+          ),
+          child: TextField(
+            controller: controller,
+            maxLines: maxLines,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: noir,
+            ),
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: TextStyle(
+                color: noir.withOpacity(0.4),
+                fontSize: 14,
+              ),
+              prefixIcon: Icon(icon, color: noir.withOpacity(0.5), size: 20),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.all(16),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImageUploadButton(
+    BuildContext context, {
+    required String label,
+    required IconData icon,
+    required VoidCallback onTap,
+    required Color color,
+    required bool isSelected,
+  }) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 120,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: isSelected
+                  ? [Colors.green.shade400, Colors.green.shade600]
+                  : [color.withOpacity(0.8), color],
+            ),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: color.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                isSelected ? CupertinoIcons.checkmark_circle_fill : icon,
+                color: blanc,
+                size: 32,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: blanc,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTypeButton(
+    BuildContext context, {
+    required String label,
+    required IconData icon,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+            gradient: isSelected
+                ? LinearGradient(
+                    colors: [rouge, rouge.withOpacity(0.8)],
+                  )
+                : null,
+            color: isSelected ? null : Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected ? rouge : Colors.grey.shade300,
+              width: 2,
+            ),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: rouge.withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : [],
+          ),
+          child: Column(
+            children: [
+              Icon(
+                icon,
+                color: isSelected ? blanc : noir.withOpacity(0.6),
+                size: 32,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                label.toUpperCase(),
+                style: TextStyle(
+                  color: isSelected ? blanc : noir,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActions(
+    BuildContext context,
+    EmissionBloc emissionBloc,
+    MenuAdminBloc menuAdminBloc,
+  ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        // Annuler
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () => menuAdminBloc.setEmission(0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Row(
+                children: [
+                  Icon(CupertinoIcons.xmark, color: noir, size: 18),
+                  const SizedBox(width: 8),
+                  Text(
+                    'ANNULER',
+                    style: TextStyle(
+                      color: noir,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        
+        // Ajouter
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: emissionBloc.chargement ? null : () => emissionBloc.addEmission(),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [rouge, rouge.withOpacity(0.8)],
+                ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: rouge.withOpacity(0.3),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  if (emissionBloc.chargement)
+                    SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(blanc),
+                      ),
+                    )
+                  else
+                    Icon(CupertinoIcons.add_circled_solid, color: blanc, size: 18),
+                  const SizedBox(width: 8),
+                  Text(
+                    'AJOUTER ÉMISSION',
+                    style: TextStyle(
+                      color: blanc,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildMediaBrowser(BuildContext context, EmissionBloc emissionBloc) {
+    return Column(
+      children: [
+        // Header
+        Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.blue.shade600,
+                Colors.blue.shade400,
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.blue.withOpacity(0.3),
+                blurRadius: 15,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Icon(CupertinoIcons.photo_on_rectangle, color: blanc, size: 32),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'BIBLIOTHÈQUE MÉDIA',
+                      style: TextStyle(
+                        color: blanc,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Sélectionnez une image de couverture pour votre émission',
+                      style: TextStyle(
+                        color: blanc.withOpacity(0.9),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        
+        // Search Bar
+        Container(
+          padding: const EdgeInsets.all(24),
+          color: Colors.grey.shade50,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade200),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: TextField(
+              onChanged: (value) => emissionBloc.setRecherche(value),
+              decoration: InputDecoration(
+                hintText: 'Rechercher dans la bibliothèque...',
+                hintStyle: TextStyle(
+                  color: noir.withOpacity(0.4),
+                  fontSize: 14,
+                ),
+                prefixIcon: Icon(CupertinoIcons.search, color: noir.withOpacity(0.5)),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.all(16),
+              ),
+            ),
+          ),
+        ),
+        
+        // Media Grid
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            color: Colors.grey.shade50,
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 5,
+                childAspectRatio: 0.8,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
+              itemCount: emissionBloc.filesModel.reversed
+                  .where((e) => e.url!
+                      .split("/")
+                      .last
+                      .toLowerCase()
+                      .contains(emissionBloc.recherche.toLowerCase()))
+                  .length,
+              itemBuilder: (context, index) {
+                final file = emissionBloc.filesModel.reversed
+                    .where((e) => e.url!
+                        .split("/")
+                        .last
+                        .toLowerCase()
+                        .contains(emissionBloc.recherche.toLowerCase()))
+                    .toList()[index];
+                final isSelected = file == emissionBloc.fileModel;
+                
+                return MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () => emissionBloc.setFileModel(file),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: isSelected ? Colors.green : Colors.grey.shade200,
+                          width: isSelected ? 3 : 1,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: isSelected
+                                ? Colors.green.withOpacity(0.3)
+                                : Colors.black.withOpacity(0.05),
+                            blurRadius: isSelected ? 15 : 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Image
+                          Expanded(
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(16),
+                                  ),
+                                  child: CachedNetworkImage(
+                                    imageUrl: BASE_URL_ASSET + file.url!,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) => Container(
+                                      color: Colors.grey.shade200,
+                                      child: Center(
+                                        child: SizedBox(
+                                          width: 30,
+                                          height: 30,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor: AlwaysStoppedAnimation<Color>(
+                                              Colors.blue,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) => Container(
+                                      color: Colors.grey.shade200,
+                                      child: Icon(
+                                        CupertinoIcons.exclamationmark_triangle,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                
+                                // Selected Overlay
+                                if (isSelected)
+                                  Positioned.fill(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.2),
+                                        borderRadius: const BorderRadius.vertical(
+                                          top: Radius.circular(16),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.2),
+                                                blurRadius: 10,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Icon(
+                                            CupertinoIcons.checkmark,
+                                            color: blanc,
+                                            size: 24,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          
+                          // Filename
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            child: Text(
+                              file.url!
+                                  .split("/")
+                                  .last
+                                  .split(".")[file.url!
+                                      .split("/")
+                                      .last
+                                      .split(".")
+                                      .length -
+                                  2],
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: noir,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+        
+        // Actions
+        Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, -2),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              // Annuler
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () => emissionBloc.setParcourirFile(0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(CupertinoIcons.xmark, color: noir, size: 18),
+                        const SizedBox(width: 8),
+                        Text(
+                          'ANNULER',
+                          style: TextStyle(
+                            color: noir,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              
+              // Sélectionner
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: emissionBloc.fileModel != null
+                      ? () => emissionBloc.setParcourirFile(0)
+                      : null,
+                  child: Opacity(
+                    opacity: emissionBloc.fileModel != null ? 1.0 : 0.5,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.green, Colors.green.shade600],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: emissionBloc.fileModel != null
+                            ? [
+                                BoxShadow(
+                                  color: Colors.green.withOpacity(0.3),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ]
+                            : [],
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(CupertinoIcons.checkmark_circle_fill, color: blanc, size: 18),
+                          const SizedBox(width: 8),
+                          Text(
+                            'SÉLECTIONNER',
+                            style: TextStyle(
+                              color: blanc,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

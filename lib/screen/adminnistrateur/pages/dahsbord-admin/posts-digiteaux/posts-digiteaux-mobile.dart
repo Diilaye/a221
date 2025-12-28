@@ -1,20 +1,57 @@
 import 'package:actu/bloc/administrateur/menu-admin.dart';
 import 'package:actu/bloc/administrateur/post-digiteaux-bloc.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/posts-digiteaux/add-post-digiteaux-mobile.dart';
-import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/posts-digiteaux/add-post-digiteaux.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/posts-digiteaux/update-post-digiteaux-mobile.dart';
-import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/posts-digiteaux/update-post-digiteaux.dart';
-import 'package:actu/utils/color-by-dii.dart';
 import 'package:actu/utils/diallog-dii.dart';
 import 'package:actu/utils/requette-by-dii.dart';
-import 'package:actu/utils/widgets/font-fammily-dii.dart';
-import 'package:actu/utils/widgets/padding-global.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PostDigiteauxScreenMobile extends StatelessWidget {
+class PostDigiteauxScreenMobile extends StatefulWidget {
   const PostDigiteauxScreenMobile({super.key});
+
+  @override
+  State<PostDigiteauxScreenMobile> createState() => _PostDigiteauxScreenMobileState();
+}
+
+class _PostDigiteauxScreenMobileState extends State<PostDigiteauxScreenMobile> {
+  int itemsPerPage = 10;
+  int currentPage = 1;
+  String searchQuery = '';
+  String statusFilter = 'all';
+  String typeFilter = 'all';
+
+  List<dynamic> _getFilteredPosts(PostsDigiteauxBloc postsDigiteauxBloc) {
+    return postsDigiteauxBloc.posts.where((e) {
+      bool matchesSearch = searchQuery.isEmpty ||
+          e.titre!.toLowerCase().contains(searchQuery.toLowerCase());
+      
+      bool matchesStatus = statusFilter == 'all' ||
+          e.statusOnline! == statusFilter;
+      
+      bool matchesType = typeFilter == 'all' ||
+          e.type!.toLowerCase() == typeFilter.toLowerCase();
+      
+      return matchesSearch && matchesStatus && matchesType;
+    }).toList();
+  }
+
+  List<dynamic> _getPaginatedPosts(PostsDigiteauxBloc postsDigiteauxBloc) {
+    final filtered = _getFilteredPosts(postsDigiteauxBloc);
+    final startIndex = (currentPage - 1) * itemsPerPage;
+    final endIndex = startIndex + itemsPerPage;
+    return filtered.sublist(
+      startIndex,
+      endIndex > filtered.length ? filtered.length : endIndex,
+    );
+  }
+
+  int _getTotalPages(PostsDigiteauxBloc postsDigiteauxBloc) {
+    final filtered = _getFilteredPosts(postsDigiteauxBloc);
+    return (filtered.length / itemsPerPage).ceil();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,279 +61,796 @@ class PostDigiteauxScreenMobile extends StatelessWidget {
 
     return Stack(
       children: [
-        ListView(
-          children: [
-            paddingVerticalGlobal(size.height * .02),
-            Row(
+        if (menuAdminBloc.addPresseEcrite == 0 && postsDigiteauxBloc.showUpdate == 0)
+          Container(
+            color: Colors.grey.shade50,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
               children: [
-                paddingHorizontalGlobal(),
-                Text(
-                  'Posts digiteaux'.toUpperCase(),
-                  style: fontFammilyDii(
-                      context, 14, noir, FontWeight.bold, FontStyle.normal),
-                )
+                _buildHeader(context, size, menuAdminBloc),
+                const SizedBox(height: 20),
+                _buildFiltersSection(context, size),
+                const SizedBox(height: 20),
+                _buildPostsGrid(context, size, postsDigiteauxBloc),
               ],
             ),
-            paddingVerticalGlobal(size.height * .02),
-            Row(
-              children: [
-                paddingHorizontalGlobal(),
-                Icon(
-                  CupertinoIcons.home,
-                  color: noir.withOpacity(.6),
-                  size: 12,
-                ),
-                paddingHorizontalGlobal(6),
-                Icon(
-                  CupertinoIcons.chevron_forward,
-                  color: noir.withOpacity(.6),
-                  size: 10,
-                ),
-                paddingHorizontalGlobal(6),
-                Text(
-                  'Posts digiteaux',
-                  style: fontFammilyDii(context, 10, noir.withOpacity(.6),
-                      FontWeight.w300, FontStyle.normal),
-                ),
-                paddingHorizontalGlobal(6),
-                Icon(
-                  CupertinoIcons.chevron_forward,
-                  color: noir.withOpacity(.6),
-                  size: 12,
-                ),
-                paddingHorizontalGlobal(6),
-                Text(
-                  'Dashbord',
-                  style: fontFammilyDii(
-                      context, 8, noir, FontWeight.w300, FontStyle.normal),
-                ),
-              ],
-            ),
-            paddingVerticalGlobal(),
-            Row(
-              children: [
-                const Spacer(),
-                paddingHorizontalGlobal(),
-                GestureDetector(
-                  onTap: () => menuAdminBloc.setPresseEcrite(1),
-                  child: CircleAvatar(
-                      backgroundColor: bleuMarine,
-                      radius: 14,
-                      child: Icon(
-                        CupertinoIcons.add,
-                        color: blanc,
-                        size: 12,
-                      )),
-                ),
-                paddingHorizontalGlobal(),
-              ],
-            ),
-            paddingVerticalGlobal(),
-            SizedBox(
-                height: 700,
-                width: size.width,
-                child: GridView.count(
-                    crossAxisCount: 1,
-                    padding: EdgeInsets.all(8),
-                    children: postsDigiteauxBloc.posts
-                        .map((e) => Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Card(
-                                elevation: 2,
-                                color: e.statusOnline! == "on" ? blanc : rouge,
-                                child: Column(
-                                  children: [
-                                    paddingVerticalGlobal(6),
-                                    Expanded(
-                                      flex: 5,
-                                      child: Row(
-                                        children: [
-                                          paddingHorizontalGlobal(6),
-                                          Expanded(
-                                            child: Image.network(
-                                              BASE_URL_ASSET + e.image!.url!,
-                                              height: 2000,
-                                              width: 2000,
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                          paddingHorizontalGlobal(6),
-                                        ],
-                                      ),
-                                    ),
-                                    paddingVerticalGlobal(8),
-                                    Row(
-                                      children: [
-                                        paddingHorizontalGlobal(8),
-                                        Text(
-                                          e.type!.toUpperCase(),
-                                          style: fontFammilyDii(
-                                              context,
-                                              14,
-                                              bleuMarine,
-                                              FontWeight.bold,
-                                              FontStyle.normal),
-                                        )
-                                      ],
-                                    ),
-                                    paddingVerticalGlobal(4),
-                                    Row(
-                                      children: [
-                                        const Spacer(),
-                                        IconButton(
-                                            onPressed: () {
-                                              postsDigiteauxBloc.setPost(e);
-                                              postsDigiteauxBloc
-                                                  .setShowUpdate(1);
-                                            },
-                                            tooltip: "Modifier posts",
-                                            icon:
-                                                const Icon(CupertinoIcons.pen)),
-                                        paddingHorizontalGlobal(6),
-                                        IconButton(
-                                            onPressed: () async =>
-                                                dialogRequest(
-                                                        title:
-                                                            'Vous êtes sur de vouloir suprimer ce posts',
-                                                        context: context)
-                                                    .then((value) async {
-                                                  if (value) {
-                                                    postsDigiteauxBloc
-                                                        .setPost(e);
-                                                    postsDigiteauxBloc
-                                                        .activePost();
-                                                  }
-                                                }),
-                                            tooltip: e.statusOnline! == "on"
-                                                ? "Suprimer posts"
-                                                : "Réintégrer posts",
-                                            icon: Icon(e.statusOnline! == "on"
-                                                ? CupertinoIcons.delete
-                                                : Icons.publish)),
-                                        paddingHorizontalGlobal(8),
-                                      ],
-                                    ),
-                                    paddingVerticalGlobal(4),
-                                    Expanded(
-                                      child: Column(
-                                        children: [
-                                          paddingVerticalGlobal(8),
-                                          Row(
-                                            children: [
-                                              paddingHorizontalGlobal(6),
-                                              Expanded(
-                                                child: Text(
-                                                  e.date!
-                                                      .split("T")[0]
-                                                      .split("-")
-                                                      .reversed
-                                                      .join('/'),
-                                                  overflow: TextOverflow.clip,
-                                                  style: fontFammilyDii(
-                                                      context,
-                                                      12,
-                                                      noir,
-                                                      FontWeight.w300,
-                                                      FontStyle.normal),
-                                                ),
-                                              ),
-                                              const Spacer(),
-                                              Icon(
-                                                CupertinoIcons.square_fill,
-                                                color: e.statusOnline! == "on"
-                                                    ? vert
-                                                    : rouge,
-                                                size: 12,
-                                              ),
-                                              paddingHorizontalGlobal(4),
-                                              Text(
-                                                e.statusOnline! == "on"
-                                                    ? 'En ligne'
-                                                    : "Brouillons",
-                                                overflow: TextOverflow.clip,
-                                                style: fontFammilyDii(
-                                                    context,
-                                                    12,
-                                                    noir,
-                                                    FontWeight.w800,
-                                                    FontStyle.normal),
-                                              ),
-                                              paddingHorizontalGlobal(6),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ))
-                        .toList())),
-            paddingVerticalGlobal(),
-            Row(
-              children: [
-                paddingHorizontalGlobal(8),
-                Text(
-                  "Affichage de 1 à 10 sur 50 posts",
-                  style: fontFammilyDii(context, 10, noir.withOpacity(.7),
-                      FontWeight.w700, FontStyle.normal),
-                ),
-                const Spacer(),
-                Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: Center(
-                          child: Icon(
-                        CupertinoIcons.chevron_left,
-                        size: 14,
-                        color: noir,
-                      ))),
-                ),
-                paddingHorizontalGlobal(8),
-                Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: Center(
-                          child: Icon(
-                        CupertinoIcons.chevron_right,
-                        size: 14,
-                        color: noir,
-                      ))),
-                ),
-                paddingHorizontalGlobal(),
-              ],
-            )
-          ],
-        ),
+          ),
         if (menuAdminBloc.addPresseEcrite == 1)
           Positioned(
-              top: 0,
-              right: 0,
-              child: SizedBox(
-                width: size.width,
-                height: size.height,
-                child: const AddPostDigiteauxScreenMobile(),
-              )),
+            child: SizedBox(
+              width: size.width,
+              height: size.height,
+              child: const AddPostDigiteauxScreenMobile(),
+            ),
+          ),
         if (postsDigiteauxBloc.showUpdate == 1)
           Positioned(
-              top: 0,
-              right: 0,
-              child: SizedBox(
-                width: size.width,
-                height: size.height,
-                child: const UpdatePostDigiteauxScreenMobile(),
-              )),
+            child: SizedBox(
+              width: size.width,
+              height: size.height,
+              child: const UpdatePostDigiteauxScreenMobile(),
+            ),
+          ),
       ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, Size size, MenuAdminBloc menuAdminBloc) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.indigo.shade700,
+            Colors.indigo.shade500,
+            Colors.purple.shade600,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 4),
+            blurRadius: 20,
+            color: Colors.indigo.withOpacity(0.3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Breadcrumb
+          Row(
+            children: [
+              Icon(CupertinoIcons.home, color: Colors.white.withOpacity(0.8), size: 12),
+              const SizedBox(width: 6),
+              Icon(CupertinoIcons.chevron_forward, color: Colors.white.withOpacity(0.5), size: 10),
+              const SizedBox(width: 6),
+              Text(
+                'Posts Digitaux',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.white.withOpacity(0.8),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Icon(CupertinoIcons.chevron_forward, color: Colors.white.withOpacity(0.5), size: 10),
+              const SizedBox(width: 6),
+              const Text(
+                'Dashboard',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Titre avec actions
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  CupertinoIcons.photo_on_rectangle,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'POSTS DIGITAUX',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Gestion des publications digitales',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white.withOpacity(0.9),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () => menuAdminBloc.setPresseEcrite(1),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        offset: const Offset(0, 2),
+                        blurRadius: 8,
+                        color: Colors.black.withOpacity(0.1),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    CupertinoIcons.add,
+                    color: Colors.indigo.shade700,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFiltersSection(BuildContext context, Size size) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200, width: 1),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 2),
+            blurRadius: 8,
+            color: Colors.black.withOpacity(0.04),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(CupertinoIcons.slider_horizontal_3, size: 16, color: Colors.indigo.shade700),
+              const SizedBox(width: 8),
+              Text(
+                'FILTRES',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.indigo.shade700,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Dropdown Type
+          Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300, width: 1),
+            ),
+            child: DropdownButton<String>(
+              items: [
+                DropdownMenuItem(
+                  value: 'all',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.square_stack_3d_up, size: 14, color: Colors.grey.shade700),
+                      const SizedBox(width: 8),
+                      Text(
+                        'TOUS LES TYPES',
+                        style: TextStyle(fontSize: 12, color: Colors.grey.shade900, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: 'Essentiel du jour',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.star_fill, size: 14, color: Colors.amber.shade700),
+                      const SizedBox(width: 8),
+                      Text(
+                        'ESSENTIEL DU JOUR',
+                        style: TextStyle(fontSize: 12, color: Colors.grey.shade900, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: 'Posts commerciale',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.briefcase_fill, size: 14, color: Colors.blue.shade700),
+                      const SizedBox(width: 8),
+                      Text(
+                        'POSTS COMMERCIAL',
+                        style: TextStyle(fontSize: 12, color: Colors.grey.shade900, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              value: typeFilter,
+              isExpanded: true,
+              iconSize: 0.0,
+              elevation: 2,
+              focusColor: Colors.transparent,
+              underline: const SizedBox(),
+              padding: const EdgeInsets.all(0),
+              onChanged: (v) {
+                setState(() {
+                  typeFilter = v!;
+                  currentPage = 1;
+                });
+              },
+            ),
+          ),
+          // Dropdown Status
+          Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300, width: 1),
+            ),
+            child: DropdownButton<String>(
+              items: [
+                DropdownMenuItem(
+                  value: 'all',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.check_mark_circled, size: 14, color: Colors.grey.shade700),
+                      const SizedBox(width: 8),
+                      Text(
+                        'TOUS LES STATUTS',
+                        style: TextStyle(fontSize: 12, color: Colors.grey.shade900, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: 'on',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.checkmark_circle_fill, size: 14, color: Colors.green.shade700),
+                      const SizedBox(width: 8),
+                      Text(
+                        'EN LIGNE',
+                        style: TextStyle(fontSize: 12, color: Colors.grey.shade900, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: 'off',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.xmark_circle_fill, size: 14, color: Colors.orange.shade700),
+                      const SizedBox(width: 8),
+                      Text(
+                        'HORS LIGNE',
+                        style: TextStyle(fontSize: 12, color: Colors.grey.shade900, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              value: statusFilter,
+              isExpanded: true,
+              iconSize: 0.0,
+              elevation: 2,
+              focusColor: Colors.transparent,
+              underline: const SizedBox(),
+              padding: const EdgeInsets.all(0),
+              onChanged: (v) {
+                setState(() {
+                  statusFilter = v!;
+                  currentPage = 1;
+                });
+              },
+            ),
+          ),
+          // Champ de recherche
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300, width: 1),
+            ),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: "Rechercher un post...",
+                hintStyle: TextStyle(fontSize: 13, color: Colors.grey.shade400, fontWeight: FontWeight.w500),
+                prefixIcon: Icon(CupertinoIcons.search, size: 18, color: Colors.grey.shade400),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              ),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                  currentPage = 1;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPostsGrid(BuildContext context, Size size, PostsDigiteauxBloc postsDigiteauxBloc) {
+    final filteredPosts = _getFilteredPosts(postsDigiteauxBloc);
+    final paginatedPosts = _getPaginatedPosts(postsDigiteauxBloc);
+    final totalPages = _getTotalPages(postsDigiteauxBloc);
+
+    return Column(
+      children: [
+        // Grille des posts
+        if (paginatedPosts.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(40),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade200, width: 1),
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  CupertinoIcons.photo_on_rectangle,
+                  size: 48,
+                  color: Colors.grey.shade300,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Aucun post trouvé',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Modifiez vos filtres ou créez un nouveau post',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          )
+        else
+          ...paginatedPosts.map((post) => _buildPostCard(context, post, postsDigiteauxBloc)),
+        // Pagination
+        if (totalPages > 1 && paginatedPosts.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          _buildPagination(context, filteredPosts, totalPages),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildPostCard(BuildContext context, dynamic post, PostsDigiteauxBloc postsDigiteauxBloc) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200, width: 1),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 2),
+            blurRadius: 8,
+            color: Colors.black.withOpacity(0.04),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Image
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: CachedNetworkImage(
+                imageUrl: BASE_URL_ASSET + post.image!.url!,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  color: Colors.grey.shade200,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey.shade200,
+                  child: const Icon(Icons.error),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Type et statut
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: post.type!.toLowerCase() == 'essentiel du jour'
+                              ? [Colors.amber.shade600, Colors.orange.shade600]
+                              : [Colors.blue.shade600, Colors.indigo.shade600],
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            post.type!.toLowerCase() == 'essentiel du jour'
+                                ? CupertinoIcons.star_fill
+                                : CupertinoIcons.briefcase_fill,
+                            size: 12,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            post.type!.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: post.statusOnline! == "on"
+                            ? Colors.green.shade500
+                            : Colors.orange.shade500,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      post.statusOnline! == "on" ? 'En ligne' : 'Hors ligne',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: post.statusOnline! == "on"
+                            ? Colors.green.shade700
+                            : Colors.orange.shade700,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                // Titre
+                Text(
+                  post.titre ?? 'Sans titre',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey.shade900,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 12),
+                // Date et actions
+                Row(
+                  children: [
+                    Icon(
+                      CupertinoIcons.calendar,
+                      size: 14,
+                      color: Colors.grey.shade500,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      post.date!.split("T")[0].split("-").reversed.join('/'),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    const Spacer(),
+                    // Bouton modifier
+                    GestureDetector(
+                      onTap: () {
+                        postsDigiteauxBloc.setPost(post);
+                        postsDigiteauxBloc.setShowUpdate(1);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          CupertinoIcons.pencil,
+                          size: 18,
+                          color: Colors.blue.shade700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // Bouton supprimer/réactiver
+                    GestureDetector(
+                      onTap: () async {
+                        final result = await dialogRequest(
+                          title: post.statusOnline! == "on"
+                              ? 'Voulez-vous mettre ce post hors ligne ?'
+                              : 'Voulez-vous remettre ce post en ligne ?',
+                          context: context,
+                        );
+                        if (result) {
+                          postsDigiteauxBloc.setPost(post);
+                          postsDigiteauxBloc.activePost();
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: post.statusOnline! == "on"
+                              ? Colors.red.shade50
+                              : Colors.green.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          post.statusOnline! == "on"
+                              ? CupertinoIcons.trash
+                              : CupertinoIcons.checkmark_circle,
+                          size: 18,
+                          color: post.statusOnline! == "on"
+                              ? Colors.red.shade700
+                              : Colors.green.shade700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPagination(BuildContext context, List<dynamic> filteredPosts, int totalPages) {
+    final startIndex = (currentPage - 1) * itemsPerPage + 1;
+    final endIndex = (currentPage * itemsPerPage) > filteredPosts.length
+        ? filteredPosts.length
+        : currentPage * itemsPerPage;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200, width: 1),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 2),
+            blurRadius: 8,
+            color: Colors.black.withOpacity(0.04),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Counter
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.indigo.shade50,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  CupertinoIcons.photo_on_rectangle,
+                  size: 16,
+                  color: Colors.indigo.shade700,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Affichage de $startIndex à $endIndex sur ${filteredPosts.length}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.indigo.shade700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          // Pagination buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Previous button
+              _buildPaginationButton(
+                icon: CupertinoIcons.chevron_left,
+                enabled: currentPage > 1,
+                onTap: () {
+                  if (currentPage > 1) {
+                    setState(() {
+                      currentPage--;
+                    });
+                  }
+                },
+              ),
+              const SizedBox(width: 12),
+              // Page numbers
+              ..._buildPageNumbers(totalPages),
+              const SizedBox(width: 12),
+              // Next button
+              _buildPaginationButton(
+                icon: CupertinoIcons.chevron_right,
+                enabled: currentPage < totalPages,
+                onTap: () {
+                  if (currentPage < totalPages) {
+                    setState(() {
+                      currentPage++;
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildPageNumbers(int totalPages) {
+    List<Widget> pages = [];
+    int startPage = currentPage - 2;
+    int endPage = currentPage + 2;
+
+    if (startPage < 1) {
+      startPage = 1;
+      endPage = totalPages < 5 ? totalPages : 5;
+    }
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = totalPages - 4 > 0 ? totalPages - 4 : 1;
+    }
+
+    for (int i = startPage; i <= endPage; i++) {
+      pages.add(
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              currentPage = i;
+            });
+          },
+          child: Container(
+            width: 40,
+            height: 40,
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              gradient: currentPage == i
+                  ? LinearGradient(
+                      colors: [
+                        Colors.indigo.shade700,
+                        Colors.indigo.shade500,
+                        Colors.purple.shade600,
+                      ],
+                    )
+                  : null,
+              color: currentPage == i ? null : Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: currentPage == i ? Colors.transparent : Colors.grey.shade300,
+                width: 1,
+              ),
+              boxShadow: currentPage == i
+                  ? [
+                      BoxShadow(
+                        offset: const Offset(0, 4),
+                        blurRadius: 12,
+                        color: Colors.indigo.withOpacity(0.3),
+                      ),
+                    ]
+                  : null,
+            ),
+            child: Center(
+              child: Text(
+                '$i',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: currentPage == i ? FontWeight.w700 : FontWeight.w600,
+                  color: currentPage == i ? Colors.white : Colors.grey.shade900,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return pages;
+  }
+
+  Widget _buildPaginationButton({
+    required IconData icon,
+    required bool enabled,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: enabled ? Colors.grey.shade100 : Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: enabled ? Colors.grey.shade300 : Colors.grey.shade200,
+            width: 1,
+          ),
+        ),
+        child: Icon(
+          icon,
+          size: 16,
+          color: enabled ? Colors.grey.shade900 : Colors.grey.shade400,
+        ),
+      ),
     );
   }
 }

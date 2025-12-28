@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'package:actu/utils/requette-by-dii.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class DashboardStatsModel {
   final int totalArticles;
@@ -141,15 +139,18 @@ class DashboardStatsBloc with ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await http.get(
-        Uri.parse('${BASE_URL}admin/dashboard-stats'),
-        headers: {'Content-Type': 'application/json'},
-      );
+      final response = await getResponse(url: 'admin/dashboard-stats');
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        _stats = DashboardStatsModel.fromJson(data);
-        _error = null;
+      if (response['status'] == 200) {
+        final data = response['body'];
+        if (data['statusCode'] == 200 && data['data'] != null) {
+          _stats = DashboardStatsModel.fromJson(data['data']);
+          _error = null;
+        } else {
+          _error = data['message'] ?? 'Erreur lors du chargement des statistiques';
+          // Données de fallback pour démonstration
+          _loadMockData();
+        }
       } else {
         _error = 'Erreur lors du chargement des statistiques';
         // Données de fallback pour démonstration

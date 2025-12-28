@@ -67,199 +67,49 @@ class HomeUtilisateurScreen extends StatelessWidget {
                         color: blanc,
                         child: ListView(
                           controller: homeUtilisateurBloc.controllerListHome,
+                          padding: EdgeInsets.zero,
                           children: [
-                            homeUtilisateurBloc.showMenu == 0
-                                ? paddingVerticalGlobal(220)
-                                : paddingVerticalGlobal(220),
-                            Center(
-                              child: Container(
-                                width: 1024,
-                                child: const LiveTickerWidget(height: 50),
-                              ),
-                            ),
-                            paddingVerticalGlobal(4),
+                            // Espace pour le header
+                            const SizedBox(height: 220),
+                            
+                            // Bandeau Live Ticker
+                            const LiveTickerWidget(height: 50),
+                            const SizedBox(height: 24),
+                            
+                            // Section Une (Principale)
                             SectionUneWidget(),
-                            paddingVerticalGlobal(8),
-                            // Affichage forcé de la section - toujours visible pour debug
-                            Container(
-                              key: const ValueKey('actualite_edition_section'),
-                              child: _buildActualiteEditionSection(context, size, homeUtilisateurBloc, papierJournalUserBloc),
+                            const SizedBox(height: 40),
+                            
+                            // Section Actualités & Partenariat
+                            _buildActualiteEditionSection(
+                              context, 
+                              size, 
+                              homeUtilisateurBloc, 
+                              papierJournalUserBloc,
                             ),
-                            paddingVerticalGlobal(32),
-                            const SectionPolitiqueWidget(),
-                            paddingVerticalGlobal(32),
-                            const SectionContributionWidget(),
-                            paddingVerticalGlobal(32),
-                            const SectionInvestigationtWidget(),
-                            paddingVerticalGlobal(32),
-                            const SectionEconomiqueWidget(),
-                            paddingVerticalGlobal(32),
-                            postsDigiteauxUserBloc.listePosts.isEmpty
-                                ? SizedBox()
-                                : SectionEtientielJourWidget(
-                                    posts: postsDigiteauxUserBloc.listePosts
-                                        .where((e) => e.type == "essentiel" && e.statusOnline =="on")
-                                        .toList()
-                                        .reversed
-                                        .toList(),
-                                  ),
-                            paddingVerticalGlobal(32),
-                            const SectionChoixRedacWidget(),
-                            paddingVerticalGlobal(32),
-                           if(homeUtilisateurBloc.videos.isNotEmpty) Container(
-                              height: 420,
-                              width: 1024,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    bleuMarine,
-                                    bleuMarine.withOpacity(0.95),
-                                    Color(0xFF0A1929),
-                                  ],
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: noir.withOpacity(0.3),
-                                    blurRadius: 15,
-                                    offset: Offset(0, 5),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  paddingVerticalGlobal(12),
-                                  Row(
-                                    children: [
-                                      paddingHorizontalGlobal(),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                        decoration: BoxDecoration(
-                                          color: rouge.withOpacity(0.15),
-                                          borderRadius: BorderRadius.circular(20),
-                                          border: Border.all(color: rouge.withOpacity(0.5), width: 1),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Icon(CupertinoIcons.play_circle_fill, color: rouge, size: 18,),
-                                            SizedBox(width: 8),
-                                            Text('VIDÉOS',style: fontFammilyDii(
-                                              context,
-                                              22,
-                                              blanc,
-                                              FontWeight.w900,
-                                              FontStyle.normal,
-                                            ), ),
-                                          ],
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      MouseRegion(
-                                        cursor: SystemMouseCursors.click,
-                                        child: Container(
-                                          height: 32,
-                                          width: 32,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(32),
-                                            border: Border.all(color: blanc.withOpacity(0.3), width: 1.5),
-                                            gradient: LinearGradient(
-                                              colors: [blanc.withOpacity(0.1), blanc.withOpacity(0.05)],
-                                            ),
-                                          ),
-                                          child: Center(
-                                            child: Icon(CupertinoIcons.arrow_left, color: blanc, size: 16,),
-                                          ),
-                                        ),
-                                      ),
-                                      paddingHorizontalGlobal(8),
-                                      MouseRegion(
-                                        cursor: SystemMouseCursors.click,
-                                        child: Container(
-                                          height: 32,
-                                          width: 32,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(32),
-                                            border: Border.all(color: blanc.withOpacity(0.3), width: 1.5),
-                                            gradient: LinearGradient(
-                                              colors: [blanc.withOpacity(0.1), blanc.withOpacity(0.05)],
-                                            ),
-                                          ),
-                                          child: Center(
-                                            child: Icon(CupertinoIcons.arrow_right, color: blanc, size: 16,),
-                                          ),
-                                        ),
-                                      ),
-                                      paddingHorizontalGlobal(),
-                                    ],
-                                  ),
-                                  paddingVerticalGlobal(12),
-                                  Container(
-                                    height: 330,
-                                    width: 1024,
-                                    child: ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children: homeUtilisateurBloc.videos.where((e) => e.statusOnline == "on" && e.isLive =="off" ).map((el) => Row(
-                                        children: [
-                                          paddingHorizontalGlobal(8),
-                                          VideoCardAnimated(video: el),
-                                        ],
-                                      )).toList(),
-                                    ),
-                                  ),
-                                  paddingVerticalGlobal(4),
-
-                                ],
-                              ),
+                            const SizedBox(height: 48),
+                            
+                            // Sections thématiques
+                            _buildThematicSections(
+                              context,
+                              homeUtilisateurBloc,
+                              postsDigiteauxUserBloc,
                             ),
-                            paddingVerticalGlobal(32),
-                            Container(
-                              height: 650,
-                              width: 1024,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: [
-                                    if(homeUtilisateurBloc.articleSport.isNotEmpty) ...[  
-                                      SectionCategoryCard(
-                                        articles: homeUtilisateurBloc.articleSport,
-                                        title: 'Sport',
-                                        icon: CupertinoIcons.sportscourt,
-                                        primaryColor: Color(0xFFE31E24),
-                                      ),
-                                      paddingHorizontalGlobal(),
-                                    ],
-                                    if(homeUtilisateurBloc.articleCultures.isNotEmpty) ...[
-                                      SectionCategoryCard(
-                                        articles: homeUtilisateurBloc.articleCultures,
-                                        title: 'Culture & Art',
-                                        icon: CupertinoIcons.paintbrush,
-                                        primaryColor: Color(0xFF9C27B0),
-                                      ),
-                                      paddingHorizontalGlobal(),
-                                    ],
-                                    if(homeUtilisateurBloc.articleAfriques.isNotEmpty) ...[
-                                      SectionCategoryCard(
-                                        articles: homeUtilisateurBloc.articleAfriques,
-                                        title: 'Afrique',
-                                        icon: CupertinoIcons.globe,
-                                        primaryColor: Color(0xFF00BCD4),
-                                      ),
-                                      paddingHorizontalGlobal(),
-                                    ],
-                                    if(homeUtilisateurBloc.articleInternationals.isNotEmpty)
-                                      SectionCategoryCard(
-                                        articles: homeUtilisateurBloc.articleInternationals,
-                                        title: 'International',
-                                        icon: CupertinoIcons.airplane,
-                                        primaryColor: Color(0xFF2196F3),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            
+                            // Section Vidéos
+                            if (homeUtilisateurBloc.videos.isNotEmpty) ...[
+                              const SizedBox(height: 48),
+                              _buildVideoSection(context, homeUtilisateurBloc),
+                            ],
+                            
+                            // Section Catégories horizontales
+                            const SizedBox(height: 48),
+                            _buildCategoriesSection(homeUtilisateurBloc),
+                            
+                            // Footer
+                            const SizedBox(height: 48),
                             const SectionFooter(),
-                            paddingVerticalGlobal(46)
+                            const SizedBox(height: 46),
                           ],
                         ),
                       ),
@@ -652,6 +502,230 @@ class HomeUtilisateurScreen extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+
+  // Section pour toutes les sections thématiques
+  Widget _buildThematicSections(
+    BuildContext context,
+    HomeUtilisateurBloc homeUtilisateurBloc,
+    PostsDigiteauxUserBloc postsDigiteauxUserBloc,
+  ) {
+    return Column(
+      children: [
+        const SectionPolitiqueWidget(),
+        const SizedBox(height: 48),
+        
+        const SectionContributionWidget(),
+        const SizedBox(height: 48),
+        
+        const SectionInvestigationtWidget(),
+        const SizedBox(height: 48),
+        
+        const SectionEconomiqueWidget(),
+        const SizedBox(height: 48),
+        
+        // Section Essentiel du jour (conditionnelle)
+        if (postsDigiteauxUserBloc.listePosts.isNotEmpty) ...[
+          SectionEtientielJourWidget(
+            posts: postsDigiteauxUserBloc.listePosts
+                .where((e) => e.type == "essentiel" && e.statusOnline == "on")
+                .toList()
+                .reversed
+                .toList(),
+          ),
+          const SizedBox(height: 48),
+        ],
+        
+        const SectionChoixRedacWidget(),
+      ],
+    );
+  }
+
+  // Section Vidéos redesignée
+  Widget _buildVideoSection(BuildContext context, HomeUtilisateurBloc homeUtilisateurBloc) {
+    final availableVideos = homeUtilisateurBloc.videos
+        .where((e) => e.statusOnline == "on" && e.isLive == "off")
+        .toList();
+
+    return Container(
+      width: 1024,
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header moderne
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: rouge.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        CupertinoIcons.play_circle_fill,
+                        color: rouge,
+                        size: 28,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'VIDÉOS',
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.black87,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${availableVideos.length} vidéos disponibles',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                InkWell(
+                  onTap: () => context.push('/videos'),
+                  borderRadius: BorderRadius.circular(25),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      border: Border.all(color: rouge.withOpacity(0.3), width: 1.5),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'VOIR TOUT',
+                          style: TextStyle(
+                            color: rouge,
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Icon(
+                          CupertinoIcons.arrow_right,
+                          color: rouge,
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          
+          // Liste des vidéos avec scroll horizontal
+          SizedBox(
+            height: 340,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              scrollDirection: Axis.horizontal,
+              itemCount: availableVideos.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 20),
+              itemBuilder: (context, index) {
+                return VideoCardAnimated(video: availableVideos[index]);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Section des catégories (Sport, Culture, Afrique, International)
+  Widget _buildCategoriesSection(HomeUtilisateurBloc homeUtilisateurBloc) {
+    return SizedBox(
+      height: 650,
+      width: 1024,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        scrollDirection: Axis.horizontal,
+        separatorBuilder: (context, index) => const SizedBox(width: 20),
+        itemCount: _getCategoryCount(homeUtilisateurBloc),
+        itemBuilder: (context, index) {
+          return _buildCategoryCard(context, homeUtilisateurBloc, index);
+        },
+      ),
+    );
+  }
+
+  int _getCategoryCount(HomeUtilisateurBloc bloc) {
+    int count = 0;
+    if (bloc.articleSport.isNotEmpty) count++;
+    if (bloc.articleCultures.isNotEmpty) count++;
+    if (bloc.articleAfriques.isNotEmpty) count++;
+    if (bloc.articleInternationals.isNotEmpty) count++;
+    return count;
+  }
+
+  Widget _buildCategoryCard(BuildContext context, HomeUtilisateurBloc bloc, int index) {
+    final categories = <Map<String, dynamic>>[];
+    
+    if (bloc.articleSport.isNotEmpty) {
+      categories.add({
+        'articles': bloc.articleSport,
+        'title': 'Sport',
+        'icon': CupertinoIcons.sportscourt,
+        'color': const Color(0xFFE31E24),
+      });
+    }
+    
+    if (bloc.articleCultures.isNotEmpty) {
+      categories.add({
+        'articles': bloc.articleCultures,
+        'title': 'Culture & Art',
+        'icon': CupertinoIcons.paintbrush,
+        'color': const Color(0xFF9C27B0),
+      });
+    }
+    
+    if (bloc.articleAfriques.isNotEmpty) {
+      categories.add({
+        'articles': bloc.articleAfriques,
+        'title': 'Afrique',
+        'icon': CupertinoIcons.globe,
+        'color': const Color(0xFF00BCD4),
+      });
+    }
+    
+    if (bloc.articleInternationals.isNotEmpty) {
+      categories.add({
+        'articles': bloc.articleInternationals,
+        'title': 'International',
+        'icon': CupertinoIcons.airplane,
+        'color': const Color(0xFF2196F3),
+      });
+    }
+
+    final category = categories[index];
+    return SectionCategoryCard(
+      articles: category['articles'],
+      title: category['title'],
+      icon: category['icon'],
+      primaryColor: category['color'],
     );
   }
 }

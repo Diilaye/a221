@@ -7,14 +7,53 @@ import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/tv/update-emiss
 import 'package:actu/utils/color-by-dii.dart';
 import 'package:actu/utils/diallog-dii.dart';
 import 'package:actu/utils/requette-by-dii.dart';
-import 'package:actu/utils/widgets/font-fammily-dii.dart';
-import 'package:actu/utils/widgets/padding-global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TvScreenMobile extends StatelessWidget {
+class TvScreenMobile extends StatefulWidget {
   const TvScreenMobile({super.key});
+
+  @override
+  State<TvScreenMobile> createState() => _TvScreenMobileState();
+}
+
+class _TvScreenMobileState extends State<TvScreenMobile> {
+  int itemsPerPage = 10;
+  int currentPage = 1;
+  String searchQuery = '';
+  String statusFilter = 'all';
+  String typeFilter = 'all';
+
+  List<dynamic> _getFilteredEmissions(EmissionBloc emissionBloc) {
+    return emissionBloc.emissions.where((e) {
+      bool matchesSearch = searchQuery.isEmpty ||
+          e.titre!.toLowerCase().contains(searchQuery.toLowerCase());
+      
+      bool matchesStatus = statusFilter == 'all' ||
+          e.statusOnline! == statusFilter;
+      
+      bool matchesType = typeFilter == 'all' ||
+          e.type! == typeFilter;
+      
+      return matchesSearch && matchesStatus && matchesType;
+    }).toList();
+  }
+
+  List<dynamic> _getPaginatedEmissions(EmissionBloc emissionBloc) {
+    final filtered = _getFilteredEmissions(emissionBloc);
+    final startIndex = (currentPage - 1) * itemsPerPage;
+    final endIndex = startIndex + itemsPerPage;
+    return filtered.sublist(
+      startIndex,
+      endIndex > filtered.length ? filtered.length : endIndex,
+    );
+  }
+
+  int _getTotalPages(EmissionBloc emissionBloc) {
+    final filtered = _getFilteredEmissions(emissionBloc);
+    return (filtered.length / itemsPerPage).ceil();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,391 +63,830 @@ class TvScreenMobile extends StatelessWidget {
 
     return Stack(
       children: [
-        ListView(
-          children: [
-            paddingVerticalGlobal(size.height * .02),
-            Row(
+        if (menuAdminBloc.addEmission == 0 && emissionBloc.showUpdate == 0)
+          Container(
+            color: Colors.grey.shade50,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
               children: [
-                paddingHorizontalGlobal(),
-                Text(
-                  'Emission'.toUpperCase(),
-                  style: fontFammilyDii(
-                      context, 14, noir, FontWeight.bold, FontStyle.normal),
-                )
+                _buildHeader(context, size, menuAdminBloc),
+                const SizedBox(height: 20),
+                _buildFiltersSection(context, size),
+                const SizedBox(height: 20),
+                _buildEmissionsGrid(context, size, emissionBloc),
               ],
             ),
-            paddingVerticalGlobal(size.height * .02),
-            Row(
-              children: [
-                paddingHorizontalGlobal(),
-                Icon(
-                  CupertinoIcons.home,
-                  color: noir.withOpacity(.6),
-                  size: 12,
-                ),
-                paddingHorizontalGlobal(6),
-                Icon(
-                  CupertinoIcons.chevron_forward,
-                  color: noir.withOpacity(.6),
-                  size: 10,
-                ),
-                paddingHorizontalGlobal(6),
-                Text(
-                  'Emission',
-                  style: fontFammilyDii(context, 10, noir.withOpacity(.6),
-                      FontWeight.w300, FontStyle.normal),
-                ),
-                paddingHorizontalGlobal(6),
-                Icon(
-                  CupertinoIcons.chevron_forward,
-                  color: noir.withOpacity(.6),
-                  size: 12,
-                ),
-                paddingHorizontalGlobal(6),
-                Text(
-                  'Dashbord',
-                  style: fontFammilyDii(
-                      context, 8, noir, FontWeight.w300, FontStyle.normal),
-                ),
-              ],
+          ),
+        if (menuAdminBloc.addEmission == 1)
+          Positioned(
+            child: SizedBox(
+              width: size.width,
+              height: size.height,
+              child: const AddEmissionScreenMobile(),
             ),
-            paddingVerticalGlobal(),
-            Row(
-              children: [
-                paddingHorizontalGlobal(),
-                Text(
-                  'Show',
-                  style: fontFammilyDii(context, 10, noir.withOpacity(.6),
-                      FontWeight.w300, FontStyle.normal),
-                ),
-                paddingHorizontalGlobal(8),
-                // Card(
-                //   elevation: 2,
-                //   shape: RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.circular(4),
-                //   ),
-                //   child: SizedBox(
-                //     height: 30,
-                //     child: Row(
-                //       children: [
-                //         paddingHorizontalGlobal(8),
-                //         DropdownButton(
-                //             items: ['10', '15', '20', '25', '50']
-                //                 .map((e) =>
-                //                     DropdownMenuItem(value: e, child: Text(e)))
-                //                 .toList(),
-                //             value: '10',
-                //             iconSize: 0.0,
-                //             elevation: 1,
-                //             focusColor: Colors.transparent,
-                //             underline: const SizedBox(),
-                //             padding: const EdgeInsets.all(0),
-                //             onChanged: (v) {}),
-                //         paddingHorizontalGlobal(8),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                paddingHorizontalGlobal(),
-                // Card(
-                //   elevation: 2,
-                //   shape: RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.circular(4),
-                //   ),
-                //   child: SizedBox(
-                //     height: 30,
-                //     child: Row(
-                //       children: [
-                //         paddingHorizontalGlobal(8),
-                //         DropdownButton(
-                //             items: ['Tous les status', '15', '20', '25', '50']
-                //                 .map((e) =>
-                //                     DropdownMenuItem(value: e, child: Text(e)))
-                //                 .toList(),
-                //             value: 'Tous les status',
-                //             iconSize: 0.0,
-                //             elevation: 1,
-                //             focusColor: Colors.transparent,
-                //             underline: const SizedBox(),
-                //             padding: const EdgeInsets.all(0),
-                //             onChanged: (v) {}),
-                //         paddingHorizontalGlobal(8),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                const Spacer(),
+          ),
+        if (emissionBloc.showUpdate == 1)
+          Positioned(
+            child: SizedBox(
+              width: size.width,
+              height: size.height,
+              child: const UpdateEmissionScreenMobile(),
+            ),
+          ),
+      ],
+    );
+  }
 
-                paddingHorizontalGlobal(),
-                GestureDetector(
-                  onTap: () => menuAdminBloc.setEmission(1),
-                  child: CircleAvatar(
-                      backgroundColor: bleuMarine,
-                      radius: 12,
-                      child: Icon(
-                        CupertinoIcons.add,
-                        color: blanc,
-                        size: 12,
-                      )),
+  Widget _buildHeader(BuildContext context, Size size, MenuAdminBloc menuAdminBloc) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.indigo.shade700,
+            Colors.indigo.shade500,
+            Colors.purple.shade600,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 4),
+            blurRadius: 20,
+            color: Colors.indigo.withOpacity(0.3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Breadcrumb
+          Row(
+            children: [
+              Icon(CupertinoIcons.home, color: blanc.withOpacity(0.8), size: 12),
+              const SizedBox(width: 6),
+              Icon(CupertinoIcons.chevron_forward, color: blanc.withOpacity(0.5), size: 10),
+              const SizedBox(width: 6),
+              Text(
+                'Emission',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: blanc.withOpacity(0.8),
+                  fontWeight: FontWeight.w500,
                 ),
-                paddingHorizontalGlobal(),
-              ],
-            ),
-            paddingVerticalGlobal(),
-            Center(
-              child: SizedBox(
-                height: 45,
-                width: size.width,
-                child: Row(
+              ),
+              const SizedBox(width: 6),
+              Icon(CupertinoIcons.chevron_forward, color: blanc.withOpacity(0.5), size: 10),
+              const SizedBox(width: 6),
+              Text(
+                'Dashboard',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: blanc,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Titre avec actions
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: blanc.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  CupertinoIcons.tv,
+                  color: blanc,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    paddingHorizontalGlobal(8),
-                    Expanded(
-                      child: TextField(
-                        // controller: connectionBloc.email,
-                        decoration: InputDecoration(
-                          hintText: "RECHERCHER UNe émission".toUpperCase(),
-                          border: OutlineInputBorder(),
-                          enabledBorder: OutlineInputBorder(),
-                        ),
+                    Text(
+                      'ÉMISSIONS TV',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: blanc,
+                        letterSpacing: 1.2,
                       ),
                     ),
-                    paddingHorizontalGlobal(8),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Gestion des émissions',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: blanc.withOpacity(0.9),
+                      ),
+                    ),
                   ],
                 ),
               ),
+              GestureDetector(
+                onTap: () => menuAdminBloc.setEmission(1),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: blanc,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        offset: const Offset(0, 2),
+                        blurRadius: 8,
+                        color: noir.withOpacity(0.1),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    CupertinoIcons.add,
+                    color: Colors.indigo.shade700,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFiltersSection(BuildContext context, Size size) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: blanc,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200, width: 1),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 2),
+            blurRadius: 8,
+            color: noir.withOpacity(0.04),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(CupertinoIcons.slider_horizontal_3, size: 16, color: Colors.indigo.shade700),
+              const SizedBox(width: 8),
+              Text(
+                'FILTRES',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.indigo.shade700,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Dropdown Type
+          Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300, width: 1),
             ),
-            paddingVerticalGlobal(),
-            SizedBox(
-                height: 700,
-                width: size.width,
-                child: GridView.count(
-                    crossAxisCount: 1,
-                    padding: EdgeInsets.all(2),
-                    children: emissionBloc.emissions
-                        .map((e) => Padding(
-                              padding: const EdgeInsets.all(0.0),
-                              child: Card(
-                                elevation: 2,
-                                child: Column(
-                                  children: [
-                                    paddingVerticalGlobal(2),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Row(
-                                        children: [
-                                          paddingHorizontalGlobal(6),
-                                          Expanded(
-                                            child: Image.network(
-                                              BASE_URL_ASSET +
-                                                  e.photoCouverture!.url!,
-                                              height: 2000,
-                                              width: 2000,
-                                            ),
-                                          ),
-                                          paddingHorizontalGlobal(6),
-                                        ],
-                                      ),
-                                    ),
-                                    paddingVerticalGlobal(4),
-                                    Expanded(
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              paddingHorizontalGlobal(6),
-                                              Expanded(
-                                                child: Text(
-                                                  e.titre!.toUpperCase(),
-                                                  overflow: TextOverflow.clip,
-                                                  style: fontFammilyDii(
-                                                      context,
-                                                      18,
-                                                      rouge,
-                                                      FontWeight.bold,
-                                                      FontStyle.normal),
-                                                ),
-                                              ),
-                                              paddingHorizontalGlobal(6),
-                                            ],
-                                          ),
-                                          paddingVerticalGlobal(4),
-                                          Row(
-                                            children: [
-                                              paddingHorizontalGlobal(6),
-                                              Expanded(
-                                                child: Text(
-                                                  e.date!
-                                                      .split("T")[0]
-                                                      .split("-")
-                                                      .reversed
-                                                      .join('/'),
-                                                  overflow: TextOverflow.clip,
-                                                  style: fontFammilyDii(
-                                                      context,
-                                                      12,
-                                                      noir,
-                                                      FontWeight.w300,
-                                                      FontStyle.normal),
-                                                ),
-                                              ),
-                                              const Spacer(),
-                                              Icon(
-                                                CupertinoIcons.square_fill,
-                                                color: e.type! == "invite"
-                                                    ? vert
-                                                    : rouge,
-                                                size: 12,
-                                              ),
-                                              paddingHorizontalGlobal(4),
-                                              Text(
-                                                e.type! == "invite"
-                                                    ? 'Invité'
-                                                    : 'à suivre',
-                                                overflow: TextOverflow.clip,
-                                                style: fontFammilyDii(
-                                                    context,
-                                                    12,
-                                                    noir,
-                                                    FontWeight.w800,
-                                                    FontStyle.normal),
-                                              ),
-                                              paddingHorizontalGlobal(6),
-                                            ],
-                                          ),
-                                          paddingVerticalGlobal(4),
-                                          Row(
-                                            children: [
-                                              paddingHorizontalGlobal(6),
-                                              Icon(
-                                                CupertinoIcons.square_fill,
-                                                color: e.statusOnline! == "on"
-                                                    ? vert
-                                                    : rouge,
-                                                size: 12,
-                                              ),
-                                              paddingHorizontalGlobal(4),
-                                              Text(
-                                                e.statusOnline! == "on"
-                                                    ? 'En ligne'
-                                                    : 'Broullions',
-                                                overflow: TextOverflow.clip,
-                                                style: fontFammilyDii(
-                                                    context,
-                                                    12,
-                                                    noir,
-                                                    FontWeight.w800,
-                                                    FontStyle.normal),
-                                              ),
-                                              const Spacer(),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    emissionBloc.setEmission(e);
-                                                    emissionBloc
-                                                        .setShowUpdate(1);
-                                                  },
-                                                  tooltip: "Modifier posts",
-                                                  icon: const Icon(
-                                                      CupertinoIcons.pen)),
-                                              paddingHorizontalGlobal(6),
-                                              IconButton(
-                                                  onPressed: () async =>
-                                                      dialogRequest(
-                                                              title:
-                                                                  'Vous êtes sur de vouloir suprimer ce posts',
-                                                              context: context)
-                                                          .then((value) async {
-                                                        if (value) {
-                                                          emissionBloc
-                                                              .setEmission(e);
-                                                          emissionBloc
-                                                              .activeEmission();
-                                                        }
-                                                      }),
-                                                  tooltip:
-                                                      e.statusOnline! == "on"
-                                                          ? "Suprimer posts"
-                                                          : "Réintégrer posts",
-                                                  icon: Icon(e.statusOnline! ==
-                                                          "on"
-                                                      ? CupertinoIcons.delete
-                                                      : Icons.publish)),
-                                              paddingHorizontalGlobal(8),
-                                              paddingHorizontalGlobal(6),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ))
-                        .toList())),
-            paddingVerticalGlobal(),
-            Row(
-              children: [
-                paddingHorizontalGlobal(8),
-                Text(
-                  "Affichage de 1 à 10 sur 50 émissions",
-                  style: fontFammilyDii(context, 10, noir.withOpacity(.7),
-                      FontWeight.w700, FontStyle.normal),
-                ),
-                const Spacer(),
-                Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
+            child: DropdownButton<String>(
+              items: [
+                DropdownMenuItem(
+                  value: 'all',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.square_grid_2x2, size: 14, color: gris),
+                      const SizedBox(width: 8),
+                      Text(
+                        'TOUS LES TYPES',
+                        style: TextStyle(fontSize: 12, color: noir, fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
-                  child: SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: Center(
-                          child: Icon(
-                        CupertinoIcons.chevron_left,
-                        size: 12,
-                        color: noir,
-                      ))),
                 ),
-                paddingHorizontalGlobal(8),
-                Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
+                DropdownMenuItem(
+                  value: 'invite',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.person_2_fill, size: 14, color: Colors.green.shade700),
+                      const SizedBox(width: 8),
+                      Text(
+                        'INVITÉ',
+                        style: TextStyle(fontSize: 12, color: noir, fontWeight: FontWeight.w500),
+                      ),
+                    ],
                   ),
-                  child: SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: Center(
-                          child: Icon(
-                        CupertinoIcons.chevron_right,
-                        size: 12,
-                        color: noir,
-                      ))),
                 ),
-                paddingHorizontalGlobal(),
+                DropdownMenuItem(
+                  value: 'suivre',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.eye_fill, size: 14, color: Colors.red.shade700),
+                      const SizedBox(width: 8),
+                      Text(
+                        'À SUIVRE',
+                        style: TextStyle(fontSize: 12, color: noir, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
               ],
-            )
-          ],
-        ),
-        if (menuAdminBloc.addEmission == 1)
-          Positioned(
-              top: 0,
-              right: 0,
-              child: SizedBox(
-                width: size.width,
-                height: size.height,
-                child: const AddEmissionScreenMobile(),
-              )),
-        if (emissionBloc.showUpdate == 1)
-          Positioned(
-              top: 0,
-              right: 0,
-              child: SizedBox(
-                width: size.width,
-                height: size.height,
-                child: const UpdateEmissionScreenMobile(),
-              )),
+              value: typeFilter,
+              isExpanded: true,
+              iconSize: 0.0,
+              elevation: 2,
+              focusColor: Colors.transparent,
+              underline: const SizedBox(),
+              padding: const EdgeInsets.all(0),
+              onChanged: (v) {
+                setState(() {
+                  typeFilter = v!;
+                  currentPage = 1;
+                });
+              },
+            ),
+          ),
+          // Dropdown Status
+          Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300, width: 1),
+            ),
+            child: DropdownButton<String>(
+              items: [
+                DropdownMenuItem(
+                  value: 'all',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.check_mark_circled, size: 14, color: gris),
+                      const SizedBox(width: 8),
+                      Text(
+                        'TOUS LES STATUTS',
+                        style: TextStyle(fontSize: 12, color: noir, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: 'on',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.checkmark_circle_fill, size: 14, color: Colors.green.shade700),
+                      const SizedBox(width: 8),
+                      Text(
+                        'EN LIGNE',
+                        style: TextStyle(fontSize: 12, color: noir, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: 'off',
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.xmark_circle_fill, size: 14, color: Colors.orange.shade700),
+                      const SizedBox(width: 8),
+                      Text(
+                        'BROUILLON',
+                        style: TextStyle(fontSize: 12, color: noir, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              value: statusFilter,
+              isExpanded: true,
+              iconSize: 0.0,
+              elevation: 2,
+              focusColor: Colors.transparent,
+              underline: const SizedBox(),
+              padding: const EdgeInsets.all(0),
+              onChanged: (v) {
+                setState(() {
+                  statusFilter = v!;
+                  currentPage = 1;
+                });
+              },
+            ),
+          ),
+          // Champ de recherche
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300, width: 1),
+            ),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: "Rechercher une émission...",
+                hintStyle: TextStyle(fontSize: 13, color: Colors.grey.shade400, fontWeight: FontWeight.w500),
+                prefixIcon: Icon(CupertinoIcons.search, size: 18, color: Colors.grey.shade400),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              ),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                  currentPage = 1;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmissionsGrid(BuildContext context, Size size, EmissionBloc emissionBloc) {
+    final filteredEmissions = _getFilteredEmissions(emissionBloc);
+    final paginatedEmissions = _getPaginatedEmissions(emissionBloc);
+    final totalPages = _getTotalPages(emissionBloc);
+
+    return Column(
+      children: [
+        // Liste des émissions en cartes
+        if (paginatedEmissions.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: blanc,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade200, width: 1),
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  CupertinoIcons.tv,
+                  size: 48,
+                  color: Colors.grey.shade300,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Aucune émission trouvée',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: gris,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Modifiez vos filtres ou créez une nouvelle émission',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: gris.withOpacity(0.7),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          )
+        else
+          ...paginatedEmissions.map((emission) => _buildEmissionCard(
+            context,
+            emission,
+            emissionBloc,
+          )),
+        // Pagination
+        if (totalPages > 1 && paginatedEmissions.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          _buildPagination(context, filteredEmissions, totalPages),
+        ],
       ],
+    );
+  }
+
+  Widget _buildEmissionCard(
+    BuildContext context,
+    dynamic emission,
+    EmissionBloc emissionBloc,
+  ) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: blanc,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200, width: 1),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 2),
+            blurRadius: 8,
+            color: noir.withOpacity(0.04),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Image de couverture
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Image.network(
+                BASE_URL_ASSET + emission.photoCouverture!.url!,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  color: Colors.grey.shade200,
+                  child: Center(
+                    child: Icon(
+                      CupertinoIcons.photo,
+                      size: 48,
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Contenu
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Titre
+                Text(
+                  emission.titre!.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.indigo.shade700,
+                    height: 1.3,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 12),
+                // Date
+                Row(
+                  children: [
+                    Icon(
+                      CupertinoIcons.calendar,
+                      size: 14,
+                      color: gris,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      emission.date!
+                          .split("T")[0]
+                          .split("-")
+                          .reversed
+                          .join('/'),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: gris,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                // Badges et actions
+                Row(
+                  children: [
+                    // Badge Type
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: emission.type! == "invite"
+                            ? Colors.green.shade50
+                            : Colors.red.shade50,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: emission.type! == "invite"
+                                  ? Colors.green.shade500
+                                  : Colors.red.shade500,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            emission.type! == "invite" ? 'Invité' : 'À suivre',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: emission.type! == "invite"
+                                  ? Colors.green.shade700
+                                  : Colors.red.shade700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // Badge Status
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: emission.statusOnline! == "on"
+                            ? Colors.green.shade50
+                            : Colors.orange.shade50,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: emission.statusOnline! == "on"
+                                  ? Colors.green.shade500
+                                  : Colors.orange.shade500,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            emission.statusOnline! == "on" ? 'En ligne' : 'Brouillon',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: emission.statusOnline! == "on"
+                                  ? Colors.green.shade700
+                                  : Colors.orange.shade700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    // Actions
+                    GestureDetector(
+                      onTap: () {
+                        emissionBloc.setEmission(emission);
+                        emissionBloc.setShowUpdate(1);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          CupertinoIcons.pencil,
+                          size: 18,
+                          color: Colors.blue.shade700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: () async {
+                        final result = await dialogRequest(
+                          title: emission.statusOnline! == "on"
+                              ? 'Voulez-vous mettre cette émission en brouillon ?'
+                              : 'Voulez-vous publier cette émission ?',
+                          context: context,
+                        );
+                        if (result) {
+                          emissionBloc.setEmission(emission);
+                          emissionBloc.activeEmission();
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: emission.statusOnline! == "on"
+                              ? Colors.red.shade50
+                              : Colors.green.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          emission.statusOnline! == "on"
+                              ? CupertinoIcons.trash
+                              : CupertinoIcons.checkmark_circle,
+                          size: 18,
+                          color: emission.statusOnline! == "on"
+                              ? Colors.red.shade700
+                              : Colors.green.shade700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPagination(BuildContext context, List<dynamic> filteredEmissions, int totalPages) {
+    final startIndex = (currentPage - 1) * itemsPerPage + 1;
+    final endIndex = (currentPage * itemsPerPage) > filteredEmissions.length
+        ? filteredEmissions.length
+        : currentPage * itemsPerPage;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: blanc,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200, width: 1),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 2),
+            blurRadius: 8,
+            color: noir.withOpacity(0.04),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Counter
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.indigo.shade50,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  CupertinoIcons.tv_fill,
+                  size: 16,
+                  color: Colors.indigo.shade700,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Affichage de $startIndex à $endIndex sur ${filteredEmissions.length}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.indigo.shade700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          // Pagination buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Previous button
+              _buildPaginationButton(
+                icon: CupertinoIcons.chevron_left,
+                enabled: currentPage > 1,
+                onTap: () {
+                  if (currentPage > 1) {
+                    setState(() {
+                      currentPage--;
+                    });
+                  }
+                },
+              ),
+              const SizedBox(width: 12),
+              // Page numbers
+              ..._buildPageNumbers(totalPages),
+              const SizedBox(width: 12),
+              // Next button
+              _buildPaginationButton(
+                icon: CupertinoIcons.chevron_right,
+                enabled: currentPage < totalPages,
+                onTap: () {
+                  if (currentPage < totalPages) {
+                    setState(() {
+                      currentPage++;
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildPageNumbers(int totalPages) {
+    List<Widget> pages = [];
+    int startPage = currentPage - 2;
+    int endPage = currentPage + 2;
+
+    if (startPage < 1) {
+      startPage = 1;
+      endPage = totalPages < 5 ? totalPages : 5;
+    }
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = totalPages - 4 > 0 ? totalPages - 4 : 1;
+    }
+
+    for (int i = startPage; i <= endPage; i++) {
+      pages.add(
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              currentPage = i;
+            });
+          },
+          child: Container(
+            width: 40,
+            height: 40,
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              gradient: currentPage == i
+                  ? LinearGradient(
+                      colors: [
+                        Colors.indigo.shade700,
+                        Colors.indigo.shade500,
+                        Colors.purple.shade600,
+                      ],
+                    )
+                  : null,
+              color: currentPage == i ? null : Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: currentPage == i ? Colors.transparent : Colors.grey.shade300,
+                width: 1,
+              ),
+              boxShadow: currentPage == i
+                  ? [
+                      BoxShadow(
+                        offset: const Offset(0, 4),
+                        blurRadius: 12,
+                        color: Colors.indigo.withOpacity(0.3),
+                      ),
+                    ]
+                  : null,
+            ),
+            child: Center(
+              child: Text(
+                '$i',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: currentPage == i ? FontWeight.w700 : FontWeight.w600,
+                  color: currentPage == i ? blanc : noir,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return pages;
+  }
+
+  Widget _buildPaginationButton({
+    required IconData icon,
+    required bool enabled,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: enabled ? Colors.grey.shade100 : Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: enabled ? Colors.grey.shade300 : Colors.grey.shade200,
+            width: 1,
+          ),
+        ),
+        child: Icon(
+          icon,
+          size: 16,
+          color: enabled ? noir : Colors.grey.shade400,
+        ),
+      ),
     );
   }
 }

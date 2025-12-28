@@ -241,25 +241,25 @@ class AdministrateurAscreen extends StatelessWidget {
                               isActive: menuAdminBloc.menu == 21,
                               ontap: () => menuAdminBloc.setMenu(21),
                             ),
-                            ItemMenu(
-                              titre: 'Presse écrite',
-                              icons: CupertinoIcons.circle_fill,
-                              haveIcon: false,
-                              isActive: menuAdminBloc.menu == 3,
-                              ontap: () => menuAdminBloc.setMenu(3),
-                            ),
-                            ItemMenu(
-                              titre: 'Journal papier',
-                              icons: CupertinoIcons.circle,
-                              isActive: menuAdminBloc.menu == 30,
-                              ontap: () => menuAdminBloc.setMenu(30),
-                            ),
-                            ItemMenu(
-                              titre: 'Ajouter journal papier',
-                              icons: CupertinoIcons.circle,
-                              isActive: menuAdminBloc.menu == 31,
-                              ontap: () => menuAdminBloc.setMenu(31),
-                            ),
+                            // ItemMenu(
+                            //   titre: 'Presse écrite',
+                            //   icons: CupertinoIcons.circle_fill,
+                            //   haveIcon: false,
+                            //   isActive: menuAdminBloc.menu == 3,
+                            //   ontap: () => menuAdminBloc.setMenu(3),
+                            // ),
+                            // ItemMenu(
+                            //   titre: 'Journal papier',
+                            //   icons: CupertinoIcons.circle,
+                            //   isActive: menuAdminBloc.menu == 30,
+                            //   ontap: () => menuAdminBloc.setMenu(30),
+                            // ),
+                            // ItemMenu(
+                            //   titre: 'Ajouter journal papier',
+                            //   icons: CupertinoIcons.circle,
+                            //   isActive: menuAdminBloc.menu == 31,
+                            //   ontap: () => menuAdminBloc.setMenu(31),
+                            // ),
                             ItemMenu(
                               titre: 'Flash news',
                               icons: CupertinoIcons.circle_fill,
@@ -312,12 +312,12 @@ class AdministrateurAscreen extends StatelessWidget {
                             SizedBox(
                               height: size.height * .02,
                             ),
-                            ItemMenu(
-                              titre: 'Help & Support',
-                              icons: CupertinoIcons.headphones,
-                              isActive: menuAdminBloc.menu == 6,
-                              ontap: () => menuAdminBloc.setMenu(6),
-                            ),
+                            // ItemMenu(
+                            //   titre: 'Help & Support',
+                            //   icons: CupertinoIcons.headphones,
+                            //   isActive: menuAdminBloc.menu == 6,
+                            //   ontap: () => menuAdminBloc.setMenu(6),
+                            // ),
                             SizedBox(
                               height: size.height * .01,
                             ),

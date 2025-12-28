@@ -1,10 +1,8 @@
 import 'package:actu/bloc/utilisateur/home-bloc.dart';
 import 'package:actu/screen/utilisateur/widget/articles/article-bloc-multi-une-lue-widget.dart';
-import 'package:actu/screen/utilisateur/widget/articles/article-les-plus-lue.dart';
 import 'package:actu/screen/utilisateur/widget/articles/article-les-plus-une-widget.dart';
-import 'package:actu/utils/color-by-dii.dart';
-import 'package:actu/utils/widgets/font-fammily-dii.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +19,7 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
   bool _isHovered = false;
+  int _hoveredSecondaryIndex = -1;
 
   @override
   void initState() {
@@ -68,33 +67,59 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
         position: _slideAnimation,
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1200),
-          margin: const EdgeInsets.symmetric(vertical: 32),
+          margin: const EdgeInsets.symmetric(vertical: 48, horizontal: 16),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                rouge,
-                rouge.withOpacity(0.9),
+                const Color(0xFF1A1A2E),
+                const Color(0xFF16213E),
+                const Color(0xFF0F1419),
               ],
             ),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: rouge.withOpacity(0.3),
-                blurRadius: 20,
-                spreadRadius: 5,
+                color: Colors.black.withOpacity(0.5),
+                blurRadius: 30,
+                spreadRadius: 0,
+                offset: const Offset(0, 15),
+              ),
+              BoxShadow(
+                color: const Color(0xFFFFD700).withOpacity(0.2),
+                blurRadius: 40,
+                spreadRadius: -10,
                 offset: const Offset(0, 10),
               ),
             ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: Stack(
               children: [
-                _buildHeader(context, homeUtilisateurBloc),
-                const SizedBox(height: 24),
-                _buildContent(context, homeUtilisateurBloc),
+                // Motif de fond subtil
+                Positioned.fill(
+                  child: Opacity(
+                    opacity: 0.05,
+                    child: CustomPaint(
+                      painter: _GridPatternPainter(),
+                    ),
+                  ),
+                ),
+                
+                // Contenu principal
+                Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildModernHeader(context, homeUtilisateurBloc),
+                      const SizedBox(height: 32),
+                      _buildContent(context, homeUtilisateurBloc),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -103,47 +128,151 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
     );
   }
 
-  Widget _buildHeader(BuildContext context, HomeUtilisateurBloc bloc) {
+  Widget _buildModernHeader(BuildContext context, HomeUtilisateurBloc bloc) {
     return Row(
       children: [
-        const Icon(Icons.search, color: Colors.white, size: 32),
-        const SizedBox(width: 16),
-        Text(
-          'Révélation'.toUpperCase(),
-          style: fontFammilyDii(
-            context,
-            28,
-            Colors.white,
-            FontWeight.bold,
-            FontStyle.normal,
+        // Badge icône
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFFFD700),
+                Color(0xFFFFA500),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFFFFD700).withOpacity(0.5),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: const Icon(
+            CupertinoIcons.eye_fill,
+            color: Colors.black87,
+            size: 32,
           ),
         ),
-        const Spacer(),
+        
+        const SizedBox(width: 20),
+        
+        // Titre
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    'RÉVÉLATION',
+                    style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      letterSpacing: 2,
+                      shadows: [
+                        Shadow(
+                          color: Color(0xFFFFD700),
+                          blurRadius: 20,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFD700).withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFFFFD700).withOpacity(0.5),
+                        width: 1,
+                      ),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          CupertinoIcons.sparkles,
+                          color: Color(0xFFFFD700),
+                          size: 14,
+                        ),
+                        SizedBox(width: 6),
+                        Text(
+                          'EXCLUSIF',
+                          style: TextStyle(
+                            color: Color(0xFFFFD700),
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Enquêtes approfondies & investigations',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white.withOpacity(0.7),
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+        ),
+        
+        // Bouton "Voir plus"
         MouseRegion(
           cursor: SystemMouseCursors.click,
           child: InkWell(
             onTap: () => _navigateToInvestigation(context, bloc),
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                gradient: LinearGradient(
+                  colors: [
+                    const Color(0xFFFFD700),
+                    const Color(0xFFFFA500),
+                  ],
+                ),
                 borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFFFD700).withOpacity(0.4),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'voir +'.toUpperCase(),
-                    style: fontFammilyDii(
-                      context,
-                      16,
-                      Colors.white,
-                      FontWeight.bold,
-                      FontStyle.normal,
+                  const Text(
+                    'VOIR TOUT',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.black87,
+                      letterSpacing: 1,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Icon(Icons.arrow_forward, color: Colors.white),
+                  const Icon(
+                    CupertinoIcons.arrow_right,
+                    color: Colors.black87,
+                    size: 16,
+                  ),
                 ],
               ),
             ),
@@ -155,34 +284,30 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
 
   Widget _buildContent(BuildContext context, HomeUtilisateurBloc bloc) {
     return SizedBox(
-      height: 500,
+      height: 520,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Article principal
+          Expanded(
+            flex: 3,
+            child: _buildMainArticle(bloc),
+          ),
+          
+          const SizedBox(width: 24),
+          
+          // Articles secondaires
           Expanded(
             flex: 2,
             child: Column(
               children: [
-                if (bloc.uneInvestigations != null)
-                  Expanded(
-                    flex: 3,
-                    child: _buildMainArticle(bloc),
-                  ),
-                const SizedBox(height: 16),
                 if (bloc.articleInvestigations.isNotEmpty)
                   Expanded(
-                    flex: 2,
                     child: _buildSecondaryArticles(bloc),
                   ),
               ],
             ),
           ),
-          const SizedBox(width: 24),
-          if (bloc.articleActualites.isNotEmpty)
-            Expanded(
-              flex: 1,
-              child: _buildMostReadSection(context, bloc),
-            ),
         ],
       ),
     );
@@ -194,147 +319,244 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
       onExit: (_) => _handleHover(false),
       cursor: SystemMouseCursors.click,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 400),
         curve: Curves.easeOutCubic,
-        transform: Matrix4.identity()..scale(_isHovered ? 1.02 : 1.0),
+        transform: Matrix4.identity()..scale(_isHovered ? 1.01 : 1.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(_isHovered ? 0.3 : 0.25),
-              blurRadius: _isHovered ? 20 : 15,
-              spreadRadius: _isHovered ? 3 : 2,
-              offset: Offset(0, _isHovered ? 10 : 8),
+              color: Colors.black.withOpacity(_isHovered ? 0.6 : 0.4),
+              blurRadius: _isHovered ? 30 : 20,
+              spreadRadius: 0,
+              offset: Offset(0, _isHovered ? 15 : 10),
             ),
             BoxShadow(
-              color: rouge.withOpacity(_isHovered ? 0.2 : 0.15),
-              blurRadius: _isHovered ? 25 : 20,
-              spreadRadius: _isHovered ? 5 : 4,
-              offset: const Offset(0, 2),
+              color: const Color(0xFFFFD700).withOpacity(_isHovered ? 0.3 : 0.15),
+              blurRadius: _isHovered ? 40 : 25,
+              spreadRadius: 0,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Hero(
-                tag: 'investigation-main-${bloc.uneInvestigations?.id ?? ""}',
-                child: ArticleLesPlusLueUneWidget(
-                  article: bloc.uneInvestigations,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Stack(
+            children: [
+              // Image principale
+              Positioned.fill(
+                child: Hero(
+                  tag: 'investigation-main-${bloc.uneInvestigations?.id ?? ""}',
+                  child: ArticleLesPlusLueUneWidget(
+                    article: bloc.uneInvestigations,
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 16,
-              left: 16,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: rouge.withOpacity(0.9),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
+              
+              // Gradient overlay
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.3),
+                        Colors.black.withOpacity(0.8),
+                      ],
+                      stops: const [0.3, 0.6, 1.0],
                     ),
-                  ],
+                  ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.highlight,
-                      color: Colors.white,
-                      size: 16,
+              ),
+              
+              // Badge "À LA UNE"
+              Positioned(
+                top: 20,
+                left: 20,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFFFFD700),
+                        Color(0xFFFFA500),
+                      ],
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      'À LA UNE',
-                      style: fontFammilyDii(
-                        context,
-                        12,
-                        Colors.white,
-                        FontWeight.bold,
-                        FontStyle.normal,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFFFD700).withOpacity(0.5),
+                        blurRadius: 15,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        CupertinoIcons.star_fill,
+                        color: Colors.black87,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'À LA UNE',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              
+              // Icône de lecture
+              if (_isHovered)
+                Positioned(
+                  bottom: 20,
+                  right: 20,
+                  child: AnimatedOpacity(
+                    opacity: _isHovered ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 300),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFD700),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFFFD700).withOpacity(0.6),
+                            blurRadius: 15,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        CupertinoIcons.arrow_right,
+                        color: Colors.black87,
+                        size: 24,
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildSecondaryArticles(HomeUtilisateurBloc bloc) {
-    return Row(
-      children: bloc.articleInvestigations
-          .take(3)
-          .map(
-            (e) => Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ArticleBlocMultiUneLueWidget(
-                  card: 0,
-                  color: rouge,
-                  article: e,
+    final articles = bloc.articleInvestigations.take(3).toList();
+    
+    return Column(
+      children: List.generate(
+        articles.length,
+        (index) => Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: index < articles.length - 1 ? 16 : 0),
+            child: MouseRegion(
+              onEnter: (_) => setState(() => _hoveredSecondaryIndex = index),
+              onExit: (_) => setState(() => _hoveredSecondaryIndex = -1),
+              cursor: SystemMouseCursors.click,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                transform: Matrix4.identity()
+                  ..scale(_hoveredSecondaryIndex == index ? 1.02 : 1.0),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: _hoveredSecondaryIndex == index
+                        ? const Color(0xFFFFD700).withOpacity(0.5)
+                        : Colors.white.withOpacity(0.1),
+                    width: 2,
+                  ),
+                  boxShadow: _hoveredSecondaryIndex == index
+                      ? [
+                          BoxShadow(
+                            color: const Color(0xFFFFD700).withOpacity(0.3),
+                            blurRadius: 20,
+                            offset: const Offset(0, 8),
+                          ),
+                        ]
+                      : [],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Stack(
+                    children: [
+                      ArticleBlocMultiUneLueWidget(
+                        card: 0,
+                        color: const Color(0xFFFFD700),
+                        article: articles[index],
+                      ),
+                      
+                      // Overlay au hover
+                      if (_hoveredSecondaryIndex == index)
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  const Color(0xFFFFD700).withOpacity(0.2),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      
+                      // Numéro de l'article
+                      Positioned(
+                        top: 12,
+                        right: 12,
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFFFFD700),
+                                Color(0xFFFFA500),
+                              ],
+                            ),
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFFFFD700).withOpacity(0.5),
+                                blurRadius: 10,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${index + 1}',
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          )
-          .toList(),
-    );
-  }
-
-  Widget _buildMostReadSection(BuildContext context, HomeUtilisateurBloc bloc) {
-    return Card(
-      elevation: 8,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: rouge.withOpacity(0.1),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.trending_up, color: rouge),
-                const SizedBox(width: 8),
-                Text(
-                  'Les plus lues'.toUpperCase(),
-                  style: fontFammilyDii(
-                    context,
-                    16,
-                    noir,
-                    FontWeight.bold,
-                    FontStyle.normal,
-                  ),
-                ),
-              ],
-            ),
           ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              itemCount: bloc.articleActualites.take(5).length,
-              itemBuilder: (context, index) {
-                return ArticleLesPlusLue(
-                  nombre: index + 1,
-                  article: bloc.articleActualites[index],
-                );
-              },
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -351,4 +573,37 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
       debugPrint('Error navigating to investigation: $e');
     }
   }
+}
+
+// Custom painter pour le motif de grille en arrière-plan
+class _GridPatternPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withOpacity(0.03)
+      ..strokeWidth = 1;
+
+    const spacing = 30.0;
+
+    // Lignes verticales
+    for (double i = 0; i < size.width; i += spacing) {
+      canvas.drawLine(
+        Offset(i, 0),
+        Offset(i, size.height),
+        paint,
+      );
+    }
+
+    // Lignes horizontales
+    for (double i = 0; i < size.height; i += spacing) {
+      canvas.drawLine(
+        Offset(0, i),
+        Offset(size.width, i),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
