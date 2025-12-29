@@ -45,6 +45,8 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
   Widget build(BuildContext context) {
     final emissionBloc = Provider.of<EmissionBloc>(context);
     final menuAdminBloc = Provider.of<MenuAdminBloc>(context);
+    final size = MediaQuery.of(context).size;
+    bool isMobile = size.width < 900;
 
     return Container(
       decoration: BoxDecoration(
@@ -61,14 +63,14 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
           ? FadeTransition(
               opacity: _fadeAnimation,
               child: ListView(
-                padding: const EdgeInsets.all(32),
+                padding: EdgeInsets.all(isMobile ? 16 : 32),
                 children: [
-                  _buildHeader(context, menuAdminBloc),
-                  const SizedBox(height: 32),
-                  _buildForm(context, emissionBloc),
-                  const SizedBox(height: 32),
-                  _buildActions(context, emissionBloc, menuAdminBloc),
-                  const SizedBox(height: 32),
+                  _buildHeader(context, menuAdminBloc, isMobile),
+                  SizedBox(height: isMobile ? 24 : 32),
+                  _buildForm(context, emissionBloc, isMobile),
+                  SizedBox(height: isMobile ? 24 : 32),
+                  _buildActions(context, emissionBloc, menuAdminBloc, isMobile),
+                  SizedBox(height: isMobile ? 24 : 32),
                 ],
               ),
             )
@@ -76,9 +78,9 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
     );
   }
 
-  Widget _buildHeader(BuildContext context, MenuAdminBloc menuAdminBloc) {
+  Widget _buildHeader(BuildContext context, MenuAdminBloc menuAdminBloc, bool isMobile) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(isMobile ? 16 : 24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -88,7 +90,7 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
             const Color(0xFFE31E24),
           ],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(isMobile ? 16 : 20),
         boxShadow: [
           BoxShadow(
             color: rouge.withOpacity(0.3),
@@ -97,7 +99,59 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
           ),
         ],
       ),
-      child: Row(
+      child: isMobile
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(CupertinoIcons.add_circled_solid, color: blanc, size: 28),
+                    ),
+                    const Spacer(),
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => menuAdminBloc.setEmission(0),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Icon(CupertinoIcons.xmark, color: blanc, size: 20),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'NOUVELLE ÉMISSION',
+                  style: TextStyle(
+                    color: blanc,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Créez et configurez une nouvelle émission TV',
+                  style: TextStyle(
+                    color: blanc.withOpacity(0.9),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            )
+          : Row(
         children: [
           Container(
             padding: const EdgeInsets.all(16),
@@ -153,7 +207,7 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
   }
 
 
-  Widget _buildForm(BuildContext context, EmissionBloc emissionBloc) {
+  Widget _buildForm(BuildContext context, EmissionBloc emissionBloc, bool isMobile) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -164,8 +218,9 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
           hint: 'Entrez le titre de l\'émission',
           controller: emissionBloc.titre,
           icon: CupertinoIcons.textformat,
+          isMobile: isMobile,
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: isMobile ? 16 : 24),
         
         // URL média
         _buildTextField(
@@ -174,8 +229,9 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
           hint: 'https://exemple.com/video.mp4',
           controller: emissionBloc.url,
           icon: CupertinoIcons.link,
+          isMobile: isMobile,
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: isMobile ? 16 : 24),
         
         // Description
         _buildTextField(
@@ -185,8 +241,9 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
           controller: emissionBloc.desc,
           icon: CupertinoIcons.doc_text,
           maxLines: 4,
+          isMobile: isMobile,
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: isMobile ? 16 : 24),
         
         // Heure
         _buildTextField(
@@ -195,8 +252,9 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
           hint: '20:00',
           controller: emissionBloc.heure,
           icon: CupertinoIcons.time,
+          isMobile: isMobile,
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: isMobile ? 16 : 24),
         
         // Image Upload Section
         Text(
@@ -209,7 +267,35 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
           ),
         ),
         const SizedBox(height: 12),
-        Row(
+        isMobile
+            ? Column(
+                children: [
+                  _buildImageUploadButton(
+                    context,
+                    label: emissionBloc.fileModel == null
+                        ? 'Parcourir la bibliothèque'
+                        : 'Image sélectionnée ✓',
+                    icon: CupertinoIcons.photo_on_rectangle,
+                    onTap: () => emissionBloc.setParcourirFile(1),
+                    color: rouge,
+                    isSelected: emissionBloc.fileModel != null,
+                  ),
+                  if (emissionBloc.fileModel == null) ...[
+                    const SizedBox(height: 12),
+                    _buildImageUploadButton(
+                      context,
+                      label: emissionBloc.imagePost[0] == null
+                          ? 'Uploader un fichier'
+                          : 'Fichier uploadé ✓',
+                      icon: CupertinoIcons.cloud_upload,
+                      onTap: () => emissionBloc.getImagePost(),
+                      color: Colors.blue,
+                      isSelected: emissionBloc.imagePost[0] != null,
+                    ),
+                  ],
+                ],
+              )
+            : Row(
           children: [
             Expanded(
               child: _buildImageUploadButton(
@@ -240,7 +326,7 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
             ],
           ],
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: isMobile ? 16 : 24),
         
         // Type d'émission
         Text(
@@ -253,7 +339,27 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
           ),
         ),
         const SizedBox(height: 12),
-        Row(
+        isMobile
+            ? Column(
+                children: [
+                  _buildTypeButton(
+                    context,
+                    label: 'Invité',
+                    icon: CupertinoIcons.person_2_fill,
+                    isSelected: emissionBloc.typeEmission == 0,
+                    onTap: () => emissionBloc.setTypeEmission(0),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildTypeButton(
+                    context,
+                    label: 'À suivre',
+                    icon: CupertinoIcons.play_circle_fill,
+                    isSelected: emissionBloc.typeEmission == 1,
+                    onTap: () => emissionBloc.setTypeEmission(1),
+                  ),
+                ],
+              )
+            : Row(
           children: [
             Expanded(
               child: _buildTypeButton(
@@ -287,6 +393,7 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
     required TextEditingController controller,
     required IconData icon,
     int maxLines = 1,
+    required bool isMobile,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -451,8 +558,97 @@ class _AddEmissionScreenState extends State<AddEmissionScreen>
     BuildContext context,
     EmissionBloc emissionBloc,
     MenuAdminBloc menuAdminBloc,
+    bool isMobile,
   ) {
-    return Row(
+    return isMobile
+        ? Column(
+            children: [
+              // Ajouter
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: emissionBloc.chargement ? null : () => emissionBloc.addEmission(),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [rouge, rouge.withOpacity(0.8)],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: rouge.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (emissionBloc.chargement)
+                          SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(blanc),
+                            ),
+                          )
+                        else
+                          Icon(CupertinoIcons.checkmark_alt, color: blanc, size: 18),
+                        const SizedBox(width: 8),
+                        Text(
+                          'AJOUTER L\'ÉMISSION',
+                          style: TextStyle(
+                            color: blanc,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              // Annuler
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () => menuAdminBloc.setEmission(0),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(CupertinoIcons.xmark, color: noir, size: 18),
+                        const SizedBox(width: 8),
+                        Text(
+                          'ANNULER',
+                          style: TextStyle(
+                            color: noir,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        : Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         // Annuler

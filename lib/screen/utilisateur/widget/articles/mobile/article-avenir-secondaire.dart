@@ -116,13 +116,14 @@ class ArticleAvenirSecondaire extends StatelessWidget {
 
               // Contenu
               Padding(
-                padding: EdgeInsets.all(14),
+                padding: EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     // Badge catégorie
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
                         color: blanc.withOpacity(0.25),
                         borderRadius: BorderRadius.circular(6),
@@ -143,28 +144,28 @@ class ArticleAvenirSecondaire extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 8),
                     
                     // Titre
                     Text(
                       article.titre!,
                       style: fontFammilyDii(
                         context,
-                        15,
+                        14,
                         blanc,
                         FontWeight.w700,
                         FontStyle.normal,
                       ),
-                      maxLines: 3,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 8),
                     
                     // Icône flèche
                     Icon(
                       CupertinoIcons.arrow_right_circle,
                       color: Color(0xff06b6d4),
-                      size: 20,
+                      size: 18,
                     ),
                   ],
                 ),

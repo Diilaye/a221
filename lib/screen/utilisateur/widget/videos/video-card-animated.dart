@@ -77,10 +77,11 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                     ),
                   ),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       // Header avec logo et titre
                       Container(
-                        padding: EdgeInsets.all(20),
+                        padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -126,7 +127,7 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                                   SizedBox(height: 8),
                                   Text(
                                     widget.video.titre!,
-                                    style: fontFammilyDii(context, 20, blanc, FontWeight.w700, FontStyle.normal),
+                                    style: fontFammilyDii(context, 18, blanc, FontWeight.w700, FontStyle.normal),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -139,13 +140,13 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                               child: GestureDetector(
                                 onTap: () => Navigator.of(context).pop(),
                                 child: Container(
-                                  padding: EdgeInsets.all(12),
+                                  padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                     color: blanc.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(12),
                                     border: Border.all(color: blanc.withOpacity(0.2), width: 1),
                                   ),
-                                  child: Icon(CupertinoIcons.xmark, color: blanc, size: 24),
+                                  child: Icon(CupertinoIcons.xmark, color: blanc, size: 20),
                                 ),
                               ),
                             ),
@@ -155,7 +156,7 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                       // Video player
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.all(20),
+                          margin: EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
@@ -198,7 +199,7 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
             ..translate(0.0, _isHovered ? -10.0 : 0.0)
             ..scale(_isHovered ? 1.05 : 1.0),
           width: 340,
-          height: 330,
+          height: 310,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: noir.withOpacity(0.3),
@@ -224,13 +225,13 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                          widget.video.imageFile!.url!.isNotEmpty)
                     ? Image.network(
                         BASE_URL_ASSET + widget.video.imageFile!.url!,
-                        height: 210,
+                        height: 190,
                         width: 340,
                         fit: BoxFit.cover,
                       )
                     : Image.network(
                         'https://cdn.vectorstock.com/i/500p/81/79/no-photo-icon-default-placeholder-vector-41468179.jpg',
-                        height: 210,
+                        height: 190,
                         width: 340,
                         fit: BoxFit.cover,
                       ),
@@ -238,7 +239,7 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                 // Gradient overlay animé
                 AnimatedContainer(
                   duration: Duration(milliseconds: 300),
-                  height: 210,
+                  height: 190,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -259,7 +260,7 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                       opacity: _isHovered ? 1.0 : 0.0,
                       duration: Duration(milliseconds: 300),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
                           color: rouge.withOpacity(0.95),
                           borderRadius: BorderRadius.circular(20),
@@ -272,12 +273,13 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                           ],
                         ),
                         child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(CupertinoIcons.play_circle_fill, color: blanc, size: 14),
+                            Icon(CupertinoIcons.play_circle_fill, color: blanc, size: 12),
                             SizedBox(width: 4),
                             Text(
                               'REGARDER',
-                              style: fontFammilyDii(context, 10, blanc, FontWeight.w700, FontStyle.normal),
+                              style: fontFammilyDii(context, 9, blanc, FontWeight.w700, FontStyle.normal),
                             ),
                           ],
                         ),
@@ -286,7 +288,7 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                   ),
                 // Bouton play avec animation de pulsation
                 Positioned(
-                  top: 75,
+                  top: 65,
                   left: 135,
                   child: AnimatedBuilder(
                     animation: _pulseAnimation,
@@ -294,8 +296,8 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                       return Transform.scale(
                         scale: _isHovered ? _pulseAnimation.value : 1.0,
                         child: Container(
-                          height: 70,
-                          width: 70,
+                          height: 60,
+                          width: 60,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: RadialGradient(
@@ -315,7 +317,7 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                           child: Icon(
                             CupertinoIcons.play_fill,
                             color: blanc,
-                            size: 32,
+                            size: 28,
                           ),
                         ),
                       );
@@ -324,7 +326,7 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                 ),
                 // Badge durée vidéo (optionnel)
                 Positioned(
-                  top: 170,
+                  top: 150,
                   left: 12,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -346,10 +348,11 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                 ),
                 // Section info avec effet glassmorphism
                 Positioned(
-                  top: 210,
+                  top: 190,
                   child: Container(
                     width: 340,
                     height: 120,
+                    constraints: BoxConstraints(maxHeight: 120),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
@@ -360,12 +363,13 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                         ],
                       ),
                     ),
-                    padding: EdgeInsets.all(12),
+                    padding: EdgeInsets.all(10),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
                             color: rouge.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(6),
@@ -376,17 +380,17 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                           ),
                           child: Text(
                             widget.video.emission!.toUpperCase(),
-                            style: fontFammilyDii(context, 12, rouge, FontWeight.w700, FontStyle.normal),
+                            style: fontFammilyDii(context, 11, rouge, FontWeight.w700, FontStyle.normal),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        paddingVerticalGlobal(8),
+                        paddingVerticalGlobal(6),
                         Text(
                           widget.video.titre!,
                           style: fontFammilyDii(
                             context,
-                            _isHovered ? 16 : 15,
+                            _isHovered ? 15 : 14,
                             blanc,
                             FontWeight.w600,
                             FontStyle.normal,
@@ -397,13 +401,13 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                         Spacer(),
                         Row(
                           children: [
-                            Icon(CupertinoIcons.play_arrow, color: rouge, size: 14),
+                            Icon(CupertinoIcons.play_arrow, color: rouge, size: 12),
                             SizedBox(width: 4),
                             Text(
                               'Regarder maintenant',
                               style: fontFammilyDii(
                                 context,
-                                12,
+                                11,
                                 _isHovered ? blanc : blanc.withOpacity(0.7),
                                 FontWeight.w500,
                                 FontStyle.normal,
@@ -411,7 +415,7 @@ class _VideoCardAnimatedState extends State<VideoCardAnimated> with SingleTicker
                             ),
                             Spacer(),
                             if (_isHovered)
-                              Icon(CupertinoIcons.arrow_right_circle_fill, color: rouge, size: 18),
+                              Icon(CupertinoIcons.arrow_right_circle_fill, color: rouge, size: 16),
                           ],
                         ),
                       ],

@@ -33,90 +33,132 @@ class ArticleCategorieRowWidget extends StatelessWidget {
         },
         child: Card(
           margin: EdgeInsets.only(top: 16.0),
-          elevation: 2,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 0.0), // Espace réservé pour l'image
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        article.tags!.titre!.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[700],
+          elevation: 4,
+          shadowColor: Colors.black.withOpacity(0.1),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.white, Colors.grey[50]!],
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Image à gauche
+                  Container(
+                    width: 140,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
                         ),
-                      ),
-                      SizedBox(height: 8.0),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            WidgetSpan(
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 4.0),
-                                child: Icon(Icons.article,
-                                    size: 20.0, color: rouge),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        BASE_URL_ASSET + article.imageArticle!.url!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[200],
+                            child: Icon(
+                              Icons.image_not_supported,
+                              size: 40,
+                              color: Colors.grey[400],
+                            ),
+                          );
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            color: Colors.grey[200],
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                                color: rouge,
+                                strokeWidth: 2,
                               ),
                             ),
-                            TextSpan(
-                              text: article.titre!,
-                              style: fontFammilyDii(context, 16, noir,
-                                  FontWeight.bold, FontStyle.normal),
-                            ),
-                            WidgetSpan(
-                                child: SizedBox(
-                              width: 120,
-                              height: 2,
-                            )),
-                          ],
-                        ),
-                      ),
-                      paddingVerticalGlobal(8),
-                      HtmlWidget(
-                        extractFirstTwoSentences(article.description!, 1),
-                        textStyle: fontFammilyDii(context, 10, noir,
-                            FontWeight.w300, FontStyle.normal),
-                      ),
-                      paddingVerticalGlobal(8),
-                      Text(
-                        'Publié le ${showDate(article.date!)}',
-                        style: fontFammilyDii(context, 12, Colors.grey[600],
-                            FontWeight.w300, FontStyle.normal),
-                      ),
-                      paddingVerticalGlobal(8),
-                      Text(
-                        '${article.author!.prenom!} ${article.author!.nom!}',
-                        style: fontFammilyDii(context, 12, Colors.grey[600],
-                            FontWeight.w300, FontStyle.normal),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                          8.0), // Pour arrondir les coins de l'image
-                      child: Image.network(
-                        BASE_URL_ASSET +
-                            article.imageArticle!
-                                .url!, // Assurez-vous d'avoir l'image dans votre dossier assets
-                        fit: BoxFit.cover,
+                          );
+                        },
                       ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(width: 20),
+                  // Contenu à droite
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: rouge.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            article.tags!.titre!.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 11.0,
+                              fontWeight: FontWeight.bold,
+                              color: rouge,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 12.0),
+                        Text(
+                          article.titre!,
+                          style: fontFammilyDii(context, 18, noir,
+                              FontWeight.bold, FontStyle.normal),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        paddingVerticalGlobal(12),
+                        HtmlWidget(
+                          extractFirstTwoSentences(article.description!, 1),
+                          textStyle: fontFammilyDii(context, 13, Colors.grey[700],
+                              FontWeight.w400, FontStyle.normal),
+                        ),
+                        paddingVerticalGlobal(12),
+                        Row(
+                          children: [
+                            Icon(Icons.calendar_today, size: 14, color: Colors.grey[500]),
+                            SizedBox(width: 6),
+                            Text(
+                              showDate(article.date!),
+                              style: fontFammilyDii(context, 12, Colors.grey[600],
+                                  FontWeight.w400, FontStyle.normal),
+                            ),
+                            SizedBox(width: 16),
+                            Icon(Icons.person, size: 14, color: Colors.grey[500]),
+                            SizedBox(width: 6),
+                            Text(
+                              '${article.author!.prenom!} ${article.author!.nom!}',
+                              style: fontFammilyDii(context, 12, Colors.grey[600],
+                                  FontWeight.w400, FontStyle.normal),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

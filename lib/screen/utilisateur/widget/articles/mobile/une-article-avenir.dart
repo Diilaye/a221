@@ -159,7 +159,7 @@ class UneArticleAvenir extends StatelessWidget {
 
               // Contenu
               Container(
-                padding: EdgeInsets.all(18),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -173,25 +173,26 @@ class UneArticleAvenir extends StatelessWidget {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     // Titre
                     Text(
                       article.titre!,
                       style: fontFammilyDii(
                         context,
-                        20,
+                        18,
                         blanc,
                         FontWeight.w900,
                         FontStyle.normal,
                       ),
-                      maxLines: 3,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 14),
+                    SizedBox(height: 12),
                     // Ligne décorative
                     Container(
                       height: 3,
-                      width: 60,
+                      width: 50,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
@@ -202,21 +203,21 @@ class UneArticleAvenir extends StatelessWidget {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    SizedBox(height: 14),
+                    SizedBox(height: 12),
                     // CTA
                     Row(
                       children: [
                         Icon(
                           CupertinoIcons.arrow_right_circle_fill,
                           color: Color(0xff06b6d4),
-                          size: 22,
+                          size: 20,
                         ),
                         SizedBox(width: 8),
                         Text(
                           'Découvrir l\'article',
                           style: fontFammilyDii(
                             context,
-                            15,
+                            14,
                             blanc,
                             FontWeight.w700,
                             FontStyle.normal,

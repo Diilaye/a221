@@ -189,15 +189,20 @@ final _router = GoRouter(
   ],
 );
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  setUrlStrategy(PathUrlStrategy());
-
-  // Gestion simple des erreurs web sans traitement complexe
-  // Installer le handler web centralisé
+  // Désactiver les assertions en mode release pour éviter les erreurs du moteur web
   if (kIsWeb) {
+    // Configurer le handler d'erreurs web en PREMIER avant toute autre initialisation
     WebErrorHandler.setupWebErrorHandling();
   }
+  
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Ne pas forcer l'orientation portrait sur le web
+  if (!kIsWeb) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  }
+  
+  setUrlStrategy(PathUrlStrategy());
 
   runApp(
     MultiProvider(

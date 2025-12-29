@@ -1,6 +1,5 @@
 import 'package:actu/bloc/utilisateur/home-bloc.dart';
 import 'package:actu/models/administrateur/article-model.dart';
-import 'package:actu/utils/color-by-dii.dart';
 import 'package:actu/utils/requette-by-dii.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +9,7 @@ class ArticleBlocMultiUneLueWidget extends StatefulWidget {
   final double card;
   final Color color;
   final ArticlesModel? article;
-  
+
   const ArticleBlocMultiUneLueWidget({
     super.key,
     this.card = 0,
@@ -19,12 +18,13 @@ class ArticleBlocMultiUneLueWidget extends StatefulWidget {
   });
 
   @override
-  State<ArticleBlocMultiUneLueWidget> createState() => _ArticleBlocMultiUneLueWidgetState();
+  State<ArticleBlocMultiUneLueWidget> createState() =>
+      _ArticleBlocMultiUneLueWidgetState();
 }
 
-class _ArticleBlocMultiUneLueWidgetState extends State<ArticleBlocMultiUneLueWidget>
+class _ArticleBlocMultiUneLueWidgetState
+    extends State<ArticleBlocMultiUneLueWidget>
     with SingleTickerProviderStateMixin {
-  bool _isHovered = false;
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _overlayAnimation;
@@ -70,9 +70,6 @@ class _ArticleBlocMultiUneLueWidgetState extends State<ArticleBlocMultiUneLueWid
   }
 
   void _handleHover(bool isHovered) {
-    setState(() {
-      _isHovered = isHovered;
-    });
     isHovered ? _controller.forward() : _controller.reverse();
   }
 
@@ -89,30 +86,29 @@ class _ArticleBlocMultiUneLueWidgetState extends State<ArticleBlocMultiUneLueWid
   Widget build(BuildContext context) {
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
 
-    return Expanded(
-      flex: 4,
-      child: MouseRegion(
-        onEnter: (_) => _handleHover(true),
-        onExit: (_) => _handleHover(false),
-        cursor: SystemMouseCursors.click,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) => Transform.scale(
-            scale: _scaleAnimation.value,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: widget.color.withOpacity(0.2),
-                    blurRadius: _isHovered ? 25 : 15,
-                    spreadRadius: _isHovered ? 5 : 2,
-                    offset: Offset(0, _isHovered ? 10 : 5),
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
+    return MouseRegion(
+      onEnter: (_) => _handleHover(true),
+      onExit: (_) => _handleHover(false),
+      cursor: SystemMouseCursors.click,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) => Transform.scale(
+          scale: _scaleAnimation.value,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: widget.color.withOpacity(0.15),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: AspectRatio(
+                aspectRatio: 16 / 10,
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
@@ -123,18 +119,33 @@ class _ArticleBlocMultiUneLueWidgetState extends State<ArticleBlocMultiUneLueWid
                         child: Image.network(
                           widget.article?.imageArticle?.url != null &&
                                   widget.article?.imageArticle?.url != ''
-                              ? BASE_URL_ASSET + widget.article!.imageArticle!.url!
+                              ? BASE_URL_ASSET +
+                                  widget.article!.imageArticle!.url!
                               : 'https://cdn.vectorstock.com/i/500p/81/79/no-photo-icon-default-placeholder-vector-41468179.jpg',
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: Colors.grey.shade300,
+                              child: Icon(
+                                Icons.image_not_supported,
+                                size: 50,
+                                color: Colors.grey.shade600,
+                              ),
+                            );
+                          },
                           loadingBuilder: (context, child, loadingProgress) {
                             if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: widget.color,
-                                value: loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
+                            return Container(
+                              color: Colors.grey.shade200,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: widget.color,
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
                               ),
                             );
                           },
@@ -147,8 +158,8 @@ class _ArticleBlocMultiUneLueWidgetState extends State<ArticleBlocMultiUneLueWid
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Colors.black.withOpacity(0.6),
-                            Colors.black.withOpacity(0.3),
+                            Colors.transparent,
+                            Colors.black.withOpacity(0.7),
                           ],
                         ),
                       ),
@@ -162,8 +173,9 @@ class _ArticleBlocMultiUneLueWidgetState extends State<ArticleBlocMultiUneLueWid
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              widget.color.withOpacity(_overlayAnimation.value),
-                              widget.color.withOpacity(_overlayAnimation.value * 0.5),
+                              Colors.transparent,
+                              widget.color
+                                  .withOpacity(_overlayAnimation.value * 0.6),
                             ],
                           ),
                         ),
@@ -172,30 +184,26 @@ class _ArticleBlocMultiUneLueWidgetState extends State<ArticleBlocMultiUneLueWid
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (widget.article?.titre != null)
-                              Expanded(
-                                child: Container(
-                                  alignment: Alignment.bottomLeft,
-                                  child: AnimatedOpacity(
-                                    duration: const Duration(milliseconds: 200),
-                                    opacity: _titleOpacityAnimation.value,
-                                    child: Text(
-                                      widget.article!.titre!,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        shadows: [
-                                          Shadow(
-                                            offset: Offset(0, 1),
-                                            blurRadius: 3,
-                                            color: Colors.black45,
-                                          ),
-                                        ],
+                              AnimatedOpacity(
+                                duration: const Duration(milliseconds: 200),
+                                opacity: _titleOpacityAnimation.value,
+                                child: Text(
+                                  widget.article!.titre!,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.3,
+                                    shadows: [
+                                      Shadow(
+                                        offset: Offset(0, 2),
+                                        blurRadius: 4,
+                                        color: Colors.black54,
                                       ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                    ],
                                   ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                           ],
@@ -210,7 +218,5 @@ class _ArticleBlocMultiUneLueWidgetState extends State<ArticleBlocMultiUneLueWid
         ),
       ),
     );
-
-   
   }
 }

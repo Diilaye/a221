@@ -218,6 +218,7 @@ class _OverViewAdminState extends State<OverViewAdmin> {
                           ],
                         ),
                       ),
+                      const SizedBox(width: 8),
                       // Bouton rafraîchir
                       Container(
                         decoration: BoxDecoration(

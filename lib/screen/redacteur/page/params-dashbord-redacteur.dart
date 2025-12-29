@@ -1,15 +1,9 @@
 import 'package:actu/bloc/administrateur/menu-admin.dart';
-import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/categories/categories-screen.dart';
-import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/mots-cles/key-word-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/profile-sccren.dart';
-import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/sous-categorie/sous-categorie-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/tags/tags-screen.dart';
 import 'package:actu/screen/adminnistrateur/pages/dahsbord-admin/params/users/users-screen.dart';
-import 'package:actu/screen/adminnistrateur/widgets/menu/item-menu.dart';
-import 'package:actu/utils/color-by-dii.dart';
-import 'package:actu/utils/widgets/font-fammily-dii.dart';
-import 'package:actu/utils/widgets/padding-global.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ParamsDashbordRedacteur extends StatelessWidget {
@@ -17,81 +11,294 @@ class ParamsDashbordRedacteur extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     final menuAdminBloc = Provider.of<MenuAdminBloc>(context);
 
-    return Row(
-      children: [
-        paddingHorizontalGlobal(0),
-        Expanded(
-            child: Container(
-          decoration: BoxDecoration(color: blanc, boxShadow: [
-            BoxShadow(
-                offset: const Offset(0, 0),
-                blurRadius: 1,
-                color: noir.withOpacity(.2))
-          ]),
-          child: ListView(
-            children: [
-              SizedBox(
-                height: size.height * .02,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: size.width * .025,
+    return Container(
+      color: Colors.grey[50],
+      child: Row(
+        children: [
+          // Menu latéral des paramètres
+          Container(
+            width: 280,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(2, 0),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.indigo.shade600,
+                        Colors.purple.shade600,
+                      ],
+                    ),
                   ),
-                  Text(
-                    'Parametres'.toUpperCase(),
-                    style: fontFammilyDii(
-                        context, 20, rouge, FontWeight.bold, FontStyle.normal),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          CupertinoIcons.settings,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Text(
+                        'PARAMÈTRES',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              SizedBox(
-                height: size.height * .02,
-              ),
-              ItemMenu(
-                titre: 'Tags',
-                icons: CupertinoIcons.circle_fill,
-                haveIcon: false,
-                isActive: menuAdminBloc.sousMenu == 2,
-                ontap: () => menuAdminBloc.setSousMenu(2),
-              ),
-              SizedBox(
-                height: size.height * .02,
-              ),
-              ItemMenu(
-                titre: 'Utilisateur',
-                icons: CupertinoIcons.circle_fill,
-                haveIcon: false,
-                isActive: menuAdminBloc.sousMenu == 4,
-                ontap: () => menuAdminBloc.setSousMenu(4),
-              ),
-              SizedBox(
-                height: size.height * .02,
-              ),
-              ItemMenu(
-                titre: 'Mot de passe',
-                icons: CupertinoIcons.circle_fill,
-                haveIcon: false,
-                isActive: menuAdminBloc.sousMenu == 5,
-                ontap: () => menuAdminBloc.setSousMenu(5),
-              ),
-            ],
+                ),
+                const SizedBox(height: 8),
+                // Menu items
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    children: [
+                      _buildMenuSection(
+                        title: 'GÉNÉRAL',
+                        items: [
+                          _ParamMenuItem(
+                            title: 'Tags',
+                            subtitle: 'Gérer les tags',
+                            icon: CupertinoIcons.tag,
+                            menuId: 2,
+                            currentMenu: menuAdminBloc.sousMenu,
+                            onTap: () => menuAdminBloc.setSousMenu(2),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      _buildMenuSection(
+                        title: 'COMPTE',
+                        items: [
+                          _ParamMenuItem(
+                            title: 'Utilisateur',
+                            subtitle: 'Informations personnelles',
+                            icon: CupertinoIcons.person_circle,
+                            menuId: 4,
+                            currentMenu: menuAdminBloc.sousMenu,
+                            onTap: () => menuAdminBloc.setSousMenu(4),
+                          ),
+                          _ParamMenuItem(
+                            title: 'Mot de passe',
+                            subtitle: 'Sécurité du compte',
+                            icon: CupertinoIcons.lock_shield,
+                            menuId: 5,
+                            currentMenu: menuAdminBloc.sousMenu,
+                            onTap: () => menuAdminBloc.setSousMenu(5),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
-        Expanded(
-            flex: 4,
+          // Content area
+          Expanded(
             child: menuAdminBloc.sousMenu == 2
                 ? const TagScreen()
                 : menuAdminBloc.sousMenu == 4
                     ? const UserScreen()
                     : menuAdminBloc.sousMenu == 5
                         ? const ProfileUserScreen()
-                        : const SizedBox()),
+                        : _buildWelcomeScreen(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuSection({required String title, required List<Widget> items}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: Colors.grey.shade600,
+              letterSpacing: 1.2,
+            ),
+          ),
+        ),
+        ...items,
       ],
+    );
+  }
+
+  Widget _buildWelcomeScreen() {
+    return Container(
+      padding: const EdgeInsets.all(40),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.indigo.shade100,
+                    Colors.purple.shade100,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                CupertinoIcons.settings,
+                size: 64,
+                color: Colors.indigo.shade700,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Paramètres du compte',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade800,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Sélectionnez une option dans le menu',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ParamMenuItem extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final int menuId;
+  final int currentMenu;
+  final VoidCallback onTap;
+
+  const _ParamMenuItem({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.menuId,
+    required this.currentMenu,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isActive = menuId == currentMenu;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isActive ? Colors.indigo.shade50 : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+            border: isActive
+                ? Border.all(
+                    color: Colors.indigo.shade300,
+                    width: 2,
+                  )
+                : null,
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  gradient: isActive
+                      ? LinearGradient(
+                          colors: [
+                            Colors.indigo.shade600,
+                            Colors.purple.shade600,
+                          ],
+                        )
+                      : null,
+                  color: isActive ? null : Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  icon,
+                  color: isActive ? Colors.white : Colors.grey.shade700,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: isActive ? Colors.indigo.shade900 : Colors.grey.shade800,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isActive ? Colors.indigo.shade700 : Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (isActive)
+                Icon(
+                  CupertinoIcons.chevron_right,
+                  color: Colors.indigo.shade600,
+                  size: 16,
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

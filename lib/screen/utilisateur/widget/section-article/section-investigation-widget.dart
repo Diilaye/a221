@@ -1,5 +1,5 @@
 import 'package:actu/bloc/utilisateur/home-bloc.dart';
-import 'package:actu/screen/utilisateur/widget/articles/article-bloc-multi-une-lue-widget.dart';
+import 'package:actu/screen/utilisateur/widget/articles/article-revelation-card.dart';
 import 'package:actu/screen/utilisateur/widget/articles/article-les-plus-lue.dart';
 import 'package:actu/screen/utilisateur/widget/articles/article-les-plus-une-widget.dart';
 import 'package:actu/utils/color-by-dii.dart';
@@ -8,14 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-class SectionInvestigationtWidget extends StatefulWidget {
-  const SectionInvestigationtWidget({super.key});
+class SectionInvestigationWidget extends StatefulWidget {
+  const SectionInvestigationWidget({super.key});
 
   @override
-  State<SectionInvestigationtWidget> createState() => _SectionInvestigationtWidgetState();
+  State<SectionInvestigationWidget> createState() =>
+      _SectionInvestigationWidgetState();
 }
 
-class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidget> 
+class _SectionInvestigationWidgetState extends State<SectionInvestigationWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
@@ -68,35 +69,21 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
         position: _slideAnimation,
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1200),
-          margin: const EdgeInsets.symmetric(vertical: 32),
+          margin: const EdgeInsets.symmetric(vertical: 40),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                rouge,
-                rouge.withOpacity(0.9),
-              ],
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: rouge.withOpacity(0.2),
+              width: 1,
             ),
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: rouge.withOpacity(0.3),
-                blurRadius: 20,
-                spreadRadius: 5,
-                offset: const Offset(0, 10),
-              ),
-            ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              children: [
-                _buildHeader(context, homeUtilisateurBloc),
-                const SizedBox(height: 24),
-                _buildContent(context, homeUtilisateurBloc),
-              ],
-            ),
+          child: Column(
+            children: [
+              _buildHeader(context, homeUtilisateurBloc),
+              const SizedBox(height: 0),
+              _buildContent(context, homeUtilisateurBloc),
+            ],
           ),
         ),
       ),
@@ -104,86 +91,183 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
   }
 
   Widget _buildHeader(BuildContext context, HomeUtilisateurBloc bloc) {
-    return Row(
-      children: [
-        const Icon(Icons.search, color: Colors.white, size: 32),
-        const SizedBox(width: 16),
-        Text(
-          'Révélation'.toUpperCase(),
-          style: fontFammilyDii(
-            context,
-            28,
-            Colors.white,
-            FontWeight.bold,
-            FontStyle.normal,
-          ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            noir,
+            Colors.grey.shade900,
+          ],
         ),
-        const Spacer(),
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: InkWell(
-            onTap: () => _navigateToInvestigation(context, bloc),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(30),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  rouge,
+                  rouge.withOpacity(0.8),
+                ],
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: rouge.withOpacity(0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const Icon(Icons.stars, color: Colors.white, size: 24),
+          ),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
                   Text(
-                    'voir +'.toUpperCase(),
+                    'RÉVÉLATION',
                     style: fontFammilyDii(
                       context,
-                      16,
-                      Colors.white,
-                      FontWeight.bold,
+                      26,
+                      rouge,
+                      FontWeight.w900,
                       FontStyle.normal,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  const Icon(Icons.arrow_forward, color: Colors.white),
+                  const SizedBox(width: 10),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          rouge,
+                          rouge.withOpacity(0.8),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Text(
+                      'EXCLUSIF',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black87,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
                 ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Enquêtes et investigations approfondies',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.grey.shade400,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.3,
+                ),
+              ),
+            ],
+          ),
+          const Spacer(),
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: InkWell(
+              onTap: () => _navigateToInvestigation(context, bloc),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      rouge.withOpacity(0.15),
+                      rouge.withOpacity(0.05),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: rouge.withOpacity(0.3),
+                    width: 1.5,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'VOIR PLUS',
+                      style: fontFammilyDii(
+                        context,
+                        13,
+                        rouge,
+                        FontWeight.w700,
+                        FontStyle.normal,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(
+                      Icons.arrow_forward,
+                      color: rouge,
+                      size: 16,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildContent(BuildContext context, HomeUtilisateurBloc bloc) {
-    return SizedBox(
-      height: 550,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: [
-                if (bloc.uneInvestigations != null)
-                  Expanded(
-                    flex: 3,
-                    child: _buildMainArticle(bloc),
-                  ),
-                const SizedBox(height: 16),
-                if (bloc.articleInvestigations.isNotEmpty)
-                  Expanded(
-                    flex: 2,
-                    child: _buildSecondaryArticles(bloc),
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 24),
-          if (bloc.articleActualites.isNotEmpty)
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: SizedBox(
+        height: 540,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
             Expanded(
-              flex: 1,
-              child: _buildMostReadSection(context, bloc),
+              flex: 3,
+              child: Column(
+                children: [
+                  // Article principal - Plus grand
+                  if (bloc.uneInvestigations != null)
+                    Expanded(
+                      flex: 2,
+                      child: _buildMainArticle(bloc),
+                    ),
+                  const SizedBox(height: 16),
+                  // Cartes secondaires modernes
+                  if (bloc.articleInvestigations.isNotEmpty)
+                    Expanded(
+                      flex: 1,
+                      child: _buildSecondaryArticles(bloc),
+                    ),
+                ],
+              ),
             ),
-        ],
+            const SizedBox(width: 20),
+            // Sidebar - Plus lues
+            if (bloc.articleActualites.isNotEmpty)
+              Expanded(
+                flex: 1,
+                child: _buildMostReadSection(context, bloc),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -196,45 +280,37 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOutCubic,
-        transform: Matrix4.identity()..scale(_isHovered ? 1.02 : 1.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(_isHovered ? 0.3 : 0.25),
-              blurRadius: _isHovered ? 20 : 15,
-              spreadRadius: _isHovered ? 3 : 2,
-              offset: Offset(0, _isHovered ? 10 : 8),
-            ),
-            BoxShadow(
-              color: rouge.withOpacity(_isHovered ? 0.2 : 0.15),
-              blurRadius: _isHovered ? 25 : 20,
-              spreadRadius: _isHovered ? 5 : 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: _isHovered
+                ? rouge.withOpacity(0.5)
+                : Colors.grey.shade300,
+            width: _isHovered ? 2 : 1,
+          ),
         ),
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: ArticleLesPlusLueUneWidget(
-                article: bloc.uneInvestigations,
-              ),
-            ),
-            
-          ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: ArticleLesPlusLueUneWidget(
+            article: bloc.uneInvestigations,
+          ),
         ),
       ),
     );
   }
 
   Widget _buildSecondaryArticles(HomeUtilisateurBloc bloc) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
+    return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.white.withOpacity(0.05),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.grey.shade50,
+            Colors.white,
+          ],
+        ),
       ),
       padding: const EdgeInsets.all(12),
       child: Row(
@@ -243,11 +319,10 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
             .map(
               (article) => Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: ArticleBlocMultiUneLueWidget(
-                    card: 0,
-                    color: rouge,
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: ArticleRevelationCard(
                     article: article,
+                    accentColor: rouge,
                   ),
                 ),
               ),
@@ -258,10 +333,11 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
   }
 
   Widget _buildMostReadSection(BuildContext context, HomeUtilisateurBloc bloc) {
-    return Card(
-      elevation: 8,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        border: Border.all(color: Colors.grey.shade200, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,20 +345,24 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: rouge.withOpacity(0.1),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              color: Colors.grey.shade50,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(12)),
+              border: Border(
+                bottom: BorderSide(color: Colors.grey.shade200, width: 1),
+              ),
             ),
             child: Row(
               children: [
-                Icon(Icons.trending_up, color: rouge),
-                const SizedBox(width: 8),
+                Icon(Icons.trending_up, color: rouge, size: 20),
+                const SizedBox(width: 10),
                 Text(
-                  'Les plus lues'.toUpperCase(),
+                  'LES PLUS LUES',
                   style: fontFammilyDii(
                     context,
-                    16,
+                    14,
                     noir,
-                    FontWeight.bold,
+                    FontWeight.w700,
                     FontStyle.normal,
                   ),
                 ),
@@ -306,12 +386,15 @@ class _SectionInvestigationtWidgetState extends State<SectionInvestigationtWidge
     );
   }
 
-  void _navigateToInvestigation(BuildContext context, HomeUtilisateurBloc bloc) async {
+  void _navigateToInvestigation(
+      BuildContext context, HomeUtilisateurBloc bloc) async {
     try {
-      final category = bloc.categories.firstWhere((e) => e.titre == "INVESTIGATION");
+      final category =
+          bloc.categories.firstWhere((e) => e.titre == "INVESTIGATION");
       await bloc.setCatMenu(category);
       if (mounted) {
-        context.go('/categorie/${category.slug?.toLowerCase().replaceAll("é", "e")}');
+        context.go(
+            '/categorie/${category.slug?.toLowerCase().replaceAll("é", "e")}');
       }
       await bloc.setCategorieMenu();
     } catch (e) {

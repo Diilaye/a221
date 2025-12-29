@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:js' as js;
 
-class ArtilceInvestiogationMobile extends StatelessWidget {
+class ArticleInvestigationMobile extends StatelessWidget {
   final ArticlesModel article;
-  const ArtilceInvestiogationMobile({super.key, required this.article});
+  const ArticleInvestigationMobile({super.key, required this.article});
 
   @override
   Widget build(BuildContext context) {
@@ -26,21 +26,14 @@ class ArtilceInvestiogationMobile extends StatelessWidget {
         width: 280,
         decoration: BoxDecoration(
           color: noir,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: noir.withOpacity(0.5),
-              blurRadius: 25,
-              offset: Offset(0, 12),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Color(0xFFffd93d).withOpacity(0.4),
-            width: 2,
+            color: Color(0xFFffd93d).withOpacity(0.3),
+            width: 1.5,
           ),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
               // Image pleine hauteur
@@ -81,64 +74,44 @@ class ArtilceInvestiogationMobile extends StatelessWidget {
               
               // Badge EXCLUSIF en haut
               Positioned(
-                top: 16,
-                right: 16,
+                top: 14,
+                right: 14,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFFffd93d), Color(0xFFffb830)],
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFFffd93d).withOpacity(0.6),
-                        blurRadius: 15,
-                        spreadRadius: 2,
-                      ),
-                    ],
+                    color: Color(0xFFffd93d),
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        CupertinoIcons.star_fill,
-                        color: noir,
-                        size: 12,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        'EXCLUSIF',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w900,
-                          color: noir,
-                          letterSpacing: 1,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    'EXCLUSIF',
+                    style: TextStyle(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w800,
+                      color: noir,
+                      letterSpacing: 0.8,
+                    ),
                   ),
                 ),
               ),
               
               // Icône loupe en haut à gauche
               Positioned(
-                top: 16,
-                left: 16,
+                top: 14,
+                left: 14,
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(7),
                   decoration: BoxDecoration(
-                    color: noir.withOpacity(0.8),
+                    color: noir.withOpacity(0.7),
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Color(0xFFffd93d),
-                      width: 2,
+                      color: Color(0xFFffd93d).withOpacity(0.6),
+                      width: 1.5,
                     ),
                   ),
                   child: Icon(
                     CupertinoIcons.search,
                     color: Color(0xFFffd93d),
-                    size: 18,
+                    size: 16,
                   ),
                 ),
               ),
@@ -149,7 +122,7 @@ class ArtilceInvestiogationMobile extends StatelessWidget {
                 left: 0,
                 right: 0,
                 child: Container(
-                  padding: EdgeInsets.all(18),
+                  padding: EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -158,48 +131,41 @@ class ArtilceInvestiogationMobile extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              width: 30,
-                              height: 2,
+                              width: 24,
+                              height: 1.5,
                               color: Color(0xFFffd93d),
                             ),
                             SizedBox(width: 8),
                             Text(
                               article.tags!.titre!.toUpperCase(),
                               style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w800,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
                                 color: Color(0xFFffd93d),
-                                letterSpacing: 1.2,
+                                letterSpacing: 1,
                               ),
                             ),
                           ],
                         ),
-                      SizedBox(height: 12),
+                      SizedBox(height: 10),
                       
                       // Titre
                       Text(
                         article.titre!,
                         style: fontFammilyDii(
-                            context, 17, blanc, FontWeight.w900, FontStyle.normal),
+                            context, 16, blanc, FontWeight.w800, FontStyle.normal),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                       
-                      SizedBox(height: 14),
+                      SizedBox(height: 12),
                       
                       // Séparateur
                       Container(
                         height: 1,
-                        width: 60,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xFFffd93d),
-                              Colors.transparent,
-                            ],
-                          ),
+                        width: 50,
+                        color: Color(0xFFffd93d).withOpacity(0.4),
                         ),
-                      ),
                       
                       SizedBox(height: 10),
                       
@@ -209,16 +175,16 @@ class ArtilceInvestiogationMobile extends StatelessWidget {
                           Text(
                             'Lire l\'enquête',
                             style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
                               color: Color(0xFFffd93d),
                             ),
                           ),
-                          SizedBox(width: 6),
+                          SizedBox(width: 5),
                           Icon(
                             CupertinoIcons.arrow_right,
                             color: Color(0xFFffd93d),
-                            size: 14,
+                            size: 13,
                           ),
                         ],
                       ),

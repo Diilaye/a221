@@ -26,6 +26,7 @@ class _TvScreenState extends State<TvScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    bool isMobile = size.width < 900;
     final menuAdminBloc = Provider.of<MenuAdminBloc>(context);
     final emissionBloc = Provider.of<EmissionBloc>(context);
 
@@ -44,23 +45,23 @@ class _TvScreenState extends State<TvScreen> {
             ),
           ),
           child: ListView(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(isMobile ? 16 : 24),
             children: [
               // Hero Header Section
-              _buildHeroHeader(context, emissionBloc, menuAdminBloc),
-              const SizedBox(height: 32),
+              _buildHeroHeader(context, emissionBloc, menuAdminBloc, isMobile),
+              SizedBox(height: isMobile ? 24 : 32),
               
               // Filters and Search Bar
-              _buildFiltersSection(context, size, menuAdminBloc),
-              const SizedBox(height: 32),
+              _buildFiltersSection(context, size, menuAdminBloc, isMobile),
+              SizedBox(height: isMobile ? 24 : 32),
               
               // Grid of Emissions
-              _buildEmissionsGrid(context, size, emissionBloc),
-              const SizedBox(height: 32),
+              _buildEmissionsGrid(context, size, emissionBloc, isMobile),
+              SizedBox(height: isMobile ? 24 : 32),
               
               // Pagination
-              _buildPagination(context, emissionBloc),
-              const SizedBox(height: 32),
+              _buildPagination(context, emissionBloc, isMobile),
+              SizedBox(height: isMobile ? 24 : 32),
             ],
           ),
         ),
@@ -108,9 +109,9 @@ class _TvScreenState extends State<TvScreen> {
     );
   }
 
-  Widget _buildHeroHeader(BuildContext context, EmissionBloc emissionBloc, MenuAdminBloc menuAdminBloc) {
+  Widget _buildHeroHeader(BuildContext context, EmissionBloc emissionBloc, MenuAdminBloc menuAdminBloc, bool isMobile) {
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: EdgeInsets.all(isMobile ? 16 : 32),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -121,7 +122,7 @@ class _TvScreenState extends State<TvScreen> {
             rouge.withOpacity(0.8),
           ],
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(isMobile ? 16 : 24),
         boxShadow: [
           BoxShadow(
             color: rouge.withOpacity(0.3),
@@ -149,23 +150,143 @@ class _TvScreenState extends State<TvScreen> {
                     Icon(CupertinoIcons.chevron_forward, color: blanc.withOpacity(0.7), size: 10),
                     const SizedBox(width: 6),
                     Text('Émission', style: TextStyle(color: blanc, fontSize: 12, fontWeight: FontWeight.w500)),
-                    const SizedBox(width: 6),
-                    Icon(CupertinoIcons.chevron_forward, color: blanc.withOpacity(0.7), size: 10),
-                    const SizedBox(width: 6),
-                    Text('Dashboard', style: TextStyle(color: blanc.withOpacity(0.9), fontSize: 12)),
+                    if (!isMobile) ...[
+                      const SizedBox(width: 6),
+                      Icon(CupertinoIcons.chevron_forward, color: blanc.withOpacity(0.7), size: 10),
+                      const SizedBox(width: 6),
+                      Text('Dashboard', style: TextStyle(color: blanc.withOpacity(0.9), fontSize: 12)),
+                    ],
                   ],
                 ),
               ),
               const Spacer(),
-              _buildHeaderAction(CupertinoIcons.printer, 'Imprimer'),
-              const SizedBox(width: 12),
-              _buildHeaderAction(CupertinoIcons.folder, 'Archives'),
+              if (!isMobile) ...[
+                _buildHeaderAction(CupertinoIcons.printer, 'Imprimer'),
+                const SizedBox(width: 12),
+                _buildHeaderAction(CupertinoIcons.folder, 'Archives'),
+              ],
             ],
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: isMobile ? 16 : 24),
           
           // Title and Stats
-          Row(
+          isMobile
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(CupertinoIcons.tv, color: blanc, size: 24),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'GESTION',
+                                style: TextStyle(
+                                  color: blanc,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                              Text(
+                                'DES ÉMISSIONS',
+                                style: TextStyle(
+                                  color: blanc.withOpacity(0.9),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    // Stats
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildStatCard(
+                            icon: CupertinoIcons.tv,
+                            label: 'Total',
+                            value: '${emissionBloc.emissions.length}',
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _buildStatCard(
+                            icon: CupertinoIcons.checkmark_circle_fill,
+                            label: 'En ligne',
+                            value: '${emissionBloc.emissions.where((e) => e.statusOnline == "on").length}',
+                            color: vert,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _buildStatCard(
+                            icon: CupertinoIcons.doc_text,
+                            label: 'Brouillons',
+                            value: '${emissionBloc.emissions.where((e) => e.statusOnline != "on").length}',
+                            color: Colors.orange,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    // Add Button
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => menuAdminBloc.setEmission(1),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                          decoration: BoxDecoration(
+                            color: blanc,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 10,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(CupertinoIcons.add_circled_solid, color: rouge, size: 20),
+                              const SizedBox(width: 10),
+                              Text(
+                                'NOUVELLE ÉMISSION',
+                                style: TextStyle(
+                                  color: rouge,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : Row(
             children: [
               Expanded(
                 child: Column(
@@ -337,12 +458,12 @@ class _TvScreenState extends State<TvScreen> {
     );
   }
 
-  Widget _buildFiltersSection(BuildContext context, Size size, MenuAdminBloc menuAdminBloc) {
+  Widget _buildFiltersSection(BuildContext context, Size size, MenuAdminBloc menuAdminBloc, bool isMobile) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(isMobile ? 16 : 24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(isMobile ? 16 : 20),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -351,7 +472,108 @@ class _TvScreenState extends State<TvScreen> {
           ),
         ],
       ),
-      child: Row(
+      child: isMobile
+          ? Column(
+              children: [
+                // Show dropdown
+                Row(
+                  children: [
+                    Text(
+                      'Afficher',
+                      style: TextStyle(
+                        color: noir.withOpacity(0.7),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey.shade200),
+                        ),
+                        child: DropdownButton<int>(
+                          isExpanded: true,
+                          value: itemsPerPage,
+                          items: [10, 15, 20, 25, 50].map((e) {
+                            return DropdownMenuItem(
+                              value: e,
+                              child: Text('$e', style: TextStyle(fontWeight: FontWeight.w600)),
+                            );
+                          }).toList(),
+                          underline: const SizedBox(),
+                          onChanged: (v) {
+                            setState(() {
+                              itemsPerPage = v!;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                
+                // Status filter
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade200),
+                  ),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    value: statusFilter,
+                    items: ['Tous les status', 'En ligne', 'Brouillons'].map((e) {
+                      return DropdownMenuItem(
+                        value: e,
+                        child: Text(e, style: TextStyle(fontWeight: FontWeight.w600)),
+                      );
+                    }).toList(),
+                    underline: const SizedBox(),
+                    onChanged: (v) {
+                      setState(() {
+                        statusFilter = v!;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 12),
+                
+                // Search
+                Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade200),
+                  ),
+                  child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Rechercher...',
+                      hintStyle: TextStyle(
+                        color: noir.withOpacity(0.4),
+                        fontSize: 14,
+                      ),
+                      prefixIcon: Icon(CupertinoIcons.search, color: noir.withOpacity(0.5)),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : Row(
         children: [
           // Show dropdown
           Text(
@@ -446,25 +668,25 @@ class _TvScreenState extends State<TvScreen> {
     );
   }
 
-  Widget _buildEmissionsGrid(BuildContext context, Size size, EmissionBloc emissionBloc) {
+  Widget _buildEmissionsGrid(BuildContext context, Size size, EmissionBloc emissionBloc, bool isMobile) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: 24,
-        mainAxisSpacing: 24,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: isMobile ? 1 : 4,
+        childAspectRatio: isMobile ? 1.2 : 0.75,
+        crossAxisSpacing: isMobile ? 16 : 24,
+        mainAxisSpacing: isMobile ? 16 : 24,
       ),
       itemCount: emissionBloc.emissions.length,
       itemBuilder: (context, index) {
         final emission = emissionBloc.emissions[index];
-        return _buildEmissionCard(context, emission, emissionBloc);
+        return _buildEmissionCard(context, emission, emissionBloc, isMobile);
       },
     );
   }
 
-  Widget _buildEmissionCard(BuildContext context, dynamic emission, EmissionBloc emissionBloc) {
+  Widget _buildEmissionCard(BuildContext context, dynamic emission, EmissionBloc emissionBloc, bool isMobile) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Container(
@@ -684,12 +906,12 @@ class _TvScreenState extends State<TvScreen> {
     );
   }
 
-  Widget _buildPagination(BuildContext context, EmissionBloc emissionBloc) {
+  Widget _buildPagination(BuildContext context, EmissionBloc emissionBloc, bool isMobile) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(isMobile ? 16 : 20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -698,7 +920,74 @@ class _TvScreenState extends State<TvScreen> {
           ),
         ],
       ),
-      child: Row(
+      child: isMobile
+          ? Column(
+              children: [
+                Text(
+                  "1 à ${itemsPerPage} / ${emissionBloc.emissions.length}",
+                  style: TextStyle(
+                    color: noir.withOpacity(0.7),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Previous Button
+                    _buildPaginationButton(
+                      icon: CupertinoIcons.chevron_left,
+                      onTap: () {},
+                    ),
+                    const SizedBox(width: 12),
+                    
+                    // Page Numbers (3 on mobile)
+                    ...List.generate(3, (index) {
+                      final isActive = index == 0;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: isActive ? rouge : Colors.transparent,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: isActive ? rouge : Colors.grey.shade300,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${index + 1}',
+                                  style: TextStyle(
+                                    color: isActive ? blanc : noir,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                    const SizedBox(width: 12),
+                    
+                    // Next Button
+                    _buildPaginationButton(
+                      icon: CupertinoIcons.chevron_right,
+                      onTap: () {},
+                    ),
+                  ],
+                ),
+              ],
+            )
+          : Row(
         children: [
           Text(
             "Affichage de 1 à ${itemsPerPage} sur ${emissionBloc.emissions.length} émissions",

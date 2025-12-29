@@ -16,7 +16,7 @@ class SectionVideoMobile extends StatelessWidget {
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
 
     return  homeUtilisateurBloc.videos.isNotEmpty ? Container(
-      height: 400,
+      height: 370,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -38,12 +38,12 @@ class SectionVideoMobile extends StatelessWidget {
       ),
       child: Column(
         children: [
-          paddingVerticalGlobal(12),
+          paddingVerticalGlobal(8),
           Row(
             children: [
               const Spacer(),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 decoration: BoxDecoration(
                   color: rouge.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(20),
@@ -51,11 +51,11 @@ class SectionVideoMobile extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(CupertinoIcons.play_circle_fill, color: rouge, size: 18,),
+                    Icon(CupertinoIcons.play_circle_fill, color: rouge, size: 16,),
                     SizedBox(width: 8),
                     Text('VIDÉOS',style: fontFammilyDii(
                         context,
-                        22,
+                        20,
                         blanc,
                         FontWeight.w900,
                         FontStyle.normal), ),
@@ -65,9 +65,9 @@ class SectionVideoMobile extends StatelessWidget {
               const Spacer(),
             ],
           ),
-          paddingVerticalGlobal(8),
+          paddingVerticalGlobal(5),
           SizedBox(
-            height: 340,
+            height: 310,
             width: MediaQuery.of(context).size.width,
             child: ListView(
               scrollDirection: Axis.horizontal,
@@ -79,7 +79,7 @@ class SectionVideoMobile extends StatelessWidget {
               )).toList(),
             ),
           ),
-          paddingVerticalGlobal(8),
+          paddingVerticalGlobal(5),
 
         ],
       ),

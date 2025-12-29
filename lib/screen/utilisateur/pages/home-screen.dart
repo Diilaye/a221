@@ -519,7 +519,7 @@ class HomeUtilisateurScreen extends StatelessWidget {
         const SectionContributionWidget(),
         const SizedBox(height: 48),
         
-        const SectionInvestigationtWidget(),
+        const SectionInvestigationWidget(),
         const SizedBox(height: 48),
         
         const SectionEconomiqueWidget(),

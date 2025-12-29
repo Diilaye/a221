@@ -91,14 +91,6 @@ class _ArticleLesPlusLueUneWidgetState extends State<ArticleLesPlusLueUneWidget>
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(_isHovered ? 0.3 : 0.2),
-                blurRadius: _isHovered ? 20 : 15,
-                spreadRadius: _isHovered ? 3 : 2,
-                offset: Offset(0, _isHovered ? 8 : 6),
-              ),
-            ],
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
@@ -147,14 +139,6 @@ class _ArticleLesPlusLueUneWidgetState extends State<ArticleLesPlusLueUneWidget>
                           decoration: BoxDecoration(
                             color: blanc,
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: rouge.withOpacity(0.2),
-                                blurRadius: 8,
-                                spreadRadius: 1,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
                           ),
                           child: Text(
                             widget.article?.tags?.titre?.toUpperCase() ?? '',
@@ -200,7 +184,7 @@ class _ArticleLesPlusLueUneWidgetState extends State<ArticleLesPlusLueUneWidget>
                                 },
                                 textStyle:  TextStyle(
                                   fontSize: 18,
-                                  color: blanc,
+                                  color: rouge,
                                   height: 1.5,
                                 ),
                               ),
@@ -226,7 +210,7 @@ class _ArticleLesPlusLueUneWidgetState extends State<ArticleLesPlusLueUneWidget>
                                 },
                                 textStyle: TextStyle(
                                   fontSize: 14,
-                                  color: blanc.withOpacity(0.9),
+                                  color: rouge.withOpacity(0.9),
                                   height: 1.6,
                                 ),
                               ),

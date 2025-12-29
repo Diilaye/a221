@@ -29,61 +29,38 @@ class SectionInvestigationMobile extends StatelessWidget {
         children: [
           // Header style investigation
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             decoration: BoxDecoration(
               color: noir,
-              boxShadow: [
-                BoxShadow(
-                  color: noir.withOpacity(0.3),
-                  blurRadius: 15,
-                  offset: Offset(0, 5),
-                ),
-              ],
             ),
             child: Row(
               children: [
                 // Badge "EXCLUSIF"
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFFffd93d), Color(0xFFffb830)],
-                    ),
-                    borderRadius: BorderRadius.circular(6),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFFffd93d).withOpacity(0.5),
-                        blurRadius: 10,
-                        spreadRadius: 1,
-                      ),
-                    ],
+                    color: Color(0xFFffd93d),
+                    borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
                     'EXCLUSIF',
                     style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w800,
                       color: noir,
-                      letterSpacing: 1.2,
+                      letterSpacing: 1,
                     ),
                   ),
                 ),
-                SizedBox(width: 12),
+                SizedBox(width: 14),
                 
                 // Icône et titre
-                Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFffd93d).withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    CupertinoIcons.search_circle_fill,
-                    color: Color(0xFFffd93d),
-                    size: 22,
-                  ),
+                Icon(
+                  CupertinoIcons.search_circle_fill,
+                  color: Color(0xFFffd93d),
+                  size: 20,
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: 12),
                 
                 Expanded(
                   child: Column(
@@ -92,16 +69,16 @@ class SectionInvestigationMobile extends StatelessWidget {
                       Text(
                         'RÉVÉLATION',
                         style: fontFammilyDii(
-                            context, 22, Color(0xFFffd93d), FontWeight.w900, FontStyle.normal),
+                            context, 20, Color(0xFFffd93d), FontWeight.w800, FontStyle.normal),
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(height: 3),
                       Text(
                         'Enquêtes & investigations',
                         style: TextStyle(
-                          fontSize: 11,
-                          color: blanc.withOpacity(0.8),
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.8,
+                          fontSize: 10,
+                          color: blanc.withOpacity(0.7),
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.5,
                         ),
                       ),
                     ],
@@ -111,96 +88,43 @@ class SectionInvestigationMobile extends StatelessWidget {
             ),
           ),
           
-          SizedBox(height: 20),
+          SizedBox(height: 24),
           
           // Sous-titre avec ligne
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
                 Expanded(
                   child: Container(
-                    height: 2,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.transparent, noir.withOpacity(0.3)],
-                      ),
-                    ),
+                    height: 1,
+                    color: noir.withOpacity(0.2),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 14),
                   child: Text(
                     'NOS ENQUÊTES',
                     style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
                       color: noir,
-                      letterSpacing: 1.5,
+                      letterSpacing: 1.2,
                     ),
                   ),
                 ),
                 Expanded(
                   child: Container(
-                    height: 2,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [noir.withOpacity(0.3), Colors.transparent],
-                      ),
-                    ),
+                    height: 1,
+                    color: noir.withOpacity(0.2),
                   ),
-                ),
+                  ),
+                
               ],
             ),
           ),
           
-          SizedBox(height: 20),
-          
-          // Scroll horizontal des articles
-          SizedBox(
-            height: 420,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              itemCount: homeUtilisateurBloc.articleInvestigations.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(right: 16),
-                  child: ArtilceInvestiogationMobile(
-                    article: homeUtilisateurBloc.articleInvestigations[index],
-                  ),
-                );
-              },
-            ),
-          ),
-          
-          SizedBox(height: 24),
-          
-          // Footer avec icône
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  CupertinoIcons.arrow_right_circle_fill,
-                  color: noir,
-                  size: 18,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  'Voir toutes nos enquêtes',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: noir,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          
-          SizedBox(height: 8),
+  
         ],
       ),
     );
