@@ -8,7 +8,7 @@ const String BASE_URL = "https://api-actu.smartek.sn/api/v1";
 //const String BASE_URL = "http://localhost:3800/api/v1";
 
 //const String BASE_URL_ASSET = "http://localhost:3800";
-const String BASE_URL_ASSET = "https://api-actu.smartek.sn/";
+const String BASE_URL_ASSET = "https://api-actu.smartek.sn";
 
 Future getResponse({
   required String url,

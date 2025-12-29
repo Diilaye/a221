@@ -58,7 +58,7 @@ class AddArticleBloc with ChangeNotifier {
       articlePagination = await articleService.allCategorie(p, categorie!.id!);
     }
     articles = [];
-    articles= articlePagination!.articles!;
+    articles = articlePagination?.articles ?? [];
     notifyListeners();
   }
 
@@ -213,7 +213,7 @@ class AddArticleBloc with ChangeNotifier {
                       ? 'rubrique'
                       : 'choix-redac',
       "categorie": categorie!.id!,
-      "tags": tag!.id!,
+      "tags": tag?.id,
       "keyWorod": keyWorld.map((e) => e.toUpperCase().trim()).toList(),
       "image": fileModel == null ? imageAticle[0] : fileModel!.id!,
       "statut": "publie",
@@ -271,7 +271,7 @@ class AddArticleBloc with ChangeNotifier {
                       ? 'rubrique'
                       : 'choix-redac',
       "categorie": categorie!.id!,
-      "tags": tag!.id!,
+      "tags": tag?.id,
       "keyWorod": keyWorld.map((e) => e.toUpperCase().trim()).toList(),
       "image": fileModel == null ? imageAticle[0] : fileModel!.id!,
       "statut": statut,
@@ -360,7 +360,7 @@ class AddArticleBloc with ChangeNotifier {
                   ? 'une'
                   : 'rubrique',
       "categorie": categorie!.id!,
-      "tags": tag!.id!,
+      "tags": tag?.id,
       "keyWorod": keyWorld.map((e) => e.toUpperCase().trim()).toList(),
       "image": fileModel == null ? imageAticle[0] : fileModel!.id!,
       "statut": "publie",
@@ -408,7 +408,7 @@ class AddArticleBloc with ChangeNotifier {
                   ? 'une'
                   : 'rubrique',
       "categorie": categorie!.id!,
-      "tags": tag!.id!,
+      "tags": tag?.id,
       "keyWorod": keyWorld.map((e) => e.toUpperCase().trim()).toList(),
       "image": fileModel == null ? imageAticle[0] : fileModel!.id!,
       "statut": statut,
@@ -472,13 +472,6 @@ class AddArticleBloc with ChangeNotifier {
       }
     }
     tag = tags.lastWhere((e) => e.id! == article!.tags!.id!);
-    if (tag != null && tagsBloc != null) {
-      try {
-        tagsBloc.setTags(tag);
-      } catch (e) {
-        print('Erreur lors de la mise à jour du tag: $e');
-      }
-    }
     keyWorld = [];
     setKeyWord(article!.keyWorod!);
     imageAticle = [
@@ -496,13 +489,13 @@ class AddArticleBloc with ChangeNotifier {
     } else {
       articlePagination = await articleService.allByStatut(page, statusNews);
     }
-    articles= articlePagination!.articles!;
+    articles = articlePagination?.articles ?? [];
     notifyListeners();
   }
 
   allArticlesByCategorie(int page) async {
     articlePagination = await articleService.all(page);
-    articles= articlePagination!.articles!;
+    articles = articlePagination?.articles ?? [];
     notifyListeners();
   }
 

@@ -151,6 +151,14 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
               ),
               const SizedBox(height: 16),
               
+              // Section Mots-clés
+              _buildSectionCard(
+                title: 'MOTS-CLÉS',
+                icon: CupertinoIcons.number,
+                child: _buildKeywordsSection(addArticleBloc),
+              ),
+              const SizedBox(height: 16),
+              
               // Section Contenu
               _buildSectionCard(
                 title: 'CONTENU DE L\'ARTICLE',
@@ -537,7 +545,7 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: CachedNetworkImage(
-                  imageUrl: "${BASE_URL}file/${addArticleBloc.fileModel!.url}",
+                  imageUrl: "${BASE_URL_ASSET}${addArticleBloc.fileModel!.url}",
                   height: 200,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -672,6 +680,120 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
         fontWeight: FontWeight.w500,
         color: Colors.black,
       ),
+    );
+  }
+
+  Widget _buildKeywordsSection(AddArticleBloc addArticleBloc) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Mots-clés existants
+        if (addArticleBloc.keyWorld.isNotEmpty)
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: addArticleBloc.keyWorld.map((keyword) {
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF0e7490), Color(0xFF0891b2)],
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF0e7490).withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(CupertinoIcons.number, color: blanc, size: 12),
+                    const SizedBox(width: 6),
+                    Text(
+                      keyword,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: blanc,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    GestureDetector(
+                      onTap: () {
+                        addArticleBloc.keyWorld.remove(keyword);
+                        addArticleBloc.notifyListeners();
+                      },
+                      child: Icon(CupertinoIcons.xmark, color: blanc, size: 12),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        if (addArticleBloc.keyWorld.isNotEmpty) const SizedBox(height: 12),
+        
+        // Champ d'ajout de mot-clé
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                onSubmitted: (value) {
+                  if (value.trim().isNotEmpty && !addArticleBloc.keyWorld.contains(value.trim())) {
+                    addArticleBloc.keyWorld.add(value.trim());
+                    addArticleBloc.notifyListeners();
+                  }
+                },
+                decoration: InputDecoration(
+                  hintText: "Ajouter un mot-clé et appuyez sur Entrée",
+                  hintStyle: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey.shade400,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey.shade50,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF06b6d4), width: 2),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  prefixIcon: Icon(
+                    CupertinoIcons.add_circled,
+                    color: const Color(0xFF0e7490),
+                    size: 20,
+                  ),
+                ),
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Appuyez sur Entrée pour ajouter chaque mot-clé',
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.grey.shade500,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+      ],
     );
   }
 
@@ -974,32 +1096,103 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
             ),
             child: SafeArea(
               bottom: false,
-              child: Row(
+              child: Column(
                 children: [
-                  GestureDetector(
-                    onTap: () => addArticleBloc.setParcourirFile(0),
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          addArticleBloc.setParcourirFile(0);
+                          addArticleBloc.setRecherche(''); // Réinitialiser la recherche tags
+                          addArticleBloc.setRechercheFile(''); // Réinitialiser la recherche images
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: blanc.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: blanc.withOpacity(0.3), width: 1),
+                          ),
+                          child: Icon(CupertinoIcons.arrow_left, color: blanc, size: 20),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Text(
+                          addArticleBloc.parcourirFile == 1 ? 'IMAGES' : 'TAGS',
+                          style: TextStyle(
+                            color: blanc,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Barre de recherche pour les images et tags
+                  if (addArticleBloc.parcourirFile == 1 || addArticleBloc.parcourirFile == 2) ...[
+                    const SizedBox(height: 12),
+                    Container(
                       decoration: BoxDecoration(
-                        color: blanc.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: blanc.withOpacity(0.3), width: 1),
-                      ),
-                      child: Icon(CupertinoIcons.arrow_left, color: blanc, size: 20),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      addArticleBloc.parcourirFile == 1 ? 'IMAGES' : 'TAGS',
-                      style: TextStyle(
                         color: blanc,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: noir.withOpacity(0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        controller: addArticleBloc.parcourirFile == 1 
+                            ? TextEditingController(text: addArticleBloc.rechercheFile)
+                            : addArticleBloc.recherche,
+                        onChanged: (value) => addArticleBloc.parcourirFile == 1
+                            ? addArticleBloc.setRechercheFile(value)
+                            : addArticleBloc.setRecherche(value),
+                        decoration: InputDecoration(
+                          hintText: addArticleBloc.parcourirFile == 1 
+                              ? 'Rechercher une image...'
+                              : 'Rechercher un tag...',
+                          hintStyle: TextStyle(
+                            color: gris.withOpacity(0.6),
+                            fontSize: 14,
+                          ),
+                          prefixIcon: Icon(
+                            CupertinoIcons.search,
+                            color: const Color(0xFF06b6d4),
+                            size: 20,
+                          ),
+                          suffixIcon: (addArticleBloc.parcourirFile == 1 
+                                  ? addArticleBloc.rechercheFile.isNotEmpty
+                                  : addArticleBloc.rechercheT.isNotEmpty)
+                              ? GestureDetector(
+                                  onTap: () {
+                                    if (addArticleBloc.parcourirFile == 1) {
+                                      addArticleBloc.setRechercheFile('');
+                                    } else {
+                                      addArticleBloc.recherche.clear();
+                                      addArticleBloc.setRecherche('');
+                                    }
+                                  },
+                                  child: Icon(
+                                    CupertinoIcons.xmark_circle_fill,
+                                    color: gris.withOpacity(0.6),
+                                    size: 20,
+                                  ),
+                                )
+                              : null,
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),
@@ -1017,6 +1210,14 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
   }
 
   Widget _buildImageGrid(AddArticleBloc addArticleBloc) {
+    // Filtrer les images selon la recherche
+    final filteredImages = addArticleBloc.filesModel.where((file) {
+      if (addArticleBloc.rechercheFile.isEmpty) return true;
+      final fileName = file.url?.toLowerCase() ?? '';
+      final searchLower = addArticleBloc.rechercheFile.toLowerCase();
+      return fileName.contains(searchLower);
+    }).toList();
+    
     if (addArticleBloc.filesModel.isEmpty) {
       return Center(
         child: Column(
@@ -1032,6 +1233,27 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
         ),
       );
     }
+    
+    if (filteredImages.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(CupertinoIcons.search, size: 64, color: Colors.grey.shade300),
+            const SizedBox(height: 16),
+            Text(
+              'Aucune image trouvée',
+              style: TextStyle(fontSize: 16, color: gris, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'pour "${addArticleBloc.rechercheFile}"',
+              style: TextStyle(fontSize: 14, color: gris.withOpacity(0.7)),
+            ),
+          ],
+        ),
+      );
+    }
 
     return GridView.builder(
       padding: const EdgeInsets.all(16),
@@ -1041,9 +1263,9 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
         mainAxisSpacing: 16,
         childAspectRatio: 1,
       ),
-      itemCount: addArticleBloc.filesModel.length,
+      itemCount: filteredImages.length,
       itemBuilder: (context, index) {
-        final file = addArticleBloc.filesModel[index];
+        final file = filteredImages[index];
         return GestureDetector(
           onTap: () {
             addArticleBloc.setFileModel(file);
@@ -1064,7 +1286,7 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: CachedNetworkImage(
-                imageUrl: "${BASE_URL}file/${file.url}",
+                imageUrl: "${BASE_URL_ASSET}${file.url}",
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Container(
                   color: Colors.grey.shade100,
@@ -1072,7 +1294,26 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
                 ),
                 errorWidget: (context, url, error) => Container(
                   color: Colors.grey.shade100,
-                  child: Icon(Icons.error, color: Colors.grey.shade400),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.error, color: Colors.grey.shade400),
+                      const SizedBox(height: 4),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "${BASE_URL_ASSET}${file.url}",
+                          style: TextStyle(fontSize: 8, color: Colors.red),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Text(
+                        error.toString(),
+                        style: TextStyle(fontSize: 7, color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -1084,6 +1325,12 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
 
   Widget _buildTagsList(AddArticleBloc addArticleBloc) {
     final tagsBloc = Provider.of<TagsBloc>(context);
+    
+    // Filtrer les tags selon la recherche
+    final filteredTags = tagsBloc.tags.where((tag) {
+      if (addArticleBloc.rechercheT.isEmpty) return true;
+      return tag.titre!.toLowerCase().contains(addArticleBloc.rechercheT.toLowerCase());
+    }).toList();
     
     if (tagsBloc.tags.isEmpty) {
       return Center(
@@ -1100,12 +1347,33 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
         ),
       );
     }
+    
+    if (filteredTags.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(CupertinoIcons.search, size: 64, color: Colors.grey.shade300),
+            const SizedBox(height: 16),
+            Text(
+              'Aucun tag trouvé',
+              style: TextStyle(fontSize: 16, color: gris, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'pour "${addArticleBloc.rechercheT}"',
+              style: TextStyle(fontSize: 14, color: gris.withOpacity(0.7)),
+            ),
+          ],
+        ),
+      );
+    }
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: tagsBloc.tags.length,
+      itemCount: filteredTags.length,
       itemBuilder: (context, index) {
-        final tag = tagsBloc.tags[index];
+        final tag = filteredTags[index];
         final isSelected = addArticleBloc.tag?.id == tag.id;
         
         return GestureDetector(
@@ -1114,6 +1382,7 @@ class _AddArticleScreenMobileState extends State<AddArticleScreenMobile> with Si
               addArticleBloc.setTags(null);
             } else {
               addArticleBloc.setTags(tag);
+              addArticleBloc.setParcourirFile(0); // Fermer l'écran de tags
             }
           },
           child: Container(
