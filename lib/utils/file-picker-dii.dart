@@ -28,11 +28,16 @@ Future getImageUpdate(int source, img) async => ImagePicker.platform
 Future<String> postpIC({required XFile image}) async {
   var img = await (image).readAsBytes();
 
-  print("image name");
-  print(image.name.split("scaled_").last.split(".")[0]);
+  // Générer un nom de fichier unique avec timestamp
+  String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+  String originalName = image.name.split("scaled_").last.split(".")[0];
+  String uniqueFileName = "${originalName}_$timestamp";
+  
+  print("image name: $uniqueFileName");
+  
   Map<String, dynamic> body = {
     "image":
-        "data:${image.name.split("scaled_").last.split(".")[0]}?image/webp;base64,${base64Encode(img)}"
+        "data:$uniqueFileName?image/webp;base64,${base64Encode(img)}"
   };
 
   var response = await postResponse(url: '/files', body: body);
