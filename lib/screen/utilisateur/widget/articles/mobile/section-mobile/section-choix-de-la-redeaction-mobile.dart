@@ -15,7 +15,7 @@ class SectionChoixDeLaRedactionMobile extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final homeUtilisateurBloc = Provider.of<HomeUtilisateurBloc>(context);
 
-    final articles = homeUtilisateurBloc.articleChoixRedac ?? [];
+    final articles = homeUtilisateurBloc.articleChoixRedac;
     final total = articles.length;
 
     return Container(

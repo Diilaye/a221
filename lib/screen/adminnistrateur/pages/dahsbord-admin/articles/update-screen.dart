@@ -79,7 +79,7 @@ class _UpdateArticleScreenState extends State<UpdateArticleScreen> with Automati
             top: 0,
             child: SizedBox(
               height: size.height,
-              width: size.width * .8,
+              width: size.width,
               child: Column(
                 children: [
                   // Header moderne avec gradient
@@ -762,7 +762,7 @@ class _UpdateArticleScreenState extends State<UpdateArticleScreen> with Automati
                                   },
                                   selectedItem: addArticleBloc.tag == null
                                       ? ""
-                                      : addArticleBloc.tag!.titre,
+                                      : addArticleBloc.tag?.titre ?? "",
                                 ),
                               ),
                             ],
@@ -921,8 +921,10 @@ class _UpdateArticleScreenState extends State<UpdateArticleScreen> with Automati
                               ),
                             ],
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Wrap(
+                            spacing: 12,
+                            runSpacing: 12,
+                            alignment: WrapAlignment.center,
                             children: [
                               ElevatedButton.icon(
                                 onPressed: () => addArticleBloc.setShowUpdate(0),
@@ -937,36 +939,33 @@ class _UpdateArticleScreenState extends State<UpdateArticleScreen> with Automati
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.grey[600],
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   elevation: 0,
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  ElevatedButton.icon(
-                                    onPressed: () => addArticleBloc.updateArticleStatut('archive'),
-                                    icon: const Icon(Icons.archive, size: 22),
-                                    label: const Text(
-                                      'Archiver',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      elevation: 0,
-                                    ),
+                              ElevatedButton.icon(
+                                onPressed: () => addArticleBloc.updateArticleStatut('archive'),
+                                icon: const Icon(Icons.archive, size: 22),
+                                label: const Text(
+                                  'Archiver',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
-                                  const SizedBox(width: 16),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 0,
+                                ),
+                              ),
                               ElevatedButton.icon(
                                 onPressed: () => addArticleBloc.updateArticleStatut('brouillon'),
                                 icon: const Icon(Icons.save, size: 22),
@@ -980,14 +979,13 @@ class _UpdateArticleScreenState extends State<UpdateArticleScreen> with Automati
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.orange,
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   elevation: 0,
                                 ),
                               ),
-                              const SizedBox(width: 16),
                               ElevatedButton.icon(
                                 onPressed: () => addArticleBloc.updateArticle(),
                                 icon: addArticleBloc.chargement
@@ -1010,14 +1008,12 @@ class _UpdateArticleScreenState extends State<UpdateArticleScreen> with Automati
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF10b981),
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   elevation: 0,
                                 ),
-                              ),
-                                ],
                               ),
                             ],
                           ),

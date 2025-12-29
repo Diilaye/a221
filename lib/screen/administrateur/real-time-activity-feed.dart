@@ -89,16 +89,19 @@ class _RealTimeActivityFeedState extends State<RealTimeActivityFeed>
                 ),
               ),
               const SizedBox(width: 16),
-              const Text(
-                'Activité en temps réel',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
+              const Expanded(
+                child: Text(
+                  'Activité en temps réel',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 8),
               _buildLivePulse(),
             ],
           ),
@@ -180,12 +183,15 @@ class _RealTimeActivityFeedState extends State<RealTimeActivityFeed>
                         const SizedBox(height: 6),
                         Row(
                           children: [
-                            Text(
-                              activity.author,
-                              style: TextStyle(
-                                color: _getActivityColor(activity.type),
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
+                            Flexible(
+                              child: Text(
+                                activity.author,
+                                style: TextStyle(
+                                  color: _getActivityColor(activity.type),
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -198,11 +204,14 @@ class _RealTimeActivityFeedState extends State<RealTimeActivityFeed>
                               ),
                             ),
                             const SizedBox(width: 8),
-                            Text(
-                              activity.time,
-                              style: const TextStyle(
-                                color: Colors.white60,
-                                fontSize: 13,
+                            Flexible(
+                              child: Text(
+                                activity.time,
+                                style: const TextStyle(
+                                  color: Colors.white60,
+                                  fontSize: 13,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],

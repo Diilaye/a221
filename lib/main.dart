@@ -1,6 +1,7 @@
 import 'package:actu/bloc/administrateur/article-bloc.dart';
 import 'package:actu/bloc/administrateur/auth.dart';
 import 'package:actu/bloc/administrateur/categorie-bloc.dart';
+import 'package:actu/bloc/administrateur/dashboard-stats-bloc.dart';
 import 'package:actu/bloc/administrateur/emission-bloc.dart';
 import 'package:actu/bloc/administrateur/flash-news-bloc.dart';
 import 'package:actu/bloc/administrateur/journal-papier-bloc.dart';
@@ -225,6 +226,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => EmissionBloc()),
         ChangeNotifierProvider(create: (_) => EmissionUserBloc()),
         ChangeNotifierProvider(create: (_) => UserBloc()),
+        ChangeNotifierProvider(create: (_) => DashboardStatsBloc()),
       ],
       child: const MyApp(),
     ),

@@ -27,7 +27,7 @@ class JournalScreen extends StatelessWidget {
     return Stack(
       children: [
         if (addArticleBloc.showUpdate == 0)
-         addArticleBloc.articlePagination== null? const SizedBox() : Container(
+         (addArticleBloc.articlePagination == null || addArticleBloc.articlePagination!.articles == null) ? const SizedBox() : Container(
            decoration: const BoxDecoration(
              gradient: LinearGradient(
                begin: Alignment.topLeft,
@@ -94,7 +94,7 @@ class JournalScreen extends StatelessWidget {
                         ),
                         paddingHorizontalGlobal(6),
                         Text(
-                          '${addArticleBloc.articlePagination!.articles!.length} Articles',
+                          '${addArticleBloc.articlePagination!.articles?.length ?? 0} Articles',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -761,7 +761,7 @@ class JournalScreen extends StatelessWidget {
                               paddingHorizontalGlobal(8),
                               Expanded(
                                 child: ListView(
-                                  children: addArticleBloc.articlePagination!.articles!
+                                  children: (addArticleBloc.articlePagination!.articles ?? [])
                                      .where((e) {
                                         if (addArticleBloc.rechercheT.isEmpty) {
                                           if (categorieBloc.categorie == null) {
