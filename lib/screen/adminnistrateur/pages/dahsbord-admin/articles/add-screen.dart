@@ -315,7 +315,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> with AutomaticKeepA
                                     borderRadius: BorderRadius.circular(10),
                                     child: addArticleBloc.fileModel != null
                                         ? Image.network(
-                                            BASE_URL_ASSET + addArticleBloc.fileModel!.url!,
+                                            "${BASE_URL_ASSET}${addArticleBloc.fileModel!.url!}",
                                             fit: BoxFit.cover,
                                             width: double.infinity,
                                           )
@@ -1142,7 +1142,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> with AutomaticKeepA
                                             child: ClipRRect(
                                               borderRadius: BorderRadius.circular(8),
                                               child: CachedNetworkImage(
-                                                imageUrl: BASE_URL_ASSET + e.url!,
+                                                imageUrl: "${BASE_URL_ASSET}${e.url!}",
                                                 fit: BoxFit.cover,
                                                 placeholder: (context, url) => Center(
                                                   child: CircularProgressIndicator(

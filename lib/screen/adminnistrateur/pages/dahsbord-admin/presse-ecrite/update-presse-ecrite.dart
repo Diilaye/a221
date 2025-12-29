@@ -301,7 +301,7 @@ class _UpdatePresseEcriteScreenState extends State<UpdatePresseEcriteScreen> {
                                       ),
                                     Expanded(
                                       child: CachedNetworkImage(
-                                        imageUrl: BASE_URL_ASSET + e.url!,
+                                        imageUrl: "${BASE_URL_ASSET}${e.url!}",
                                         placeholder: (context, url) => Center(
                                             child:
                                                 const CircularProgressIndicator()),
