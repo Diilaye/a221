@@ -18,19 +18,19 @@ class JournalScreenMobile extends StatefulWidget {
 }
 
 class _JournalScreenMobileState extends State<JournalScreenMobile> {
-  int itemsPerPage = 1000; // Afficher tous les articles
+  int itemsPerPage = 10;
   int currentPage = 1;
 
   List<dynamic> _getFilteredArticles(AddArticleBloc addArticleBloc, CategorieBloc categorieBloc) {
     return addArticleBloc.articles.where((e) {
       bool matchesSearch = addArticleBloc.rechercheT.isEmpty ||
-          (e.titre?.toLowerCase().contains(addArticleBloc.rechercheT.toLowerCase()) ?? false);
+          e.titre!.toLowerCase().contains(addArticleBloc.rechercheT.toLowerCase());
       
       bool matchesCategory = categorieBloc.categorie == null ||
-          e.categorie?.id == categorieBloc.categorie!.id!;
+          e.categorie!.id == categorieBloc.categorie!.id!;
       
       bool matchesStatus = addArticleBloc.statusNews == 'all' ||
-          e.statusOnline == addArticleBloc.statusNews;
+          e.statusOnline! == addArticleBloc.statusNews;
       
       return matchesSearch && matchesCategory && matchesStatus;
     }).toList();
@@ -38,9 +38,7 @@ class _JournalScreenMobileState extends State<JournalScreenMobile> {
 
   List<dynamic> _getPaginatedArticles(AddArticleBloc addArticleBloc, CategorieBloc categorieBloc) {
     final filtered = _getFilteredArticles(addArticleBloc, categorieBloc);
-    if (filtered.isEmpty) return [];
     final startIndex = (currentPage - 1) * itemsPerPage;
-    if (startIndex >= filtered.length) return [];
     final endIndex = startIndex + itemsPerPage;
     return filtered.sublist(
       startIndex,
@@ -362,7 +360,7 @@ class _JournalScreenMobileState extends State<JournalScreenMobile> {
               border: Border.all(color: Colors.grey.shade300, width: 1),
             ),
             child: DropdownButton<int>(
-              items: [10, 15, 20, 25, 50, 100, 1000].map((value) {
+              items: [10, 15, 20, 25, 50].map((value) {
                 return DropdownMenuItem<int>(
                   value: value,
                   child: Row(
@@ -370,7 +368,7 @@ class _JournalScreenMobileState extends State<JournalScreenMobile> {
                       Icon(CupertinoIcons.list_bullet, size: 14, color: gris),
                       const SizedBox(width: 8),
                       Text(
-                        value == 1000 ? 'Tous les articles' : '$value par page',
+                        '$value par page',
                         style: TextStyle(fontSize: 12, color: noir, fontWeight: FontWeight.w500),
                       ),
                     ],
@@ -834,7 +832,7 @@ class _JournalScreenMobileState extends State<JournalScreenMobile> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  '${article.author?.prenom?.substring(0, 1) ?? 'A'}${article.author?.nom?.substring(0, 1) ?? 'U'}',
+                  '${article.author!.prenom!.substring(0, 1)}${article.author!.nom!.substring(0, 1)}',
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -849,7 +847,7 @@ class _JournalScreenMobileState extends State<JournalScreenMobile> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${article.author?.prenom ?? 'Auteur'} ${article.author?.nom ?? 'Inconnu'}',
+                      '${article.author!.prenom} ${article.author!.nom}',
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,

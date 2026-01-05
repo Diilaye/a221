@@ -445,171 +445,64 @@ class AdministrateurAscreen extends StatelessWidget {
                 )
               : Stack(
                   children: [
-                    // Contenu principal avec animation
                     Positioned(
-                      top: 60,
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        switchInCurve: Curves.easeInOut,
-                        switchOutCurve: Curves.easeInOut,
-                        transitionBuilder: (Widget child, Animation<double> animation) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: SlideTransition(
-                              position: Tween<Offset>(
-                                begin: const Offset(0.02, 0),
-                                end: Offset.zero,
-                              ).animate(animation),
-                              child: child,
-                            ),
-                          );
-                        },
-                        child: Container(
-                          key: ValueKey<int>(menuAdminBloc.menu),
-                          height: size.height - 60,
-                          width: size.width,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.grey[50]!,
-                                Colors.white,
-                                Colors.grey[50]!,
-                              ],
-                            ),
-                          ),
-                          child: _buildMobileScreen(menuAdminBloc.menu, addArticleBloc),
-                        ),
-                      ),
-                    ),
-                    
-                    // Menu mobile avec animation
-                    if (homeUtilisateurBloc.showMenuMobile == 1)
-                      Positioned(
                         top: 60,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.3),
-                                  blurRadius: 20,
-                                  spreadRadius: 5,
-                                ),
-                              ],
-                            ),
-                            child: const MenuMobileAdministratreur(),
-                          ),
-                        ),
-                      ),
-                    
-                    // Top bar avec ombre
-                    Positioned(
-                      top: 0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 10,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: const TopBarMenu(),
-                      ),
-                    ),
+                        child: SizedBox(
+                            height: size.height - 60,
+                            width: size.width,
+                            child: menuAdminBloc.menu == 0
+                                ? const MobileOverViewAdmin()
+                                : menuAdminBloc.menu == 1
+                                    ? const JournalScreenMobile()
+                                    : menuAdminBloc.menu == 10
+                                        ? const JournalScreenMobile()
+                                        : menuAdminBloc.menu == 11
+                                            ? const AddArticleScreenMobile()
+                                            : menuAdminBloc.menu == 2
+                                                ? const TvScreenMobile()
+                                                : menuAdminBloc.menu == 20
+                                                    ? const TvScreenMobile()
+                                                    : menuAdminBloc.menu == 21
+                                                        ? const AddEmissionScreenMobile()
+                                                        : menuAdminBloc.menu ==
+                                                                3
+                                                            ? const PresseEcriteScreenMobile()
+                                                            : menuAdminBloc
+                                                                        .menu ==
+                                                                    30
+                                                                ? const PresseEcriteScreenMobile()
+                                                                : menuAdminBloc
+                                                                            .menu ==
+                                                                        31
+                                                                    ? const AddPresseEcriteScreenMobile()
+                                                                    : menuAdminBloc.menu ==
+                                                                            4
+                                                                        ? const FlashNewsScreenMobile()
+                                                                        : menuAdminBloc.menu ==
+                                                                                40
+                                                                            ? const FlashNewsScreenMobile()
+                                                                            : menuAdminBloc.menu == 41
+                                                                                ? const AddFlashNewsScreen()
+                                                                                : menuAdminBloc.menu == 5
+                                                                                    ? const PostDigiteauxScreenMobile()
+                                                                                    : menuAdminBloc.menu == 50
+                                                                                        ? const PostDigiteauxScreenMobile()
+                                                                                        : menuAdminBloc.menu == 51
+                                                                                            ? const AddPostDigiteauxScreenMobile()
+                                                                                            : menuAdminBloc.menu == 7
+                                                                                                ? const ParamsDashbord()
+                                                                                                : Container())),
+                    if (homeUtilisateurBloc.showMenuMobile == 1)
+                      const Positioned(
+                          top: 60, child: MenuMobileAdministratreur()),
+                    const Positioned(
+                        top: 0,
+                        child: TopBarMenu())
                   ],
                 ),
         ),
       ),
     );
   }
-
-  // Fonction helper pour gérer l'affichage des écrans mobiles
-  Widget _buildMobileScreen(int menuIndex, AddArticleBloc addArticleBloc) {
-    switch (menuIndex) {
-      case 0:
-        return const MobileOverViewAdmin();
-      case 1:
-      case 10:
-        return const JournalScreenMobile();
-      case 11:
-        return const AddArticleScreenMobile();
-      case 2:
-      case 20:
-        return const TvScreenMobile();
-      case 21:
-        return const AddEmissionScreenMobile();
-      case 3:
-      case 30:
-        return const PresseEcriteScreenMobile();
-      case 31:
-        return const AddPresseEcriteScreenMobile();
-      case 4:
-      case 40:
-        return const FlashNewsScreenMobile();
-      case 41:
-        return const AddFlashNewsScreen();
-      case 5:
-      case 50:
-        return const PostDigiteauxScreenMobile();
-      case 51:
-        return const AddPostDigiteauxScreenMobile();
-      case 7:
-        return const ParamsDashbord();
-      default:
-        return Center(
-          child: Container(
-            padding: const EdgeInsets.all(40),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.blue[50]!,
-                  Colors.blue[100]!,
-                ],
-              ),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withOpacity(0.2),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  CupertinoIcons.square_grid_2x2,
-                  size: 64,
-                  color: Colors.blue[700],
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Sélectionnez une section',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue[900],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Utilisez le menu pour naviguer',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.blue[700],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-    }
-  }
-  }
+}
+  

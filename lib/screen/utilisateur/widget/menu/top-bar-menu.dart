@@ -17,23 +17,22 @@ class TopBarMenu extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final isMobile = deviceName(size) == ScreenType.Mobile;
 
-    return Center(
-      child: Container(
-        height: 60,
-        width: isMobile ? size.width : 1024,
-        decoration: BoxDecoration(
-          color: blanc,
-          borderRadius: BorderRadius.circular(2),
-          boxShadow: [
-            BoxShadow(
-              color: noir.withOpacity(0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            )
-          ],
-        ),
-        child: isMobile ? _buildMobileMenu(context, homeUtilisateurBloc) : _buildDesktopMenu(context, homeUtilisateurBloc, size),
+    return Container(
+      height: 60,
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 32),
+      decoration: BoxDecoration(
+        color: blanc,
+        borderRadius: BorderRadius.circular(2),
+        boxShadow: [
+          BoxShadow(
+            color: noir.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          )
+        ],
       ),
+      child: isMobile ? _buildMobileMenu(context, homeUtilisateurBloc) : _buildDesktopMenu(context, homeUtilisateurBloc, size),
     );
   }
 
@@ -59,17 +58,22 @@ class TopBarMenu extends StatelessWidget {
     return Row(
       children: [
         const SizedBox(width: 16),
-        Flexible(child: _buildLogo(context)),
+        SizedBox(
+          width: 300,
+          child: _buildLogo(context)),
+      //  Flexible(child: ),
         const SizedBox(width: 16),
         Container(width: 1, height: 20, color: noir.withOpacity(0.3)),
         const SizedBox(width: 16),
-        Flexible(child: _buildCorrespondentButton(bloc)),
+        SizedBox(
+          width: 250,
+          child: _buildCorrespondentButton(bloc)),
         const Spacer(),
+
         _buildLiveButton(bloc),
-        const SizedBox(width: 12),
         _buildCreateAccountButton(context),
         const SizedBox(width: 12),
-        _buildUserIcon(bloc),
+       // _buildUserIcon(bloc),
         const SizedBox(width: 16),
       ],
     );

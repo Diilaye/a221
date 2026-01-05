@@ -132,6 +132,67 @@ class AddArticleBloc with ChangeNotifier {
     notifyListeners();
   }
 
+  bool isUploadingImage = false;
+  List<dynamic>? uploadedImageData;
+
+  uploadNewImage() async {
+    isUploadingImage = true;
+    notifyListeners();
+    
+    try {
+      List<dynamic> result = await getImage(0);
+      
+      if (result[0] != null && result[0] != "0") {
+        // Stocker les données de l'image uploadée
+        uploadedImageData = result;
+        imageAticle = result;
+        
+        // Créer un FileModel temporaire avec l'ID de l'image uploadée
+        fileModel = FileModel(
+          id: result[0],
+          url: "", // Pas d'URL car l'image vient d'être uploadée
+        );
+        
+        Fluttertoast.showToast(
+          msg: "Image uploadée avec succès !",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: vert,
+          textColor: Colors.white,
+          fontSize: 12.0,
+        );
+        
+        // Fermer le mode parcourir si ouvert
+        parcourirFile = 0;
+      } else {
+        Fluttertoast.showToast(
+          msg: "Erreur lors de l'upload de l'image",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: rouge,
+          textColor: Colors.white,
+          fontSize: 12.0,
+        );
+      }
+    } catch (e) {
+      print("Erreur upload image: $e");
+      Fluttertoast.showToast(
+        msg: "Erreur lors de l'upload: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: rouge,
+        textColor: Colors.white,
+        fontSize: 12.0,
+      );
+    }
+    
+    isUploadingImage = false;
+    notifyListeners();
+  }
+
   List<dynamic> imageAticle = [null, null];
 
   getImageArticle() async {
@@ -200,6 +261,76 @@ class AddArticleBloc with ChangeNotifier {
     chargement = true;
     notifyListeners();
 
+    // Validation du titre
+    if (titre.text.trim().isEmpty) {
+      Fluttertoast.showToast(
+        msg: "Veuillez saisir un titre",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: rouge,
+        textColor: Colors.white,
+        fontSize: 12.0,
+      );
+      chargement = false;
+      notifyListeners();
+      return;
+    }
+
+    // Validation de la description
+    if (body.trim().isEmpty) {
+      Fluttertoast.showToast(
+        msg: "Veuillez saisir une description",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: rouge,
+        textColor: Colors.white,
+        fontSize: 12.0,
+      );
+      chargement = false;
+      notifyListeners();
+      return;
+    }
+
+    // Déterminer l'ID de l'image à utiliser
+    String? imageId;
+    if (fileModel != null && fileModel!.id != null && fileModel!.id!.isNotEmpty) {
+      imageId = fileModel!.id!;
+    } else if (imageAticle.isNotEmpty && imageAticle[0] != null && imageAticle[0] != "0") {
+      imageId = imageAticle[0];
+    }
+
+    if (imageId == null) {
+      Fluttertoast.showToast(
+        msg: "Veuillez sélectionner une image de couverture",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: rouge,
+        textColor: Colors.white,
+        fontSize: 12.0,
+      );
+      chargement = false;
+      notifyListeners();
+      return;
+    }
+
+    if (categorie == null || categorie!.id == null) {
+      Fluttertoast.showToast(
+        msg: "Veuillez sélectionner une catégorie",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: rouge,
+        textColor: Colors.white,
+        fontSize: 12.0,
+      );
+      chargement = false;
+      notifyListeners();
+      return;
+    }
+
     String? result = await articleService.add({
       "titre": titre.text,
       "description": body,
@@ -215,7 +346,7 @@ class AddArticleBloc with ChangeNotifier {
       "categorie": categorie!.id!,
       "tags": tag?.id,
       "keyWorod": keyWorld.map((e) => e.toUpperCase().trim()).toList(),
-      "image": fileModel == null ? imageAticle[0] : fileModel!.id!,
+      "image": imageId,
       "statut": "publie",
     });
 

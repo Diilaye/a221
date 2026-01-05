@@ -63,11 +63,11 @@ class HomeUtilisateurScreen extends StatelessWidget {
                     Center(
                       child: Container(
                         height: size.height,
-                        width: 1024,
+                        width: double.infinity,
                         color: blanc,
                         child: ListView(
                           controller: homeUtilisateurBloc.controllerListHome,
-                          padding: EdgeInsets.zero,
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
                           children: [
                             // Espace pour le header
                             const SizedBox(height: 220),
@@ -132,12 +132,14 @@ class HomeUtilisateurScreen extends StatelessWidget {
                         )),
                     Positioned(
                         top: 84,
-                        left: (size.width - 1024) / 2,
-                        right: (size.width - 1024) / 2,
-                        child: SizedBox(
+                        left: 0,
+                        right: 0,
+                        child: Container(
                           height: 75,
-                          width: 1024,
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
                           child: Row(
+                            
                             children: [
 
                               Expanded(
@@ -182,8 +184,8 @@ class HomeUtilisateurScreen extends StatelessWidget {
                         )),
                    Positioned(
                         top: 20,
-                       left: (size.width - 1024) / 2,
-                       right: (size.width - 1024) / 2,
+                       left: 0,
+                       right: 0,
                         child: const TopBarMenu()),
 
 
@@ -205,26 +207,26 @@ class HomeUtilisateurScreen extends StatelessWidget {
                     if (!homeUtilisateurBloc.showFlashInfo)
                       Positioned(
                         bottom: 0,
-                        left: (size.width - 1024) / 2,
-                        right: (size.width - 1024) / 2,
+                        left: 0,
+                        right: 0,
                         child: const SizedBox(
                           height: 50,
-                          width: 1024,
+                          width: double.infinity,
                           child: LiveTickerWidget(height: 50),
                         ),
                       ),
 
                     if(homeUtilisateurBloc.showLiveYoutube) Positioned(
                       top: 70,
-                      left: (size.width - 1024) / 2,
-                      right: (size.width - 1024) / 2,
+                      left: 0,
+                      right: 0,
                       child: Container(
                         color: noir,
-                          width: 1024,
+                          width: double.infinity,
                           child: Center(
 
                               child: SizedBox(
-                                  width: 1024,
+                                  width: double.infinity,
                                   child: YoutubeHtmlWidget(urlY: homeUtilisateurBloc.videos.where((e) => e.isLive == "on").first.url!)))),)
                   ],
                 ),
@@ -242,8 +244,8 @@ class HomeUtilisateurScreen extends StatelessWidget {
     
     // Version épurée selon l'image - sans bordures ni conteneurs colorés
     return Container(
-      width: 1024,
-      margin: const EdgeInsets.symmetric(vertical: 16),
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -549,14 +551,14 @@ class HomeUtilisateurScreen extends StatelessWidget {
         .toList();
 
     return Container(
-      width: 1024,
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header moderne
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.zero,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -641,7 +643,7 @@ class HomeUtilisateurScreen extends StatelessWidget {
           SizedBox(
             height: 340,
             child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.zero,
               scrollDirection: Axis.horizontal,
               itemCount: availableVideos.length,
               separatorBuilder: (context, index) => const SizedBox(width: 20),
@@ -659,9 +661,9 @@ class HomeUtilisateurScreen extends StatelessWidget {
   Widget _buildCategoriesSection(HomeUtilisateurBloc homeUtilisateurBloc) {
     return SizedBox(
       height: 650,
-      width: 1024,
+      width: double.infinity,
       child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 32),
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) => const SizedBox(width: 20),
         itemCount: _getCategoryCount(homeUtilisateurBloc),
